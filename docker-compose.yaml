@@ -1,0 +1,18 @@
+mysql:
+  image: mysql:5.7.26
+  container_name: MYSQL5726
+  ports:
+    - '3306:3306'
+  environment:
+    MYSQL_DATABASE: 'wirecard'
+    MYSQL_ROOT_PASSWORD: 'root'
+
+redis:
+  image: redis:5.0.5
+  container_name: REDIS505
+  hostname: localhost
+  command: --cluster-enabled no --bind 0.0.0.0
+  environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+  ports:
+    - '6379:6379'
