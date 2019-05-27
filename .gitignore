@@ -1,5 +1,11 @@
+.DS_Store
+data/
 HELP.md
 /target/
+target
+wirecardchallenge-core/target/
+wirecardchallenge-rest/target/
+*.log
 !.mvn/wrapper/maven-wrapper.jar
 
 ### STS ###
