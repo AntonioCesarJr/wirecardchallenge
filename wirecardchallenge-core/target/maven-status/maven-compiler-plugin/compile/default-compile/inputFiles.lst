@@ -1,9 +1,0 @@
-/home/antonio/Documents/Wirecard/workspace/wirecardchallenge/wirecardchallenge-core/src/main/java/com/wirecardchallenge/core/repository/PaymentRepository.java
-/home/antonio/Documents/Wirecard/workspace/wirecardchallenge/wirecardchallenge-core/src/main/java/com/wirecardchallenge/core/service/PaymentService.java
-/home/antonio/Documents/Wirecard/workspace/wirecardchallenge/wirecardchallenge-core/src/main/java/com/wirecardchallenge/core/entity/Card.java
-/home/antonio/Documents/Wirecard/workspace/wirecardchallenge/wirecardchallenge-core/src/main/java/com/wirecardchallenge/core/enun/Type.java
-/home/antonio/Documents/Wirecard/workspace/wirecardchallenge/wirecardchallenge-core/src/main/java/com/wirecardchallenge/core/entity/Buyer.java
-/home/antonio/Documents/Wirecard/workspace/wirecardchallenge/wirecardchallenge-core/src/main/java/com/wirecardchallenge/core/entity/Client.java
-/home/antonio/Documents/Wirecard/workspace/wirecardchallenge/wirecardchallenge-core/src/main/java/com/wirecardchallenge/core/dto/PaymentDto.java
-/home/antonio/Documents/Wirecard/workspace/wirecardchallenge/wirecardchallenge-core/src/main/java/com/wirecardchallenge/core/enun/PaymentStatus.java
-/home/antonio/Documents/Wirecard/workspace/wirecardchallenge/wirecardchallenge-core/src/main/java/com/wirecardchallenge/core/entity/Payment.java
