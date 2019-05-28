@@ -2,6 +2,7 @@ package com.wirecardchallenge.core.entity;
 
 import com.wirecardchallenge.core.enun.PaymentStatus;
 import com.wirecardchallenge.core.enun.Type;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -29,6 +30,7 @@ import java.util.UUID;
 @Data
 @Builder
 @NoArgsConstructor
+@AllArgsConstructor
 public class Payment {
 
     @Id
