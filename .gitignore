@@ -2,6 +2,8 @@
 data/
 HELP.md
 /target/
+wirecardchallenge-core-*.jar
+wirecardchallenge-rest-*.jar
 *.log
 !.mvn/wrapper/maven-wrapper.jar
 
