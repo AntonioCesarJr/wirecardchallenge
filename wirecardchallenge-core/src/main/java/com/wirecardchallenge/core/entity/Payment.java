@@ -2,6 +2,7 @@ package com.wirecardchallenge.core.entity;
 
 import com.wirecardchallenge.core.enun.PaymentStatus;
 import com.wirecardchallenge.core.enun.Type;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
@@ -26,6 +27,7 @@ import java.util.UUID;
 @Entity
 @Table(name = "payment")
 @Data
+@Builder
 @NoArgsConstructor
 public class Payment {
 

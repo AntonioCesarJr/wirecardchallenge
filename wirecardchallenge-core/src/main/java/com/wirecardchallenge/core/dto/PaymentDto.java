@@ -26,10 +26,11 @@ import java.util.UUID;
 @NoArgsConstructor
 public class PaymentDto {
 
+    private Long id;
     private UUID publicId;
     private BigDecimal amount;
-    private String type;
-    private String paymentStatus;
+    private Type type;
+    private PaymentStatus paymentStatus;
     private Card card;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;

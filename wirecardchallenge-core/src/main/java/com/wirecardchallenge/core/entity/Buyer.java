@@ -19,7 +19,7 @@ import java.util.UUID;
 @Table(name = "buyer")
 @Data
 @NoArgsConstructor
-public class Buyer {
+public class  Buyer {
 
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO,generator="native")
