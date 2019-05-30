@@ -38,12 +38,15 @@ public class PaymentService {
     }
 
     private Payment buildPaymentEntity(PaymentDto paymentDto){
-        Payment paymentToReturn = buildPaymentEntity(paymentDto);
-        if (paymentDto.getId() == null){
-            paymentToReturn.setId(paymentDto.getId());
-            return paymentToReturn;
-        }
-        return paymentToReturn;
+        return Payment.builder()
+                .id(paymentDto.getId())
+                .publicId(paymentDto.getPublicId())
+                .amount(paymentDto.getAmount())
+                .type(paymentDto.getType())
+                .paymentStatus(paymentDto.getPaymentStatus())
+                .createdAt(paymentDto.getCreatedAt())
+                .updatedAt(paymentDto.getUpdatedAt())
+                .build();
     }
 
     private PaymentDto buildPaymentDto(Payment payment){

@@ -1,7 +1,7 @@
 package com.wirecardchallenge.core.entity;
 
-import com.wirecardchallenge.core.enun.PaymentStatus;
-import com.wirecardchallenge.core.enun.Type;
+import com.wirecardchallenge.core.enumerable.PaymentStatus;
+import com.wirecardchallenge.core.enumerable.Type;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

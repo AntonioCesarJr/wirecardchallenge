@@ -1,5 +1,7 @@
 package com.wirecardchallenge.core.entity;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
@@ -18,7 +20,9 @@ import java.util.UUID;
 @Entity
 @Table(name = "client")
 @Data
+@Builder
 @NoArgsConstructor
+@AllArgsConstructor
 public class Client {
 
     @Id
@@ -27,6 +31,10 @@ public class Client {
     private Long id;
     @Column(nullable = false)
     private UUID publicId;
+    @Column(nullable = false)
+    private String name;
+    @Column(nullable = false, columnDefinition = "text")
+    private String description;
     @CreationTimestamp
     @Column(name = "created_at", columnDefinition = "DATETIME")
     private LocalDateTime createdAt;
