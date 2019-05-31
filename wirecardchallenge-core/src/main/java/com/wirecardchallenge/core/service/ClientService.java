@@ -10,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -31,6 +32,12 @@ public class ClientService {
         Client client = buildClient(clientDto);
         Client clientSaved = clientRepository.save(client);
         return buildClientDto(clientSaved);
+    }
+
+    public void delete(String uuid){
+        Optional<Client> client = clientRepository.findByPublicId(uuid);
+        if (client.isPresent())
+            clientRepository.delete(client.get());
     }
 
     private ClientDto buildClientDto(Client client){
