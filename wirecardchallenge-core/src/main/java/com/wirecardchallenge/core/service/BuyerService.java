@@ -10,6 +10,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -24,6 +26,38 @@ public class BuyerService {
                 .map(buyer -> buildBuyerDto(buyer))
                 .collect(Collectors.toList());
         return new PageImpl<>(buyerDtos, pageable, buyerPage.getTotalElements());
+    }
+
+    public BuyerDto findByPublicId(UUID publicId){
+        Optional<Buyer> buyerOptional = buyerRepository.findByPublicId(publicId);
+        if (!buyerOptional.isPresent())
+            return BuyerDto.builder().build();
+        return buildBuyerDto(buyerOptional.get());
+    }
+
+    public BuyerDto create(BuyerDto buyerDto){
+        Buyer buyer = buildBuyer(buyerDto);
+        Buyer buyerSaved = buyerRepository.save(buyer);
+        return buildBuyerDto(buyerSaved);
+    }
+
+    public BuyerDto update(UUID uuid,
+                            BuyerDto buyerDto){
+        Optional<Buyer> optionalBuyer = buyerRepository.findByPublicId(uuid);
+        if (!optionalBuyer.isPresent())
+            return BuyerDto.builder().build();
+        Buyer buyer = optionalBuyer.get();
+        buyer.setName(buyerDto.getName());
+        buyer.setEmail(buyerDto.getEmail());
+        buyer.setCpf(buyerDto.getCpf());
+        Buyer buyerSaved = buyerRepository.save(buyer);
+        return buildBuyerDto(buyerSaved);
+    }
+
+    public void delete(UUID uuid){
+        Optional<Buyer> buyerOptional = buyerRepository.findByPublicId(uuid);
+        if (buyerOptional.isPresent())
+            buyerRepository.delete(buyerOptional.get());
     }
 
     private BuyerDto buildBuyerDto(Buyer buyer){

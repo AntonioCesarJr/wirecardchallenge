@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.Valid;
 import java.util.UUID;
 
-
 @RestController
 @RequestMapping(value = "/api/v1/client")
 public class ClientController {
