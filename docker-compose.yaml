@@ -5,7 +5,7 @@ mysql:
     - '3306:3306'
   environment:
     MYSQL_DATABASE: 'wirecard'
-    MYSQL_ROOT_PASSWORD: 'root'
+    MYSQL_ROOT_PASSWORD: 'password'
 
 redis:
   image: redis:5.0.5

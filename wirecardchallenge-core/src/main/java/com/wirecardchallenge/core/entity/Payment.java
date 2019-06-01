@@ -20,7 +20,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -31,13 +33,13 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Payment {
+public class Payment implements Serializable {
 
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO,generator="native")
     @GenericGenerator(name = "native",strategy = "native")
     private Long id;
-    @Column(nullable = false)
+    @Column(unique = true, updatable = false,columnDefinition = "BINARY(16)",length = 16)
     private UUID publicId;
     @Column(nullable = false)
     private BigDecimal amount;
@@ -54,4 +56,9 @@ public class Payment {
     @Column(name = "updated_at", columnDefinition = "DATETIME")
     @UpdateTimestamp
     private LocalDateTime updatedAt;
+
+    @PrePersist
+    protected void onCreateAbstractBaseEntity() {
+        this.publicId = UUID.randomUUID();
+    }
 }

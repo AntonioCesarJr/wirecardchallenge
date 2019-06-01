@@ -10,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -27,10 +28,35 @@ public class ClientService {
         return new PageImpl<>(clientDtos, pageable, clientPage.getTotalElements());
     }
 
-    public ClientDto save(ClientDto clientDto){
+    public ClientDto findByPublicId(UUID publicId){
+        Optional<Client> clientOptional = clientRepository.findByPublicId(publicId);
+        if (!clientOptional.isPresent())
+            return ClientDto.builder().build();
+        return buildClientDto(clientOptional.get());
+    }
+
+    public ClientDto create(ClientDto clientDto){
         Client client = buildClient(clientDto);
         Client clientSaved = clientRepository.save(client);
         return buildClientDto(clientSaved);
+    }
+
+    public ClientDto update(UUID uuid,
+                            ClientDto clientDto){
+        Optional<Client> optionalClient = clientRepository.findByPublicId(uuid);
+        if (!optionalClient.isPresent())
+            return ClientDto.builder().build();
+        Client client = optionalClient.get();
+        client.setName(clientDto.getName());
+        client.setDescription(clientDto.getDesccription());
+        Client clientSaved = clientRepository.save(client);
+        return buildClientDto(clientSaved);
+    }
+
+    public void delete(UUID uuid){
+        Optional<Client> client = clientRepository.findByPublicId(uuid);
+        if (client.isPresent())
+            clientRepository.delete(client.get());
     }
 
     private ClientDto buildClientDto(Client client){
@@ -46,7 +72,7 @@ public class ClientService {
     private Client buildClient(ClientDto clientDto){
         return Client.builder()
                 .id(clientDto.getId())
-                .publicId(clientDto.getPublicId() == null ? UUID.randomUUID() : clientDto.getPublicId())
+                .publicId(clientDto.getPublicId())
                 .name(clientDto.getName())
                 .description(clientDto.getDesccription())
                 .build();
