@@ -20,18 +20,18 @@ public interface ClientRepository extends JpaRepository<Client, Long> {
     Page<Client> findAll(Pageable pageable);
     @Cacheable("clientId")
     Optional<Client> findById(Long id);
-    @Cacheable("clientUUID")
-    Optional<Client> findByPublicId(UUID uuid);
+    @Cacheable("clientPublicId")
+    Optional<Client> findByPublicId(UUID publicId);
     @Caching(evict = {
             @CacheEvict(value="clientsPage", allEntries=true),
-            @CacheEvict(value="clientsId", key = "#client.id"),
-            @CacheEvict(value="clientsUUID", key = "#client.publicId")
+            @CacheEvict(value="clientsId", allEntries=true),
+            @CacheEvict(value="clientPublicId", allEntries=true)
     })
     Client save(Client client);
     @Caching(evict = {
             @CacheEvict(value="clientsPage", allEntries=true),
-            @CacheEvict(value="clientsId", key = "#client.id"),
-            @CacheEvict(value="clientsUUID", key = "#client.publicId")
+            @CacheEvict(value="clientsId", allEntries=true),
+            @CacheEvict(value="clientPublicId", allEntries=true)
     })
     void delete(Client client);
 }

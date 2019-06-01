@@ -34,6 +34,12 @@ public class ClientController {
         return ResponseEntity.ok(clientDtos);
     }
 
+    @GetMapping(value = "/{publicId}")
+    public ResponseEntity<ClientDto> findByPublicId(@PathVariable UUID publicId){
+        ClientDto clientDtos = clientService.findByPublicId(publicId);
+        return ResponseEntity.ok(clientDtos);
+    }
+
     @PostMapping
     public ResponseEntity<ClientDto> add(@RequestBody @Valid ClientRequest clientRequest){
         ClientDto clientDto = buildClientDto(clientRequest);
@@ -41,18 +47,18 @@ public class ClientController {
         return ResponseEntity.ok(clientDtoSaved);
     }
 
-    @PutMapping("/{uiid}")
-    public ResponseEntity<ClientDto> update(@PathVariable UUID uiid,
+    @PutMapping("/{publicId}")
+    public ResponseEntity<ClientDto> update(@PathVariable UUID publicId,
                                             @RequestBody @Valid ClientRequest clientRequest){
         ClientDto clientDto = buildClientDto(clientRequest);
-        clientDto.setPublicId(uiid);
-        ClientDto clientDtoSaved = clientService.update(uiid, clientDto);
+        clientDto.setPublicId(publicId);
+        ClientDto clientDtoSaved = clientService.update(publicId, clientDto);
         return ResponseEntity.ok(clientDtoSaved);
     }
 
-    @DeleteMapping("/{uiid}")
-    public ResponseEntity<ClientDto> delete(@PathVariable UUID uiid){
-        clientService.delete(uiid);
+    @DeleteMapping("/{publicId}")
+    public ResponseEntity<ClientDto> delete(@PathVariable UUID publicId){
+        clientService.delete(publicId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
