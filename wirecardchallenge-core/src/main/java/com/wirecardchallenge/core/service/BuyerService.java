@@ -1,9 +1,7 @@
 package com.wirecardchallenge.core.service;
 
 import com.wirecardchallenge.core.dto.BuyerDto;
-import com.wirecardchallenge.core.dto.ClientDto;
 import com.wirecardchallenge.core.entity.Buyer;
-import com.wirecardchallenge.core.entity.Client;
 import com.wirecardchallenge.core.repository.BuyerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
