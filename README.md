@@ -1,4 +1,4 @@
-# Wirecard BackEnd Challenge
+# Wirecard Backend Challenge
 
 ## PreReqs
 
