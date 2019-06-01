@@ -39,7 +39,7 @@ public class Payment implements Serializable {
     @GeneratedValue(strategy= GenerationType.AUTO,generator="native")
     @GenericGenerator(name = "native",strategy = "native")
     private Long id;
-    @Column(unique = true, updatable = false,columnDefinition = "BINARY(16)",length = 16)
+    @Column(unique = true, updatable = false,columnDefinition = "BINARY(16)",length = 16, nullable = false)
     private UUID publicId;
     @Column(nullable = false)
     private BigDecimal amount;

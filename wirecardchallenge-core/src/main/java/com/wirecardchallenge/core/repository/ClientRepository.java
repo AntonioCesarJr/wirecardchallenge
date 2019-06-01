@@ -24,13 +24,13 @@ public interface ClientRepository extends JpaRepository<Client, Long> {
     Optional<Client> findByPublicId(UUID publicId);
     @Caching(evict = {
             @CacheEvict(value="clientsPage", allEntries=true),
-            @CacheEvict(value="clientsId", allEntries=true),
+            @CacheEvict(value="clientId", allEntries=true),
             @CacheEvict(value="clientPublicId", allEntries=true)
     })
     Client save(Client client);
     @Caching(evict = {
             @CacheEvict(value="clientsPage", allEntries=true),
-            @CacheEvict(value="clientsId", allEntries=true),
+            @CacheEvict(value="clientId", allEntries=true),
             @CacheEvict(value="clientPublicId", allEntries=true)
     })
     void delete(Client client);

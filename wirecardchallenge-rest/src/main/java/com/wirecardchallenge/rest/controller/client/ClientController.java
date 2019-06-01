@@ -65,7 +65,7 @@ public class ClientController {
     private ClientDto buildClientDto(ClientRequest clientRequest){
         return ClientDto.builder()
                 .name(clientRequest.getName())
-                .desccription(clientRequest.getDescription())
+                .description(clientRequest.getDescription())
                 .build();
     }
 }
