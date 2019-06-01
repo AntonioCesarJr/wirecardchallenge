@@ -14,6 +14,6 @@ public interface ClientRepository extends JpaRepository<Client, Long> {
 
     Page<Client> findAll(Pageable pageable);
     Optional<Client> findById(Long uuid);
-    Optional<Client> findByPublicId(String uuid);
+    Optional<Client> findByPublicId(UUID uuid);
 
 }

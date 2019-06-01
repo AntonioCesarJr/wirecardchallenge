@@ -20,6 +20,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -37,7 +38,7 @@ public class Payment {
     @GeneratedValue(strategy= GenerationType.AUTO,generator="native")
     @GenericGenerator(name = "native",strategy = "native")
     private Long id;
-    @Column(nullable = false)
+    @Column(unique = true, updatable = false)
     private UUID publicId;
     @Column(nullable = false)
     private BigDecimal amount;
@@ -54,4 +55,9 @@ public class Payment {
     @Column(name = "updated_at", columnDefinition = "DATETIME")
     @UpdateTimestamp
     private LocalDateTime updatedAt;
+
+    @PrePersist
+    protected void onCreateAbstractBaseEntity() {
+        this.publicId = UUID.randomUUID();
+    }
 }

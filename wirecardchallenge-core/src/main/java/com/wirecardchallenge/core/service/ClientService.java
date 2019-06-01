@@ -34,7 +34,7 @@ public class ClientService {
         return buildClientDto(clientSaved);
     }
 
-    public void delete(String uuid){
+    public void delete(UUID uuid){
         Optional<Client> client = clientRepository.findByPublicId(uuid);
         if (client.isPresent())
             clientRepository.delete(client.get());
@@ -53,7 +53,7 @@ public class ClientService {
     private Client buildClient(ClientDto clientDto){
         return Client.builder()
                 .id(clientDto.getId())
-                .publicId(clientDto.getPublicId() == null ? UUID.randomUUID() : clientDto.getPublicId())
+                .publicId(clientDto.getPublicId())
                 .name(clientDto.getName())
                 .description(clientDto.getDesccription())
                 .build();

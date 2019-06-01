@@ -41,7 +41,7 @@ public class ClientController {
     }
 
     @DeleteMapping("/{uiid}")
-    public ResponseEntity<ClientDto> delete(@PathVariable String uiid){
+    public ResponseEntity<ClientDto> delete(@PathVariable UUID uiid){
         clientService.delete(uiid);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
