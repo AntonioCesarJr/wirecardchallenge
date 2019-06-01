@@ -4,6 +4,8 @@ import com.wirecardchallenge.core.dto.ClientDto;
 import com.wirecardchallenge.core.entity.Client;
 import com.wirecardchallenge.core.repository.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
