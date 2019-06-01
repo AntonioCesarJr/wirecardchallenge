@@ -28,8 +28,20 @@ public class ClientService {
         return new PageImpl<>(clientDtos, pageable, clientPage.getTotalElements());
     }
 
-    public ClientDto save(ClientDto clientDto){
+    public ClientDto create(ClientDto clientDto){
         Client client = buildClient(clientDto);
+        Client clientSaved = clientRepository.save(client);
+        return buildClientDto(clientSaved);
+    }
+
+    public ClientDto update(UUID uuid,
+                            ClientDto clientDto){
+        Optional<Client> optionalClient = clientRepository.findByPublicId(uuid);
+        if (!optionalClient.isPresent())
+            return ClientDto.builder().build();
+        Client client = optionalClient.get();
+        client.setName(clientDto.getName());
+        client.setDescription(clientDto.getDesccription());
         Client clientSaved = clientRepository.save(client);
         return buildClientDto(clientSaved);
     }
