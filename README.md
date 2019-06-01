@@ -2,6 +2,10 @@
 
 ## PreReqs
 
+### System Information
+> Ubuntu 18.04.2 LTS \
+Linux 4.15.0-50-generic Ubuntu x86_64 GNU/Linux
+
 ### Docker
 > Client: \
     Version:           18.09.6 \
