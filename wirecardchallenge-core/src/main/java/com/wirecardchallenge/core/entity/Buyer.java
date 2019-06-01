@@ -27,7 +27,7 @@ public class  Buyer implements Serializable {
     @GeneratedValue(strategy= GenerationType.AUTO,generator="native")
     @GenericGenerator(name = "native",strategy = "native")
     private Long id;
-    @Column(name = "public_id", nullable = false)
+    @Column(unique = true, updatable = false,columnDefinition = "BINARY(16)",length = 16)
     private UUID publicId;
     @Column(nullable = false)
     private String name;
