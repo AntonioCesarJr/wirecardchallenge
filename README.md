@@ -6,6 +6,14 @@
 > Ubuntu 18.04.2 LTS \
 Linux 4.15.0-50-generic Ubuntu x86_64 GNU/Linux
 
+### Java 8
+> java version "1.8.0_201"
+  Java(TM) SE Runtime Environment (build 1.8.0_201-b09)
+  Java HotSpot(TM) 64-Bit Server VM (build 25.201-b09, mixed mode)
+
+### Maven
+>Apache Maven 3.6.0
+
 ### Docker
 > Client: \
     Version:           18.09.6 \
