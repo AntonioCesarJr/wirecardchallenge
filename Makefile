@@ -8,8 +8,5 @@ install:
 install-no-test:
 	mvn clean package install -U -DskipTests=true
 
-run-api-no-test:install-no-test
-	mvn spring-boot:run -pl wirecardchallenge-rest
-
-run-api:
+run-api:install-no-test
 	mvn spring-boot:run -pl wirecardchallenge-rest

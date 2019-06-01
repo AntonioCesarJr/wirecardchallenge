@@ -1,6 +1,10 @@
-# Wirecard BackEnd Challenge
+# Wirecard Backend Challenge
 
-## PreReqs
+## Prerequisites
+
+### System Information
+> Ubuntu 18.04.2 LTS \
+Linux 4.15.0-50-generic Ubuntu x86_64 GNU/Linux
 
 ### Docker
 > Client: \
@@ -34,26 +38,19 @@
   Built for x86_64-pc-linux-gnu \
   Copyright (C) 1988-2014 Free Software Foundation, Inc.
 
-## Build Data Store Infrastructure
+## How to use Application
 
-## Docker container MYSQL and REDIS creation 
+### 1- Create Docker container with a MYSQL and REDIS  
     docker-compose up -d
-__OBS: You must wait until MYSQL database start to listener the confgured port!\
-This may take a few minutes!__
+__PS: You must wait until MYSQL database start to listener the confgured port!\
+This may take a few minutes__
 
 
-## Build application 
+## 2- Build application 
     make install
     
-## Start application 
+## 3- Start application 
     make run-api
     
-__If application fail to start it is probably because the Data Store Infrastructure still not ready or because you have another started instance.!__
+__If application fail to start it is probably because the Data Store Infrastructure still not ready or because you have another started instance.__
 
-#####################################################################################################################################################
-
-
-
-_italic_
-__bold__
-> blockquotes
