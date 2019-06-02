@@ -48,11 +48,10 @@ Linux 4.15.0-50-generic Ubuntu x86_64 GNU/Linux
 
 ## How to use Application
 
-### 1 - Create Docker container with a MYSQL and REDIS  
+### 1 - Create Docker Infrastructure - MYSQL and REDIS  
     docker-compose up -d
 __PS: You must wait until MYSQL database start to listener the confgured port!\
 This may take a few minutes__
-
 
 ## 2 - Build application 
     make install
@@ -65,6 +64,6 @@ __If application fail to start it is probably because the Data Store Infrastruct
 ## 4 - See API Documentation with Swagger 2
 <a href="http://localhost:8089/swagger-ui.html" target="_blank">SpringFox Swagger - http://localhost:8089/swagger-ui.html<a/>
 
-## 5 - See Actuator Information by using
+## 5 - See Actuator Information
 <a href="http://localhost:8089/actuator" target="_blank">Spring Boot Actuator - http://localhost:8089/actuator<a/>
 
