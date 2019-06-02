@@ -47,17 +47,26 @@ Linux 4.15.0-50-generic Ubuntu x86_64 GNU/Linux
   Copyright (C) 1988-2014 Free Software Foundation, Inc.
 
 ## How to use Application
+*Use the following commands on a terminal in the root directory.* 
 
 ### 1 - Create Docker Infrastructure - MYSQL and REDIS  
     docker-compose up -d
 __PS: You must wait until MYSQL database start to listener the confgured port!\
 This may take a few minutes__
 
-## 2 - Build application 
+## 2 - Build application with make or with mvn
     make install
     
-## 3 - Start application 
-    make run-api
+    or
+    
+    mvn clean package install -U    
+    
+## 3 - Start application with make or with mvn
+    make run
+    
+    or
+    
+    mvn spring-boot:run -pl wirecardchallenge-rest
     
 __If application fail to start it is probably because the Data Store Infrastructure still not ready or because you have another started instance.__
 

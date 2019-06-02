@@ -42,7 +42,7 @@ public class Card implements Serializable {
     @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false, length = 16)
+    @Column(unique = true, nullable = false, length = 16)
     private String number;
 
     @Column(name = "expiration_date", nullable = false)
