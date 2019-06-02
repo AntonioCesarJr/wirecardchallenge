@@ -69,6 +69,7 @@ This may take a few minutes__
     
 __If application fail to start it is probably because the Data Store Infrastructure still not ready or because you have another started instance.__
 
+*With started application.*
 ## 4 - See API Documentation with Swagger 2
 <a href="http://localhost:8089/swagger-ui.html" target="_blank">SpringFox Swagger - http://localhost:8089/swagger-ui.html<a/>
 
