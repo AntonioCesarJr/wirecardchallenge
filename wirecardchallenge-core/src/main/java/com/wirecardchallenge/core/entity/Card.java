@@ -1,5 +1,7 @@
 package com.wirecardchallenge.core.entity;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
@@ -24,29 +26,39 @@ import java.util.UUID;
 @Entity
 @Table(name = "card")
 @Data
+@Builder
 @NoArgsConstructor
+@AllArgsConstructor
 public class Card implements Serializable {
 
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO,generator="native")
     @GenericGenerator(name = "native",strategy = "native")
     private Long id;
-    @Column(unique = true, updatable = false,columnDefinition = "BINARY(16)",length = 16)
+
+    @Column(unique = true, updatable = false,columnDefinition = "BINARY(16)",length = 16, nullable = false)
     private UUID publicId;
+
     @Column(nullable = false)
     private String name;
-    @Column(nullable = false)
+
+    @Column(unique = true, nullable = false, length = 16)
     private String number;
+
     @Column(name = "expiration_date", nullable = false)
     private String expirationDate;
-    @Column(nullable = false)
+
+    @Column(nullable = false, length = 3)
     private String CVV;
+
     @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL, mappedBy = "card")
     private Set<Payment> payments;
+
     @CreationTimestamp
-    @Column(name = "created_at", columnDefinition = "DATETIME")
+    @Column(name = "created_at", columnDefinition = "DATETIME", nullable = false)
     private LocalDateTime createdAt;
-    @Column(name = "updated_at", columnDefinition = "DATETIME")
+
+    @Column(name = "updated_at", columnDefinition = "DATETIME", nullable = false)
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 

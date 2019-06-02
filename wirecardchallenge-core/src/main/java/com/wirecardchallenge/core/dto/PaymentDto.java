@@ -21,11 +21,18 @@ public class PaymentDto {
 
     @JsonIgnore
     private Long id;
+
     private UUID publicId;
+
     private BigDecimal amount;
+
     private Type type;
+
     private PaymentStatus paymentStatus;
+
     private Card card;
+
     private LocalDateTime createdAt;
+
     private LocalDateTime updatedAt;
 }

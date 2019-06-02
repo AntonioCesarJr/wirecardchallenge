@@ -1,7 +1,7 @@
 package com.wirecardchallenge.core.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,16 +14,23 @@ import java.util.UUID;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ClientDto {
+public class BuyerDto {
 
     @JsonIgnore
     private Long id;
 
     private UUID publicId;
 
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    private String name;
+
+    private String email;
+
+    private String cpf;
+
+    @JsonProperty(value = "client")
+    private ClientDto clientDto;
+
     private LocalDateTime createdAt;
 
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private LocalDateTime updatedAt;
 }
