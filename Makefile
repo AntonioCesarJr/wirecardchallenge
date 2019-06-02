@@ -10,3 +10,6 @@ install-no-test:
 
 run-api:install-no-test
 	mvn spring-boot:run -pl wirecardchallenge-rest
+
+run:
+	mvn spring-boot:run -pl wirecardchallenge-rest
