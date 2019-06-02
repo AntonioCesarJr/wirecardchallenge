@@ -38,9 +38,9 @@ public class Client implements Serializable {
     @Column(nullable = false, columnDefinition = "text")
     private String description;
     @CreationTimestamp
-    @Column(name = "created_at", columnDefinition = "DATETIME")
+    @Column(name = "created_at", columnDefinition = "DATETIME", nullable = false)
     private LocalDateTime createdAt;
-    @Column(name = "updated_at", columnDefinition = "DATETIME")
+    @Column(name = "updated_at", columnDefinition = "DATETIME", nullable = false)
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 

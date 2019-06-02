@@ -44,9 +44,9 @@ public class Card implements Serializable {
     @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL, mappedBy = "card")
     private Set<Payment> payments;
     @CreationTimestamp
-    @Column(name = "created_at", columnDefinition = "DATETIME")
+    @Column(name = "created_at", columnDefinition = "DATETIME", nullable = false)
     private LocalDateTime createdAt;
-    @Column(name = "updated_at", columnDefinition = "DATETIME")
+    @Column(name = "updated_at", columnDefinition = "DATETIME", nullable = false)
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 

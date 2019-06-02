@@ -51,9 +51,9 @@ public class Payment implements Serializable {
     @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     private Card card;
     @CreationTimestamp
-    @Column(name = "created_at", columnDefinition = "DATETIME")
+    @Column(name = "created_at", columnDefinition = "DATETIME", nullable = false)
     private LocalDateTime createdAt;
-    @Column(name = "updated_at", columnDefinition = "DATETIME")
+    @Column(name = "updated_at", columnDefinition = "DATETIME", nullable = false)
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 

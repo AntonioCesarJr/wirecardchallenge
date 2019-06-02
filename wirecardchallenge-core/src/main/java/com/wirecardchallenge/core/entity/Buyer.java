@@ -37,16 +37,16 @@ public class  Buyer implements Serializable {
     private UUID publicId;
     @Column(nullable = false)
     private String name;
-    @Column(nullable = false)
+    @Column(unique = true, nullable = false)
     @Email
     private String email;
-    @Column(nullable = false)
+    @Column(unique = true, nullable = false)
     @CPF
     private String cpf;
     @CreationTimestamp
-    @Column(name = "created_at", columnDefinition = "DATETIME")
+    @Column(name = "created_at", columnDefinition = "DATETIME", nullable = false)
     private LocalDateTime createdAt;
-    @Column(name = "updated_at", columnDefinition = "DATETIME")
+    @Column(name = "updated_at", columnDefinition = "DATETIME", nullable = false)
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
