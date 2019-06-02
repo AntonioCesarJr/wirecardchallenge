@@ -41,9 +41,8 @@ Linux 4.15.0-50-generic Ubuntu x86_64 GNU/Linux
   OpenSSL version: OpenSSL 1.1.0f  25 May 2017
 
 
-### Make
+### Make (optional)
 > GNU Make 4.1 \
-  Built for x86_64-pc-linux-gnu \
   Copyright (C) 1988-2014 Free Software Foundation, Inc.
 
 ## How to use Application
@@ -54,14 +53,14 @@ Linux 4.15.0-50-generic Ubuntu x86_64 GNU/Linux
 __PS: You must wait until MYSQL database start to listener the confgured port!\
 This may take a few minutes__
 
-## 2 - Build application with make or with mvn
+## 2 - Build application with Make or Maven
     make install
     
     or
     
     mvn clean package install -U    
     
-## 3 - Start application with make or with mvn
+## 3 - Start application with Make or Maven
     make run
     
     or
