@@ -1,9 +1,7 @@
 package com.wirecardchallenge.rest.controller.card;
 
-import com.wirecardchallenge.core.dto.BuyerDto;
 import com.wirecardchallenge.core.dto.CardDto;
 import com.wirecardchallenge.core.service.CardService;
-import com.wirecardchallenge.rest.controller.buyer.request.BuyerRequest;
 import com.wirecardchallenge.rest.controller.card.request.CardRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
