@@ -48,6 +48,26 @@ public class CardService {
         return buildCardDto(cardSaved);
     }
 
+    public CardDto update(UUID uuid,
+                          CardDto cardDto){
+        Optional<Card> cardOptional = cardRepository.findByPublicId(uuid);
+        if (!cardOptional.isPresent())
+            return CardDto.builder().build();
+        Card card = cardOptional.get();
+        card.setName(cardDto.getName());
+        card.setNumber(cardDto.getNumber());
+        card.setExpirationDate(cardDto.getExpirationDate());
+        card.setCVV(cardDto.getCVV());
+        Card cardSaved = cardRepository.save(card);
+        return buildCardDto(cardSaved);
+    }
+
+    public void delete(UUID uuid){
+        Optional<Card> cardOptional = cardRepository.findByPublicId(uuid);
+        if (cardOptional.isPresent())
+            cardRepository.delete(cardOptional.get());
+    }
+
     private CardDto buildCardDto(Card card){
         return CardDto.builder()
             .publicId(card.getPublicId())
