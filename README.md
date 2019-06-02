@@ -63,9 +63,9 @@ This may take a few minutes__
 __If application fail to start it is probably because the Data Store Infrastructure still not ready or because you have another started instance.__
 
 ## 4 - See API Documentation with Swagger 2
-[SpringFox Swagger - http://localhost:8089/swagger-ui.html](http://localhost:8089/swagger-ui.html)
+[SpringFox Swagger - http://localhost:8089/swagger-ui.html](http://localhost:8089/swagger-ui.html?target=_blank)
 
 ## 5 - See Actuator Information by using  
-[Spring Boot Actuator - http://localhost:8089/actuator](http://localhost:8089/actuator)
+[Spring Boot Actuator - http://localhost:8089/actuator](http://localhost:8089/actuator?target=_blank)
 
 
