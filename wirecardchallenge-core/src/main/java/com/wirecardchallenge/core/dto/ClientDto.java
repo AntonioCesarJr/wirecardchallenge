@@ -17,9 +17,14 @@ public class ClientDto {
 
     @JsonIgnore
     private Long id;
+
     private UUID publicId;
+
     private String name;
+
     private String description;
+
     private LocalDateTime createdAt;
+
     private LocalDateTime updatedAt;
 }

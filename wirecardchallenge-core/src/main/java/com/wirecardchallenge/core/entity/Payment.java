@@ -39,20 +39,27 @@ public class Payment implements Serializable {
     @GeneratedValue(strategy= GenerationType.AUTO,generator="native")
     @GenericGenerator(name = "native",strategy = "native")
     private Long id;
+
     @Column(unique = true, updatable = false,columnDefinition = "BINARY(16)",length = 16, nullable = false)
     private UUID publicId;
+
     @Column(nullable = false)
     private BigDecimal amount;
+
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private Type type;
+
     @Enumerated(EnumType.STRING)
     private PaymentStatus paymentStatus;
+
     @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     private Card card;
+
     @CreationTimestamp
     @Column(name = "created_at", columnDefinition = "DATETIME", nullable = false)
     private LocalDateTime createdAt;
+
     @Column(name = "updated_at", columnDefinition = "DATETIME", nullable = false)
     @UpdateTimestamp
     private LocalDateTime updatedAt;

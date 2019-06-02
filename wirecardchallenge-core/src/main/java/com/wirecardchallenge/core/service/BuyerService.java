@@ -23,9 +23,16 @@ public class BuyerService {
     public Page<BuyerDto> findAll(Pageable pageable){
         Page<Buyer> buyerPage = buyerRepository.findAll(pageable);
         List<BuyerDto> buyerDtos= buyerPage.getContent().stream()
-                .map(buyer -> buildBuyerDto(buyer))
-                .collect(Collectors.toList());
+            .map(buyer -> buildBuyerDto(buyer))
+            .collect(Collectors.toList());
         return new PageImpl<>(buyerDtos, pageable, buyerPage.getTotalElements());
+    }
+
+    public BuyerDto findById(Long id){
+        Optional<Buyer> buyerOptional = buyerRepository.findById(id);
+        if (!buyerOptional.isPresent())
+            return BuyerDto.builder().build();
+        return buildBuyerDto(buyerOptional.get());
     }
 
     public BuyerDto findByPublicId(UUID publicId){
@@ -42,7 +49,7 @@ public class BuyerService {
     }
 
     public BuyerDto update(UUID uuid,
-                            BuyerDto buyerDto){
+                           BuyerDto buyerDto){
         Optional<Buyer> optionalBuyer = buyerRepository.findByPublicId(uuid);
         if (!optionalBuyer.isPresent())
             return BuyerDto.builder().build();
@@ -62,23 +69,22 @@ public class BuyerService {
 
     private BuyerDto buildBuyerDto(Buyer buyer){
         return BuyerDto.builder()
-                .publicId(buyer.getPublicId())
-                .email(buyer.getEmail())
-                .name(buyer.getName())
-                .cpf(buyer.getCpf())
-                .createdAt(buyer.getCreatedAt())
-                .updatedAt(buyer.getUpdatedAt())
-                .build();
+            .publicId(buyer.getPublicId())
+            .email(buyer.getEmail())
+            .name(buyer.getName())
+            .cpf(buyer.getCpf())
+            .createdAt(buyer.getCreatedAt())
+            .updatedAt(buyer.getUpdatedAt())
+            .build();
     }
 
     private Buyer buildBuyer(BuyerDto buyerDto){
         return Buyer.builder()
-                .id(buyerDto.getId())
-                .publicId(buyerDto.getPublicId())
-                .email(buyerDto.getEmail())
-                .name(buyerDto.getName())
-                .cpf(buyerDto.getCpf())
-                .build();
+            .id(buyerDto.getId())
+            .publicId(buyerDto.getPublicId())
+            .email(buyerDto.getEmail())
+            .name(buyerDto.getName())
+            .cpf(buyerDto.getCpf())
+            .build();
     }
-
 }

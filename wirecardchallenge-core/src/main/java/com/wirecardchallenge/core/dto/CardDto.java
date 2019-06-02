@@ -1,36 +1,36 @@
 package com.wirecardchallenge.core.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.wirecardchallenge.core.entity.Card;
-import com.wirecardchallenge.core.enumerable.PaymentStatus;
-import com.wirecardchallenge.core.enumerable.Type;
+import com.wirecardchallenge.core.entity.Payment;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Set;
 import java.util.UUID;
 
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class PaymentDto {
+public class CardDto {
 
     @JsonIgnore
     private Long id;
 
     private UUID publicId;
 
-    private BigDecimal amount;
+    private String name;
 
-    private Type type;
+    private String number;
 
-    private PaymentStatus paymentStatus;
+    private String expirationDate;
 
-    private Card card;
+    private String CVV;
+
+    private Set<Payment> payments;
 
     private LocalDateTime createdAt;
 

@@ -30,22 +30,28 @@ import java.util.UUID;
 public class  Buyer implements Serializable {
 
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO,generator="native")
-    @GenericGenerator(name = "native",strategy = "native")
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
+    @GenericGenerator(name = "native", strategy = "native")
     private Long id;
-    @Column(unique = true, updatable = false,columnDefinition = "BINARY(16)",length = 16, nullable = false)
+
+    @Column(unique = true, updatable = false, columnDefinition = "BINARY(16)", length = 16, nullable = false)
     private UUID publicId;
+
     @Column(nullable = false)
     private String name;
+
     @Column(unique = true, nullable = false)
     @Email
     private String email;
+
     @Column(unique = true, nullable = false)
     @CPF
     private String cpf;
+
     @CreationTimestamp
     @Column(name = "created_at", columnDefinition = "DATETIME", nullable = false)
     private LocalDateTime createdAt;
+
     @Column(name = "updated_at", columnDefinition = "DATETIME", nullable = false)
     @UpdateTimestamp
     private LocalDateTime updatedAt;

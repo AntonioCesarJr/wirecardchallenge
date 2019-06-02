@@ -17,20 +17,22 @@ public interface BuyerRepository extends JpaRepository<Buyer, Long>{
 
     @Cacheable("buyersPage")
     Page<Buyer> findAll(Pageable pageable);
+
     @Cacheable("buyerId")
     Optional<Buyer> findById(Long id);
+
     @Cacheable("buyerPublicId")
     Optional<Buyer> findByPublicId(UUID publicId);
+
     @Caching(evict = {
-            @CacheEvict(value="buyersPage", allEntries=true),
-            @CacheEvict(value="buyerId", allEntries=true),
-            @CacheEvict(value="buyerPublicId", allEntries=true)
-    })
+        @CacheEvict(value="buyersPage", allEntries=true),
+        @CacheEvict(value="buyerId", allEntries=true),
+        @CacheEvict(value="buyerPublicId", allEntries=true)})
     Buyer save(Buyer buyer);
+
     @Caching(evict = {
-            @CacheEvict(value="buyersPage", allEntries=true),
-            @CacheEvict(value="buyerId", allEntries=true),
-            @CacheEvict(value="buyerPublicId", allEntries=true)
-    })
+        @CacheEvict(value="buyersPage", allEntries=true),
+        @CacheEvict(value="buyerId", allEntries=true),
+        @CacheEvict(value="buyerPublicId", allEntries=true)})
     void delete(Buyer buyer);
 }

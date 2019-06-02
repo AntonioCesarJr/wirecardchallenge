@@ -17,10 +17,16 @@ public class BuyerDto {
 
     @JsonIgnore
     private Long id;
+
     private UUID publicId;
+
     private String name;
+
     private String email;
+
     private String cpf;
+
     private LocalDateTime createdAt;
+
     private LocalDateTime updatedAt;
 }
