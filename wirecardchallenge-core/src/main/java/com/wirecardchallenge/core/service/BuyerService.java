@@ -4,6 +4,8 @@ import com.wirecardchallenge.core.dto.BuyerDto;
 import com.wirecardchallenge.core.dto.ClientDto;
 import com.wirecardchallenge.core.entity.Buyer;
 import com.wirecardchallenge.core.entity.Client;
+import com.wirecardchallenge.core.exceptions.BuyerNotFoundException;
+import com.wirecardchallenge.core.exceptions.ClientNotFoundException;
 import com.wirecardchallenge.core.repository.BuyerRepository;
 import com.wirecardchallenge.core.repository.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,22 +36,24 @@ public class BuyerService {
         return new PageImpl<>(buyerDtos, pageable, buyerPage.getTotalElements());
     }
 
-    public BuyerDto findById(Long id){
+    public BuyerDto findById(Long id) throws BuyerNotFoundException {
         Optional<Buyer> buyerOptional = buyerRepository.findById(id);
         if (!buyerOptional.isPresent())
-            return BuyerDto.builder().build();
+            throw new BuyerNotFoundException();
         return buildBuyerDto(buyerOptional.get());
     }
 
-    public BuyerDto findByPublicId(UUID publicId){
+    public BuyerDto findByPublicId(UUID publicId) throws BuyerNotFoundException {
         Optional<Buyer> buyerOptional = buyerRepository.findByPublicId(publicId);
         if (!buyerOptional.isPresent())
-            return BuyerDto.builder().build();
+            throw new BuyerNotFoundException();
         return buildBuyerDto(buyerOptional.get());
     }
 
-    public BuyerDto create(BuyerDto buyerDto){
+    public BuyerDto create(BuyerDto buyerDto) throws ClientNotFoundException {
         Optional<Client> client = clientRepository.findByPublicId(buyerDto.getClientDto().getPublicId());
+        if(!client.isPresent())
+            throw new ClientNotFoundException();
         Buyer buyer = buildBuyer(buyerDto);
         buyer.setClient(client.get());
         Buyer buyerSaved = buyerRepository.save(buyer);
@@ -57,11 +61,13 @@ public class BuyerService {
     }
 
     public BuyerDto update(UUID uuid,
-                           BuyerDto buyerDto){
+                           BuyerDto buyerDto) throws ClientNotFoundException, BuyerNotFoundException {
         Optional<Client> client = clientRepository.findByPublicId(buyerDto.getClientDto().getPublicId());
+        if(!client.isPresent())
+            throw new ClientNotFoundException();
         Optional<Buyer> optionalBuyer = buyerRepository.findByPublicId(uuid);
         if (!optionalBuyer.isPresent())
-            return BuyerDto.builder().build();
+            throw new BuyerNotFoundException();
         Buyer buyer = optionalBuyer.get();
         buyer.setName(buyerDto.getName());
         buyer.setEmail(buyerDto.getEmail());
@@ -71,10 +77,11 @@ public class BuyerService {
         return buildBuyerDto(buyerSaved);
     }
 
-    public void delete(UUID uuid){
+    public void delete(UUID uuid) throws BuyerNotFoundException {
         Optional<Buyer> buyerOptional = buyerRepository.findByPublicId(uuid);
-        if (buyerOptional.isPresent())
-            buyerRepository.delete(buyerOptional.get());
+        if (!buyerOptional.isPresent())
+            throw new BuyerNotFoundException();
+        buyerRepository.delete(buyerOptional.get());
     }
 
     private BuyerDto buildBuyerDto(Buyer buyer){
@@ -83,7 +90,9 @@ public class BuyerService {
             .email(buyer.getEmail())
             .name(buyer.getName())
             .cpf(buyer.getCpf())
-            .clientDto(ClientDto.builder().publicId(buyer.getClient().getPublicId()).build())
+            .clientDto(ClientDto.builder()
+                .publicId(buyer.getClient().getPublicId())
+                .build())
             .createdAt(buyer.getCreatedAt())
             .updatedAt(buyer.getUpdatedAt())
             .build();

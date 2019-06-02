@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 @NoArgsConstructor
 public class ClientNotFoundHttpException extends RuntimeException {
 
-    public ClientNotFoundHttpException(String message){
+    public ClientNotFoundHttpException(String message) {
         super(message);
-    };
+    }
 }

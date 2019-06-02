@@ -47,7 +47,7 @@ public class ClientController {
 
     @PostMapping
     public ResponseEntity<ClientDto> add(){
-        ClientDto clientDto = new ClientDto();
+        ClientDto clientDto = ClientDto.builder().build();
         ClientDto clientDtoSaved = clientService.create(clientDto);
         return ResponseEntity.ok(clientDtoSaved);
     }
