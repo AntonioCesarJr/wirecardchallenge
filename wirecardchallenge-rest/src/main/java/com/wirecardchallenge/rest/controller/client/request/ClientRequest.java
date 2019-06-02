@@ -2,10 +2,10 @@ package com.wirecardchallenge.rest.controller.client.request;
 
 import lombok.Data;
 
+import java.util.UUID;
+
 @Data
 public class ClientRequest {
 
-    private String name;
-
-    private String description;
+    private UUID publicId;
 }

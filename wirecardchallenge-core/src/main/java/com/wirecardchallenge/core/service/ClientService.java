@@ -47,8 +47,6 @@ public class ClientService {
         if (!optionalClient.isPresent())
             return ClientDto.builder().build();
         Client client = optionalClient.get();
-        client.setName(clientDto.getName());
-        client.setDescription(clientDto.getDescription());
         Client clientSaved = clientRepository.save(client);
         return buildClientDto(clientSaved);
     }
@@ -62,8 +60,6 @@ public class ClientService {
     private ClientDto buildClientDto(Client client){
         return ClientDto.builder()
                 .publicId(client.getPublicId())
-                .name(client.getName())
-                .description(client.getDescription())
                 .createdAt(client.getCreatedAt())
                 .updatedAt(client.getUpdatedAt())
                 .build();
@@ -73,8 +69,6 @@ public class ClientService {
         return Client.builder()
                 .id(clientDto.getId())
                 .publicId(clientDto.getPublicId())
-                .name(clientDto.getName())
-                .description(clientDto.getDescription())
                 .build();
     }
 }

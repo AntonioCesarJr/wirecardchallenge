@@ -1,6 +1,7 @@
 package com.wirecardchallenge.rest.controller.buyer;
 
 import com.wirecardchallenge.core.dto.BuyerDto;
+import com.wirecardchallenge.core.dto.ClientDto;
 import com.wirecardchallenge.core.service.BuyerService;
 import com.wirecardchallenge.rest.controller.buyer.request.BuyerRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,9 +64,12 @@ public class BuyerController {
 
     private BuyerDto buildBuyerDto(BuyerRequest buyerRequest){
         return BuyerDto.builder()
-                .name(buyerRequest.getName())
-                .email(buyerRequest.getEmail())
-                .cpf(buyerRequest.getCpf())
-                .build();
+            .name(buyerRequest.getName())
+            .email(buyerRequest.getEmail())
+            .cpf(buyerRequest.getCpf())
+            .clientDto(ClientDto.builder()
+                .publicId(buyerRequest.getClientRequest().getPublicId())
+                .build())
+            .build();
     }
 }

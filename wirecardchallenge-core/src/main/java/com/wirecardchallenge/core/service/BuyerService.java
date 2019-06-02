@@ -1,8 +1,11 @@
 package com.wirecardchallenge.core.service;
 
 import com.wirecardchallenge.core.dto.BuyerDto;
+import com.wirecardchallenge.core.dto.ClientDto;
 import com.wirecardchallenge.core.entity.Buyer;
+import com.wirecardchallenge.core.entity.Client;
 import com.wirecardchallenge.core.repository.BuyerRepository;
+import com.wirecardchallenge.core.repository.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -19,6 +22,9 @@ public class BuyerService {
 
     @Autowired
     BuyerRepository buyerRepository;
+
+    @Autowired
+    ClientRepository clientRepository;
 
     public Page<BuyerDto> findAll(Pageable pageable){
         Page<Buyer> buyerPage = buyerRepository.findAll(pageable);
@@ -43,13 +49,16 @@ public class BuyerService {
     }
 
     public BuyerDto create(BuyerDto buyerDto){
+        Optional<Client> client = clientRepository.findByPublicId(buyerDto.getClientDto().getPublicId());
         Buyer buyer = buildBuyer(buyerDto);
+        buyer.setClient(client.get());
         Buyer buyerSaved = buyerRepository.save(buyer);
         return buildBuyerDto(buyerSaved);
     }
 
     public BuyerDto update(UUID uuid,
                            BuyerDto buyerDto){
+        Optional<Client> client = clientRepository.findByPublicId(buyerDto.getClientDto().getPublicId());
         Optional<Buyer> optionalBuyer = buyerRepository.findByPublicId(uuid);
         if (!optionalBuyer.isPresent())
             return BuyerDto.builder().build();
@@ -57,6 +66,7 @@ public class BuyerService {
         buyer.setName(buyerDto.getName());
         buyer.setEmail(buyerDto.getEmail());
         buyer.setCpf(buyerDto.getCpf());
+        buyer.setClient(client.get());
         Buyer buyerSaved = buyerRepository.save(buyer);
         return buildBuyerDto(buyerSaved);
     }
@@ -73,6 +83,7 @@ public class BuyerService {
             .email(buyer.getEmail())
             .name(buyer.getName())
             .cpf(buyer.getCpf())
+            .clientDto(ClientDto.builder().publicId(buyer.getClient().getPublicId()).build())
             .createdAt(buyer.getCreatedAt())
             .updatedAt(buyer.getUpdatedAt())
             .build();

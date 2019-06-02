@@ -1,6 +1,7 @@
 package com.wirecardchallenge.core.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,11 +21,9 @@ public class ClientDto {
 
     private UUID publicId;
 
-    private String name;
-
-    private String description;
-
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private LocalDateTime createdAt;
 
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private LocalDateTime updatedAt;
 }

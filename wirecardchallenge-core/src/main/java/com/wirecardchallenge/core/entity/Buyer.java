@@ -11,9 +11,11 @@ import org.hibernate.validator.constraints.br.CPF;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.validation.constraints.Email;
@@ -47,6 +49,10 @@ public class  Buyer implements Serializable {
     @Column(unique = true, nullable = false)
     @CPF
     private String cpf;
+
+    @OneToOne(fetch = FetchType.EAGER, optional = false)
+//    @Builder.Default
+    private Client client;
 
     @CreationTimestamp
     @Column(name = "created_at", columnDefinition = "DATETIME", nullable = false)

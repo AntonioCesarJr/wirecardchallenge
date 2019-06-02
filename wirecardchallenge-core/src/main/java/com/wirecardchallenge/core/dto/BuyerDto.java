@@ -1,6 +1,7 @@
 package com.wirecardchallenge.core.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -25,6 +26,9 @@ public class BuyerDto {
     private String email;
 
     private String cpf;
+
+    @JsonProperty(value = "client")
+    private ClientDto clientDto;
 
     private LocalDateTime createdAt;
 
