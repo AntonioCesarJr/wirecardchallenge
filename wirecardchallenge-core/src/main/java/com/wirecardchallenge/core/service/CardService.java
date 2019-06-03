@@ -82,7 +82,8 @@ public class CardService {
         Optional<Card> cardOptional = cardRepository.findByPublicId(uuid);
         if (!cardOptional.isPresent())
             throw new CardNotFoundException();
-        cardRepository.delete(cardOptional.get());
+        Card card = cardOptional.get();
+        cardRepository.delete(card);
     }
 
     private CardDto buildCardDto(Card card){
