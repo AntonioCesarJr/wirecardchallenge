@@ -2,7 +2,7 @@ package com.wirecardchallenge.core.service;
 
 import com.wirecardchallenge.core.dto.ClientDto;
 import com.wirecardchallenge.core.entity.Client;
-import com.wirecardchallenge.core.exceptions.ClientNotFoundException;
+import com.wirecardchallenge.core.exceptions.client.ClientNotFoundException;
 import com.wirecardchallenge.core.repository.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -31,8 +31,7 @@ public class ClientService {
 
     public ClientDto findByPublicId(UUID publicId) throws ClientNotFoundException {
         Optional<Client> clientOptional = clientRepository.findByPublicId(publicId);
-        if (!clientOptional.isPresent())
-            throw new ClientNotFoundException();
+        if (!clientOptional.isPresent()) throw new ClientNotFoundException("Client Not Found !!");
         return buildClientDto(clientOptional.get());
     }
 
@@ -45,8 +44,7 @@ public class ClientService {
     public ClientDto update(UUID publicId,
                             ClientDto clientDto) throws ClientNotFoundException {
         Optional<Client> optionalClient = clientRepository.findByPublicId(publicId);
-        if (!optionalClient.isPresent())
-            throw new ClientNotFoundException();
+        if (!optionalClient.isPresent()) throw new ClientNotFoundException("Client Not Found !!");
         Client client = optionalClient.get();
         Client clientSaved = clientRepository.save(client);
         return buildClientDto(clientSaved);
@@ -54,8 +52,7 @@ public class ClientService {
 
     public void delete(UUID publicId) throws ClientNotFoundException {
         Optional<Client> client = clientRepository.findByPublicId(publicId);
-        if (!client.isPresent())
-            throw new ClientNotFoundException();
+        if (!client.isPresent()) throw new ClientNotFoundException("Client Not Found !!");
         clientRepository.delete(client.get());
     }
 

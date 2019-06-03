@@ -1,6 +1,5 @@
 package com.wirecardchallenge.core.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,12 +16,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.Set;
 import java.util.UUID;
 
 @Entity
@@ -53,11 +50,11 @@ public class Card implements Serializable {
     @Column(nullable = false, length = 3)
     private String CVV;
 
-    @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL, mappedBy = "card")
-    @JsonIgnore
-    private Set<Payment> payments;
+//    @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL, mappedBy = "card")
+//    @JsonIgnore
+//    private Set<Payment> payments;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER, optional = false)
+    @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.EAGER, optional = false)
     private Buyer buyer;
 
     @CreationTimestamp

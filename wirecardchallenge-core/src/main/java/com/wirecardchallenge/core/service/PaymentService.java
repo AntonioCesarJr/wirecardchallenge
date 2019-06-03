@@ -18,22 +18,28 @@ public class PaymentService {
     PaymentRepository paymentRepository;
 
     public List<PaymentDto> findAll(){
+
         List<PaymentDto> paymentDtos = paymentRepository.findAll()
                 .stream().map(payment -> buildPaymentDto(payment)
                 ).collect(Collectors.toList());
+
         return paymentDtos;
     }
 
     public PaymentDto save(PaymentDto paymentDto){
+
         Payment payment = buildPaymentEntity(paymentDto);
         payment =  paymentRepository.save(payment);
+
         return buildPaymentDto(payment);
     }
 
     public PaymentDto findByPublicId(UUID publicId){
+
         Optional<Payment> payment = paymentRepository.findByPublicId(publicId);
         if (payment.isPresent())
             return buildPaymentDto(payment.get());
+
         return PaymentDto.builder().build();
     }
 

@@ -14,7 +14,9 @@ public class CacheService {
     private RedisConnectionFactory redisConnectionFactory;
 
     public String cleanCache(){
+
         RedisConnection connection = redisConnectionFactory.getConnection();
+
         try {
             connection.flushAll();
             log.info("Cache cleaned! \\o/");
@@ -24,6 +26,7 @@ public class CacheService {
         } finally {
             connection.close();
         }
+
         return "success!";
     }
 }

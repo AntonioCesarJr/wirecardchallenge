@@ -58,8 +58,7 @@ public class  Buyer implements Serializable {
     @OneToOne(fetch = FetchType.EAGER, optional = false)
     private Client client;
 
-    @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL, mappedBy = "buyer")
-    @Builder.Default
+    @OneToMany(mappedBy = "buyer", fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     @JsonIgnore
     private Set<Card> cards =  new HashSet<>();
 
