@@ -1,0 +1,416 @@
+{
+	"info": {
+		"_postman_id": "e1b2668b-f8f3-423b-828c-dafad34102b9",
+		"name": "WireCard",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Client",
+			"item": [
+				{
+					"name": "Client Get List",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:8089/api/v1/client",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8089",
+							"path": [
+								"api",
+								"v1",
+								"client"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Client Get",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:8089/api/v1/client/fd422b05-2d06-462c-8783-35d216a86877",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8089",
+							"path": [
+								"api",
+								"v1",
+								"client",
+								"fd422b05-2d06-462c-8783-35d216a86877"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Client Post",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:8089/api/v1/client",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8089",
+							"path": [
+								"api",
+								"v1",
+								"client"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Client Delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:8089/api/v1/client/ff2e5450-8559-11e9-999e-0242ac110002",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8089",
+							"path": [
+								"api",
+								"v1",
+								"client",
+								"ff2e5450-8559-11e9-999e-0242ac110002"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Cache",
+			"item": [
+				{
+					"name": "Clean Cache",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:8089/api/v1/cache/clean",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8089",
+							"path": [
+								"api",
+								"v1",
+								"cache",
+								"clean"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Buyer",
+			"item": [
+				{
+					"name": "Buyer Get List",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:8089/api/v1/buyer",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8089",
+							"path": [
+								"api",
+								"v1",
+								"buyer"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Buyer Get",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:8089/api/v1/buyer/d1d35803-3379-4713-8281-153a534efec1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8089",
+							"path": [
+								"api",
+								"v1",
+								"buyer",
+								"d1d35803-3379-4713-8281-153a534efec1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Buyer Post",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"client\": {\n    \"publicId\": \"9650b0b7-8563-11e9-999e-0242ac110002\"\n  },\n  \"cpf\": \"494.797.170-34\",\n  \"email\": \"email@wirecard.com\",\n  \"name\": \"Buyer 1\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8089/api/v1/buyer",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8089",
+							"path": [
+								"api",
+								"v1",
+								"buyer"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Buyer Put",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"cpf\": \"136.745.340-29\",\n  \"email\": \"email@wirecard.com\",\n  \"name\": \"Buyer Wire 3 alterado\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8089/api/v1/buyer/d1d35803-3379-4713-8281-153a534efec1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8089",
+							"path": [
+								"api",
+								"v1",
+								"buyer",
+								"d1d35803-3379-4713-8281-153a534efec1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Buyer Delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:8089/api/v1/buyer/d1d35803-3379-4713-8281-153a534efec1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8089",
+							"path": [
+								"api",
+								"v1",
+								"buyer",
+								"d1d35803-3379-4713-8281-153a534efec1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Card",
+			"item": [
+				{
+					"name": "Card Get List",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:8089/api/v1/card",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8089",
+							"path": [
+								"api",
+								"v1",
+								"card"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Card Get",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:8089/api/v1/card/74c23cb2-8587-11e9-999e-0242ac110002",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8089",
+							"path": [
+								"api",
+								"v1",
+								"card",
+								"74c23cb2-8587-11e9-999e-0242ac110002"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Card Put",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"buyer.publicId\": \"749acdf9-8587-11e9-999e-0242ac110002\",\n  \"cvv\": \"111\",\n  \"expirationDate\": \"02/20\",\n  \"name\": \"Name Updated\",\n  \"number\": \"1111222233334444\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8089/api/v1/card/74c23cb2-8587-11e9-999e-0242ac110002",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8089",
+							"path": [
+								"api",
+								"v1",
+								"card",
+								"74c23cb2-8587-11e9-999e-0242ac110002"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Card Delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:8089/api/v1/card/74c23cb2-8587-11e9-999e-0242ac110002",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8089",
+							"path": [
+								"api",
+								"v1",
+								"card",
+								"74c23cb2-8587-11e9-999e-0242ac110002"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
