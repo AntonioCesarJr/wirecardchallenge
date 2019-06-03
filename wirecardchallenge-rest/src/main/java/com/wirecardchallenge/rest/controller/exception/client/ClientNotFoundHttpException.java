@@ -1,4 +1,4 @@
-package com.wirecardchallenge.rest.controller.exception;
+package com.wirecardchallenge.rest.controller.exception.client;
 
 import lombok.NoArgsConstructor;
 import org.springframework.http.HttpStatus;

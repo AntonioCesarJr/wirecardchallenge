@@ -2,12 +2,14 @@ package com.wirecardchallenge.rest.controller.buyer;
 
 import com.wirecardchallenge.core.dto.BuyerDto;
 import com.wirecardchallenge.core.dto.ClientDto;
-import com.wirecardchallenge.core.exceptions.BuyerNotFoundException;
-import com.wirecardchallenge.core.exceptions.ClientNotFoundException;
+import com.wirecardchallenge.core.exceptions.buyer.BuyerNotFoundException;
+import com.wirecardchallenge.core.exceptions.buyer.BuyerServiceIntegrityConstraintException;
+import com.wirecardchallenge.core.exceptions.client.ClientNotFoundException;
 import com.wirecardchallenge.core.service.BuyerService;
 import com.wirecardchallenge.rest.controller.buyer.request.BuyerRequest;
-import com.wirecardchallenge.rest.controller.exception.BuyerNotFoundHttpException;
-import com.wirecardchallenge.rest.controller.exception.ClientNotFoundHttpException;
+import com.wirecardchallenge.rest.controller.exception.buyer.BuyerInternalErrorHttpException;
+import com.wirecardchallenge.rest.controller.exception.buyer.BuyerNotFoundHttpException;
+import com.wirecardchallenge.rest.controller.exception.client.ClientNotFoundHttpException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -44,7 +46,7 @@ public class BuyerController {
         try {
             buyerDto = buyerService.findByPublicId(publicId);
         } catch (BuyerNotFoundException e) {
-            throw new BuyerNotFoundHttpException("Buyer " + publicId + " not found !");
+            throw new BuyerNotFoundHttpException(e.getMessage() + " -> PUBLICID = " + publicId);
         }
         return ResponseEntity.ok(buyerDto);
     }
@@ -56,8 +58,8 @@ public class BuyerController {
         try {
             buyerDtoSaved = buyerService.create(buyerDto);
         } catch (ClientNotFoundException e) {
-            throw new ClientNotFoundHttpException("Client " + buyerRequest.getClientRequest().getPublicId() +
-                " not found !");
+            throw new ClientNotFoundHttpException(e.getMessage() + " -> PUBLICID =  " +
+                buyerRequest.getClientRequest().getPublicId());
         }
         return ResponseEntity.ok(buyerDtoSaved);
     }
@@ -71,10 +73,10 @@ public class BuyerController {
         try {
             buyerDtoSaved = buyerService.update(publicId, buyerDto);
         } catch (ClientNotFoundException e) {
-            throw new ClientNotFoundHttpException("Client " + buyerRequest.getClientRequest().getPublicId() +
-                " not found !");
+            throw new ClientNotFoundHttpException(e.getMessage() + " -> PUBLICID =  " +
+                buyerRequest.getClientRequest().getPublicId());
         } catch (BuyerNotFoundException e) {
-            throw new BuyerNotFoundHttpException("Buyer " + publicId + " not found !");
+            throw new BuyerNotFoundHttpException(e.getMessage() + " -> PUBLICID =  " + publicId);
         }
         return ResponseEntity.ok(buyerDtoSaved);
     }
@@ -84,7 +86,9 @@ public class BuyerController {
         try {
             buyerService.delete(publicId);
         } catch (BuyerNotFoundException e) {
-            throw new BuyerNotFoundHttpException("Buyer " + publicId + " not found !");
+            throw new BuyerNotFoundHttpException(e.getMessage() + " -> PUBLICID = " + publicId);
+        } catch (BuyerServiceIntegrityConstraintException e) {
+            throw new BuyerInternalErrorHttpException(e.getMessage());
         }
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

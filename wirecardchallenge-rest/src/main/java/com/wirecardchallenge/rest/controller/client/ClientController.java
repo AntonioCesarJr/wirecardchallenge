@@ -1,9 +1,9 @@
 package com.wirecardchallenge.rest.controller.client;
 
 import com.wirecardchallenge.core.dto.ClientDto;
-import com.wirecardchallenge.core.exceptions.ClientNotFoundException;
+import com.wirecardchallenge.core.exceptions.client.ClientNotFoundException;
 import com.wirecardchallenge.core.service.ClientService;
-import com.wirecardchallenge.rest.controller.exception.ClientNotFoundHttpException;
+import com.wirecardchallenge.rest.controller.exception.client.ClientNotFoundHttpException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
