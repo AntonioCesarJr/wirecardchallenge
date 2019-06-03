@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.wirecardchallenge.rest.controller.client.request.ClientRequest;
 import lombok.Data;
 
+import java.util.UUID;
+
 @Data
 public class BuyerRequest {
 
@@ -12,6 +14,8 @@ public class BuyerRequest {
     private String email;
 
     private String cpf;
+
+    private UUID publicId;
 
     @JsonProperty(value = "client")
     private ClientRequest clientRequest;

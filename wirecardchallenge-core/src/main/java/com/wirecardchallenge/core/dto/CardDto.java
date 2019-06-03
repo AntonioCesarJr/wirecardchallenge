@@ -1,6 +1,8 @@
 package com.wirecardchallenge.core.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.wirecardchallenge.core.entity.Buyer;
 import com.wirecardchallenge.core.entity.Payment;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -29,6 +31,9 @@ public class CardDto {
     private String expirationDate;
 
     private String CVV;
+
+    @JsonProperty(value = "buyer")
+    private BuyerDto buyerDto;
 
     private Set<Payment> payments;
 
