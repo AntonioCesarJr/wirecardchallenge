@@ -1,7 +1,12 @@
 package com.wirecardchallenge.core.service;
 
+import com.wirecardchallenge.core.dto.BuyerDto;
 import com.wirecardchallenge.core.dto.CardDto;
+import com.wirecardchallenge.core.entity.Buyer;
 import com.wirecardchallenge.core.entity.Card;
+import com.wirecardchallenge.core.exceptions.BuyerNotFoundException;
+import com.wirecardchallenge.core.exceptions.CardNotFoundException;
+import com.wirecardchallenge.core.repository.BuyerRepository;
 import com.wirecardchallenge.core.repository.CardRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -20,52 +25,64 @@ public class CardService {
     @Autowired
     CardRepository cardRepository;
 
+    @Autowired
+    BuyerRepository buyerRepository;
+
     public Page<CardDto> findAll(Pageable pageable){
-        Page<Card> vardPage = cardRepository.findAll(pageable);
-        List<CardDto> cardDtos= vardPage.getContent().stream()
+        Page<Card> cardPage = cardRepository.findAll(pageable);
+        List<CardDto> cardDtos = cardPage.getContent().stream()
             .map(card -> buildCardDto(card))
             .collect(Collectors.toList());
-        return new PageImpl<>(cardDtos, pageable, vardPage.getTotalElements());
+        return new PageImpl<>(cardDtos, pageable, cardPage.getTotalElements());
     }
 
-    public CardDto findById(Long id){
+    public CardDto findById(Long id) throws CardNotFoundException {
         Optional<Card> cardOptional = cardRepository.findById(id);
         if (!cardOptional.isPresent())
-            return CardDto.builder().build();
+            throw new CardNotFoundException();
         return buildCardDto(cardOptional.get());
     }
 
-    public CardDto findByPublicId(UUID publicId){
+    public CardDto findByPublicId(UUID publicId) throws CardNotFoundException {
         Optional<Card> cardOptional = cardRepository.findByPublicId(publicId);
         if (!cardOptional.isPresent())
-            return CardDto.builder().build();
+            throw new CardNotFoundException();
         return buildCardDto(cardOptional.get());
     }
 
-    public CardDto create(CardDto cardDto){
+    public CardDto create(CardDto cardDto) throws BuyerNotFoundException {
+        Optional<Buyer> buyerOptional = buyerRepository.findByPublicId(cardDto.getBuyerDto().getPublicId());
+        if(!buyerOptional.isPresent())
+            throw new BuyerNotFoundException();
         Card card = buildCard(cardDto);
+        card.setBuyer(buyerOptional.get());
         Card cardSaved = cardRepository.save(card);
         return buildCardDto(cardSaved);
     }
 
     public CardDto update(UUID uuid,
-                          CardDto cardDto){
+                          CardDto cardDto) throws CardNotFoundException, BuyerNotFoundException {
+        Optional<Buyer> buyerOptional = buyerRepository.findByPublicId(cardDto.getBuyerDto().getPublicId());
+        if(!buyerOptional.isPresent())
+            throw new BuyerNotFoundException();
         Optional<Card> cardOptional = cardRepository.findByPublicId(uuid);
         if (!cardOptional.isPresent())
-            return CardDto.builder().build();
+            throw new CardNotFoundException();
         Card card = cardOptional.get();
         card.setName(cardDto.getName());
         card.setNumber(cardDto.getNumber());
         card.setExpirationDate(cardDto.getExpirationDate());
         card.setCVV(cardDto.getCVV());
+        card.setBuyer(buyerOptional.get());
         Card cardSaved = cardRepository.save(card);
         return buildCardDto(cardSaved);
     }
 
-    public void delete(UUID uuid){
+    public void delete(UUID uuid) throws CardNotFoundException {
         Optional<Card> cardOptional = cardRepository.findByPublicId(uuid);
-        if (cardOptional.isPresent())
-            cardRepository.delete(cardOptional.get());
+        if (!cardOptional.isPresent())
+            throw new CardNotFoundException();
+        cardRepository.delete(cardOptional.get());
     }
 
     private CardDto buildCardDto(Card card){
@@ -75,6 +92,12 @@ public class CardService {
             .number(card.getNumber())
             .expirationDate(card.getExpirationDate())
             .CVV(card.getCVV())
+            .buyerDto(BuyerDto.builder()
+                .publicId(card.getBuyer().getPublicId())
+                .name(card.getBuyer().getName())
+                .email(card.getBuyer().getEmail())
+                .cpf(card.getBuyer().getCpf())
+                .build())
             .createdAt(card.getCreatedAt())
             .updatedAt(card.getUpdatedAt())
             .build();
@@ -88,6 +111,9 @@ public class CardService {
             .number(cardDto.getNumber())
             .expirationDate(cardDto.getExpirationDate())
             .CVV(cardDto.getCVV())
+            .buyer(Buyer.builder()
+                .publicId(cardDto.getBuyerDto().getPublicId())
+                .build())
             .build();
     }
 }

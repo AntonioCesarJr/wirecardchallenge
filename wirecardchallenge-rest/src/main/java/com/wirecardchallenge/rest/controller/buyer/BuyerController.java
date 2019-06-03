@@ -2,8 +2,12 @@ package com.wirecardchallenge.rest.controller.buyer;
 
 import com.wirecardchallenge.core.dto.BuyerDto;
 import com.wirecardchallenge.core.dto.ClientDto;
+import com.wirecardchallenge.core.exceptions.BuyerNotFoundException;
+import com.wirecardchallenge.core.exceptions.ClientNotFoundException;
 import com.wirecardchallenge.core.service.BuyerService;
 import com.wirecardchallenge.rest.controller.buyer.request.BuyerRequest;
+import com.wirecardchallenge.rest.controller.exception.BuyerNotFoundHttpException;
+import com.wirecardchallenge.rest.controller.exception.ClientNotFoundHttpException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -36,14 +40,25 @@ public class BuyerController {
 
     @GetMapping(value = "/{publicId}")
     public ResponseEntity<BuyerDto> findByPublicId(@PathVariable UUID publicId){
-        BuyerDto buyerDto = buyerService.findByPublicId(publicId);
+        BuyerDto buyerDto;
+        try {
+            buyerDto = buyerService.findByPublicId(publicId);
+        } catch (BuyerNotFoundException e) {
+            throw new BuyerNotFoundHttpException("Buyer " + publicId + " not found !");
+        }
         return ResponseEntity.ok(buyerDto);
     }
 
     @PostMapping
     public ResponseEntity<BuyerDto> add(@RequestBody @Valid BuyerRequest buyerRequest){
         BuyerDto buyerDto = buildBuyerDto(buyerRequest);
-        BuyerDto buyerDtoSaved = buyerService.create(buyerDto);
+        BuyerDto buyerDtoSaved;
+        try {
+            buyerDtoSaved = buyerService.create(buyerDto);
+        } catch (ClientNotFoundException e) {
+            throw new ClientNotFoundHttpException("Client " + buyerRequest.getClientRequest().getPublicId() +
+                " not found !");
+        }
         return ResponseEntity.ok(buyerDtoSaved);
     }
 
@@ -52,13 +67,25 @@ public class BuyerController {
                                            @RequestBody @Valid BuyerRequest buyerRequest){
         BuyerDto buyerDto = buildBuyerDto(buyerRequest);
         buyerDto.setPublicId(publicId);
-        BuyerDto buyerDtoSaved = buyerService.update(publicId, buyerDto);
+        BuyerDto buyerDtoSaved;
+        try {
+            buyerDtoSaved = buyerService.update(publicId, buyerDto);
+        } catch (ClientNotFoundException e) {
+            throw new ClientNotFoundHttpException("Client " + buyerRequest.getClientRequest().getPublicId() +
+                " not found !");
+        } catch (BuyerNotFoundException e) {
+            throw new BuyerNotFoundHttpException("Buyer " + publicId + " not found !");
+        }
         return ResponseEntity.ok(buyerDtoSaved);
     }
 
     @DeleteMapping("/{publicId}")
     public ResponseEntity<BuyerDto> delete(@PathVariable UUID publicId){
-        buyerService.delete(publicId);
+        try {
+            buyerService.delete(publicId);
+        } catch (BuyerNotFoundException e) {
+            throw new BuyerNotFoundHttpException("Buyer " + publicId + " not found !");
+        }
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
