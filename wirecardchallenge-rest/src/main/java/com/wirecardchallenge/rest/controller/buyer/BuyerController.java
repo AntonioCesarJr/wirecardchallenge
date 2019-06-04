@@ -54,12 +54,14 @@ public class BuyerController {
     @PostMapping
     public ResponseEntity<BuyerDto> add(@RequestBody @Valid BuyerRequest buyerRequest){
         BuyerDto buyerDto = buildBuyerDto(buyerRequest);
-        BuyerDto buyerDtoSaved;
+        BuyerDto buyerDtoSaved = new BuyerDto();
         try {
             buyerDtoSaved = buyerService.create(buyerDto);
         } catch (ClientNotFoundException e) {
             throw new ClientNotFoundHttpException(e.getMessage() + " -> PUBLICID =  " +
                 buyerRequest.getClientRequest().getPublicId());
+        } catch (BuyerServiceIntegrityConstraintException e) {
+            throw new BuyerInternalErrorHttpException(e.getMessage());
         }
         return ResponseEntity.ok(buyerDtoSaved);
     }
@@ -77,6 +79,8 @@ public class BuyerController {
                 buyerRequest.getClientRequest().getPublicId());
         } catch (BuyerNotFoundException e) {
             throw new BuyerNotFoundHttpException(e.getMessage() + " -> PUBLICID =  " + publicId);
+        } catch (BuyerServiceIntegrityConstraintException e) {
+            throw new BuyerInternalErrorHttpException(e.getMessage());
         }
         return ResponseEntity.ok(buyerDtoSaved);
     }

@@ -1,5 +1,5 @@
 package com.wirecardchallenge.core.enumerable;
 
 public enum PaymentStatus {
-    CREATED,COMPLETED,WITHERROR
+    CREATED, ACCEPTED, REJECTED, WITHERROR
 }

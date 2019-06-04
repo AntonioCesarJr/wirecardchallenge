@@ -1,3 +1,4 @@
+delete from `payment`;
 delete from `card`;
 delete from `buyer`;
 delete from `client`;
@@ -42,3 +43,31 @@ insert into `card`(`public_id`,`name`,`number`,`expiration_date`,`CVV`,`buyer_id
 values (@UUIDCARD2, 'NAME 2','1234432112344322','20/30','123',@ID5, now(), now());
 insert into `card`(`public_id`,`name`,`number`,`expiration_date`,`CVV`,`buyer_id`,`created_at`,`updated_at`)
 values (@UUIDCARD3, 'NAME 3','1234432112344323','20/30','123',@ID6, now(), now());
+
+select (UNHEX(REPLACE(UUID(), '-', ''))) into @UUIDPAYMENT1;
+select (UNHEX(REPLACE(UUID(), '-', ''))) into @UUIDPAYMENT2;
+select (UNHEX(REPLACE(UUID(), '-', ''))) into @UUIDPAYMENT3;
+select (UNHEX(REPLACE(UUID(), '-', ''))) into @UUIDPAYMENT4;
+select (UNHEX(REPLACE(UUID(), '-', ''))) into @UUIDPAYMENT5;
+select (UNHEX(REPLACE(UUID(), '-', ''))) into @UUIDPAYMENT6;
+select (UNHEX(REPLACE(UUID(), '-', ''))) into @UUIDPAYMENT7;
+select (UNHEX(REPLACE(UUID(), '-', ''))) into @UUIDPAYMENT8;
+select (UNHEX(REPLACE(UUID(), '-', ''))) into @UUIDPAYMENT9;
+select `id` into @ID7 from `card` limit 0,1;
+select `id` into @ID8 from `card` limit 1,1;
+insert into `payment`(`public_id`, `amount`, `payment_status`, `type`, `card_id`, `created_at`, `updated_at`)
+values (@UUIDPAYMENT1, 100.34, 'CREATED', 'CREDIT_CARD',@ID7, now(), now());
+insert into `payment`(`public_id`, `amount`, `payment_status`, `type`, `card_id`, `created_at`, `updated_at`)
+values (@UUIDPAYMENT2, 2345.87, 'ACCEPTED', 'CREDIT_CARD',@ID7, now(), now());
+insert into `payment`(`public_id`, `amount`, `payment_status`, `type`, `card_id`, `created_at`, `updated_at`)
+values (@UUIDPAYMENT3, 87.45, 'WITHERROR', 'CREDIT_CARD',@ID7, now(), now());
+insert into `payment`(`public_id`, `amount`, `payment_status`, `type`, `card_id`, `created_at`, `updated_at`)
+values (@UUIDPAYMENT4, 584.78, 'REJECTED', 'CREDIT_CARD',@ID8, now(), now());
+insert into `payment`(`public_id`, `amount`, `payment_status`, `type`, `card_id`, `created_at`, `updated_at`)
+values (@UUIDPAYMENT5, 487.21, 'ACCEPTED', 'CREDIT_CARD',@ID8, now(), now());
+insert into `payment`(`public_id`, `amount`, `payment_status`, `type`, `card_id`, `created_at`, `updated_at`)
+values (@UUIDPAYMENT6, 1257.54, 'WITHERROR', 'CREDIT_CARD',@ID8, now(), now());
+insert into `payment`(`public_id`, `amount`, `payment_status`, `type`, `card_id`, `created_at`, `updated_at`)
+values (@UUIDPAYMENT7, 877.44, 'ACCEPTED', 'BOLETO', null, now(), now());
+insert into `payment`(`public_id`, `amount`, `payment_status`, `type`, `card_id`, `created_at`, `updated_at`)
+values (@UUIDPAYMENT8, 6114.44, 'REJECTED', 'BOLETO', null, now(), now());
