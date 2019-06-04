@@ -4,10 +4,11 @@ import com.wirecardchallenge.core.entity.Payment;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -15,7 +16,7 @@ import java.util.UUID;
 public interface PaymentRepository extends JpaRepository<Payment, Long> {
 
     @Cacheable("paymentsPage")
-    List<Payment> findAll();
+    Page<Payment> findAll(Pageable pageable);
 
     @Cacheable("paymentId")
     Optional<Payment> findById(Long id);

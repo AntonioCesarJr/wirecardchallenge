@@ -19,9 +19,9 @@ public class CacheService {
 
         try {
             connection.flushAll();
-            log.info("Cache cleaned! \\o/");
+            log.info("Cache cleaned ! \\o/");
         } catch (Exception e) {
-            log.warn("Something went wrong cleaning Redis cache! :(  -> ", e);
+            log.warn("Something went wrong cleaning Redis cache ! :(  -> ", e);
             return "fail!";
         } finally {
             connection.close();

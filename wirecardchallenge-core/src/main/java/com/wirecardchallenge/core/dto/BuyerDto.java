@@ -24,8 +24,10 @@ public class BuyerDto {
 
     private String name;
 
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private String email;
 
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private String cpf;
 
     @JsonProperty(value = "client")

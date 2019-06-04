@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -25,13 +26,14 @@ import java.time.LocalDateTime;
 import java.util.Set;
 import java.util.UUID;
 
-@Entity
+@Entity(name = "Card")
 @Table(name = "card")
-@Data
 @Builder
-@NoArgsConstructor
+@Data
 @AllArgsConstructor
 public class Card implements Serializable {
+
+    public Card(){}
 
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO,generator="native")
@@ -57,7 +59,8 @@ public class Card implements Serializable {
     @JsonIgnore
     private Set<Payment> payments;
 
-    @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.EAGER, optional = false)
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @Builder.Default
     private Buyer buyer;
 
     @CreationTimestamp

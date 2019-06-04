@@ -93,8 +93,9 @@ public class BuyerService {
 
         if (!buyerOptional.isPresent()) throw new BuyerNotFoundException("Buyer Not Found !!");
 
+        Buyer buyer = buyerOptional.get();
         try{
-            buyerRepository.delete(buyerOptional.get());
+            buyerRepository.delete(buyer);
         }catch (DataIntegrityViolationException e){
             log.error(e.getMessage() + " // " + e.getCause().getCause());
             throw new BuyerServiceIntegrityConstraintException(e.getMessage());

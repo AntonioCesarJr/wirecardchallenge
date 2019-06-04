@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -22,12 +23,12 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-@Entity
+@Entity(name = "Client")
 @Table(name = "client")
-@Data
 @Builder
-@NoArgsConstructor
+@Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class Client implements Serializable {
 
     @Id
@@ -38,8 +39,7 @@ public class Client implements Serializable {
     @Column(unique = true, updatable = false,columnDefinition = "BINARY(16)",length = 16, nullable = false)
     private UUID publicId;
 
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "client")
-    @JoinColumn(unique = true)
+    @OneToOne(mappedBy = "client")
     private Buyer buyer;
 
     @CreationTimestamp
