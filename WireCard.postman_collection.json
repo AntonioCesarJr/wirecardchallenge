@@ -6,6 +6,37 @@
 	},
 	"item": [
 		{
+			"name": "Cache",
+			"item": [
+				{
+					"name": "Clean Cache",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:8089/api/v1/cache/clean",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8089",
+							"path": [
+								"api",
+								"v1",
+								"cache",
+								"clean"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
 			"name": "Client",
 			"item": [
 				{
@@ -43,7 +74,7 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "http://localhost:8089/api/v1/client/998e5359-8645-11e9-999e-0242ac110002",
+							"raw": "http://localhost:8089/api/v1/client/3c69024c-882b-4dc3-8603-2d9212a3e1c9",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -53,7 +84,7 @@
 								"api",
 								"v1",
 								"client",
-								"998e5359-8645-11e9-999e-0242ac110002"
+								"3c69024c-882b-4dc3-8603-2d9212a3e1c9"
 							]
 						}
 					},
@@ -101,7 +132,7 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "http://localhost:8089/api/v1/client/ff2e5450-8559-11e9-999e-0242ac110002",
+							"raw": "http://localhost:8089/api/v1/client/3c69024c-882b-4dc3-8603-2d9212a3e1c9",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -111,7 +142,7 @@
 								"api",
 								"v1",
 								"client",
-								"ff2e5450-8559-11e9-999e-0242ac110002"
+								"3c69024c-882b-4dc3-8603-2d9212a3e1c9"
 							]
 						}
 					},
@@ -120,10 +151,10 @@
 			]
 		},
 		{
-			"name": "Cache",
+			"name": "Buyer",
 			"item": [
 				{
-					"name": "Clean Cache",
+					"name": "Buyer Get List",
 					"request": {
 						"method": "GET",
 						"header": [],
@@ -132,7 +163,7 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "http://localhost:8089/api/v1/cache/clean",
+							"raw": "http://localhost:8089/api/v1/buyer",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -141,8 +172,124 @@
 							"path": [
 								"api",
 								"v1",
-								"cache",
-								"clean"
+								"buyer"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Buyer Get",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:8089/api/v1/buyer/99d088bb-8645-11e9-999e-0242ac110002",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8089",
+							"path": [
+								"api",
+								"v1",
+								"buyer",
+								"99d088bb-8645-11e9-999e-0242ac110002"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Buyer Post",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"client\": {\n    \"publicId\": \"aa830c4d-bcf4-4ec3-b277-488db7014bc2\"\n  },\n  \"cpf\": \"241.970.670-62\",\n  \"email\": \"zazascasasq2@wirecard.com\",\n  \"name\": \"Buyer INSERIDO qwqwqwqwqwqw\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8089/api/v1/buyer",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8089",
+							"path": [
+								"api",
+								"v1",
+								"buyer"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Buyer Put",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"client\": {\n    \"publicId\": \"dbe5cf6f-8648-11e9-999e-0242ac110002\"\n  },\n  \"cpf\": \"726.911.900-72\",\n  \"email\": \"teste_update@wirecard.com\",\n  \"name\": \"Buyer Alterado em teste POSTMAN\",\n  \"publicId\": \"dc323001-8648-11e9-999e-0242ac110002\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8089/api/v1/buyer/dc323001-8648-11e9-999e-0242ac110002",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8089",
+							"path": [
+								"api",
+								"v1",
+								"buyer",
+								"dc323001-8648-11e9-999e-0242ac110002"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Buyer Delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:8089/api/v1/buyer/311454c9-119f-45b9-a388-4c77cc4f2e21",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8089",
+							"path": [
+								"api",
+								"v1",
+								"buyer",
+								"311454c9-119f-45b9-a388-4c77cc4f2e21"
 							]
 						}
 					},
@@ -218,7 +365,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"buyer.publicId\": \"6feea999-864d-11e9-999e-0242ac110002\",\n  \"cvv\": \"999\",\n  \"expirationDate\": \"03/20\",\n  \"name\": \"NOVO CARD NAME\",\n  \"number\": \"8585969674741334\"\n}"
+							"raw": "{\n  \"buyer.publicId\": \"6feea999-864d-11e9-999e-0242ac110002\",\n  \"cvv\": \"999\",\n  \"expirationDate\": \"03/20\",\n  \"name\": \"NOVO CARD NAME TEST POSTMAM\",\n  \"number\": \"8585969674741387\"\n}"
 						},
 						"url": {
 							"raw": "http://localhost:8089/api/v1/card",
@@ -298,10 +445,10 @@
 			]
 		},
 		{
-			"name": "Buyer",
+			"name": "Payment",
 			"item": [
 				{
-					"name": "Buyer Get List",
+					"name": "Payment Get List",
 					"request": {
 						"method": "GET",
 						"header": [],
@@ -310,7 +457,7 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "http://localhost:8089/api/v1/buyer",
+							"raw": "http://localhost:8089/api/v1/payment",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -319,124 +466,7 @@
 							"path": [
 								"api",
 								"v1",
-								"buyer"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Buyer Get",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
-						"url": {
-							"raw": "http://localhost:8089/api/v1/buyer/99d088bb-8645-11e9-999e-0242ac110002",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8089",
-							"path": [
-								"api",
-								"v1",
-								"buyer",
-								"99d088bb-8645-11e9-999e-0242ac110002"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Buyer Post",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"name": "Content-Type",
-								"value": "application/json",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n  \"client\": {\n    \"publicId\": \"47e814d7-da27-491a-b3b1-e8ad2e1986ba\"\n  },\n  \"cpf\": \"494.797.170-34\",\n  \"email\": \"emailbla@wirecard.com\",\n  \"name\": \"Buyer Inserido\"\n}"
-						},
-						"url": {
-							"raw": "http://localhost:8089/api/v1/buyer",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8089",
-							"path": [
-								"api",
-								"v1",
-								"buyer"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Buyer Put",
-					"request": {
-						"method": "PUT",
-						"header": [
-							{
-								"key": "Content-Type",
-								"name": "Content-Type",
-								"value": "application/json",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n  \"client\": {\n    \"publicId\": \"dbe5cf6f-8648-11e9-999e-0242ac110002\"\n  },\n  \"cpf\": \"726.911.900-72\",\n  \"email\": \"teste_update@wirecard.com\",\n  \"name\": \"Buyer Alterado em teste POSTMAN\",\n  \"publicId\": \"dc323001-8648-11e9-999e-0242ac110002\"\n}"
-						},
-						"url": {
-							"raw": "http://localhost:8089/api/v1/buyer/dc323001-8648-11e9-999e-0242ac110002",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8089",
-							"path": [
-								"api",
-								"v1",
-								"buyer",
-								"dc323001-8648-11e9-999e-0242ac110002"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Buyer Delete",
-					"request": {
-						"method": "DELETE",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
-						"url": {
-							"raw": "http://localhost:8089/api/v1/buyer/6feea999-864d-11e9-999e-0242ac110002",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8089",
-							"path": [
-								"api",
-								"v1",
-								"buyer",
-								"6feea999-864d-11e9-999e-0242ac110002"
+								"payment"
 							]
 						}
 					},
