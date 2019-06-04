@@ -68,6 +68,6 @@ values (@UUIDPAYMENT5, 487.21, 'ACCEPTED', 'CREDIT_CARD',@ID8, now(), now());
 insert into `payment`(`public_id`, `amount`, `payment_status`, `type`, `card_id`, `created_at`, `updated_at`)
 values (@UUIDPAYMENT6, 1257.54, 'WITHERROR', 'CREDIT_CARD',@ID8, now(), now());
 insert into `payment`(`public_id`, `amount`, `payment_status`, `type`, `card_id`, `created_at`, `updated_at`)
-values (@UUIDPAYMENT7, 877.44, 'ACCEPTED', 'BOLETO', null, now(), now());
+values (@UUIDPAYMENT7, 877.44, 'ACCEPTED', 'BANK_SLIP', null, now(), now());
 insert into `payment`(`public_id`, `amount`, `payment_status`, `type`, `card_id`, `created_at`, `updated_at`)
-values (@UUIDPAYMENT8, 6114.44, 'REJECTED', 'BOLETO', null, now(), now());
+values (@UUIDPAYMENT8, 6114.44, 'REJECTED', 'BANK_SLIP', null, now(), now());

@@ -48,6 +48,9 @@ public class Payment implements Serializable {
     @Column(nullable = false)
     private BigDecimal amount;
 
+    @Column
+    private String bankSlipNumber;
+
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private Type type;
