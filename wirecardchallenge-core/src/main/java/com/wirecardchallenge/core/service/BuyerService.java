@@ -58,20 +58,20 @@ public class BuyerService {
         return buildBuyerDto(buyerOptional.get());
     }
 
-    public BuyerDto create(BuyerDto buyerDto) throws ClientNotFoundException {
+    public BuyerDto create(BuyerDto buyerDto) throws ClientNotFoundException,
+        BuyerServiceIntegrityConstraintException {
 
         Optional<Client> client = clientRepository.findByPublicId(buyerDto.getClientDto().getPublicId());
         if(!client.isPresent()) throw new ClientNotFoundException("Client Not Found !!");
 
         Buyer buyer = buildBuyer(buyerDto);
-        buyer.setClient(client.get());
-        Buyer buyerSaved = buyerRepository.save(buyer);
-
-        return buildBuyerDto(buyerSaved);
+        return saveBuyerOrThrow(client.get(), buyer);
     }
 
     public BuyerDto update(UUID uuid,
-                           BuyerDto buyerDto) throws ClientNotFoundException, BuyerNotFoundException {
+                           BuyerDto buyerDto) throws ClientNotFoundException,
+
+        BuyerNotFoundException, BuyerServiceIntegrityConstraintException {
 
         Optional<Client> client = clientRepository.findByPublicId(buyerDto.getClientDto().getPublicId());
 
@@ -84,10 +84,7 @@ public class BuyerService {
         buyer.setName(buyerDto.getName());
         buyer.setEmail(buyerDto.getEmail());
         buyer.setCpf(buyerDto.getCpf());
-        buyer.setClient(client.get());
-        Buyer buyerSaved = buyerRepository.save(buyer);
-
-        return buildBuyerDto(buyerSaved);
+        return saveBuyerOrThrow(client.get(), buyer);
     }
 
     public void delete(UUID uuid) throws BuyerNotFoundException, BuyerServiceIntegrityConstraintException {
@@ -102,6 +99,20 @@ public class BuyerService {
             log.error(e.getMessage() + " // " + e.getCause().getCause());
             throw new BuyerServiceIntegrityConstraintException(e.getMessage());
         }
+    }
+
+    private BuyerDto saveBuyerOrThrow(Client client, Buyer buyer)
+        throws BuyerServiceIntegrityConstraintException {
+        buyer.setClient(client);
+        Buyer buyerSaved;
+        try {
+            buyerSaved = buyerRepository.save(buyer);
+        } catch (DataIntegrityViolationException e) {
+            log.error(e.getMessage() + " // " + e.getCause().getCause());
+            throw new BuyerServiceIntegrityConstraintException(e.getMessage());
+        }
+
+        return buildBuyerDto(buyerSaved);
     }
 
     private BuyerDto buildBuyerDto(Buyer buyer){

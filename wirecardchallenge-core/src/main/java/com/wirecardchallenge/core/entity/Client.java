@@ -38,7 +38,7 @@ public class Client implements Serializable {
     @Column(unique = true, updatable = false,columnDefinition = "BINARY(16)",length = 16, nullable = false)
     private UUID publicId;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "client")
     @JoinColumn(unique = true)
     private Buyer buyer;
 
