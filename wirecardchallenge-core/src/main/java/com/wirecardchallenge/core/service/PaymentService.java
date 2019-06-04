@@ -45,6 +45,12 @@ public class PaymentService {
         return new PageImpl<>(paymentDtos, pageable, paymentPage.getTotalElements());
     }
 
+    public PaymentDto savePaymentCreditCard(PaymentDto paymentDto){
+
+
+        return null;
+    }
+
     public PaymentDto save(PaymentDto paymentDto) throws CardNotFoundException {
 
         Optional<Card> cardOptional = cardRepository.findByPublicId(paymentDto.getCardDto().getPublicId());

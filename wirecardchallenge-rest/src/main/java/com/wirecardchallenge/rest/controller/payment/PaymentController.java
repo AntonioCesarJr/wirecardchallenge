@@ -38,6 +38,9 @@ public class PaymentController {
     public ResponseEntity<PaymentDto> add(@RequestBody @Valid PostPaymentRequest postPaymentRequest,
                                           @PathVariable Type type){
         if (type.equals(Type.CREDIT_CARD)) log.info(type.toString());
+
+
+
         return null;
     }
 }

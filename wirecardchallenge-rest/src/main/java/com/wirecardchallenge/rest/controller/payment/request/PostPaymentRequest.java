@@ -1,6 +1,7 @@
 package com.wirecardchallenge.rest.controller.payment.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.wirecardchallenge.rest.controller.buyer.request.BuyerRequest;
 import com.wirecardchallenge.rest.controller.card.request.CardRequest;
 import lombok.Data;
 
@@ -13,5 +14,8 @@ public class PostPaymentRequest {
 
     @JsonProperty(value = "card")
     private CardRequest cardRequest;
+
+    @JsonProperty(value = "buyer")
+    private PostPaymentBuyerRequest buyerRequest;
 
 }

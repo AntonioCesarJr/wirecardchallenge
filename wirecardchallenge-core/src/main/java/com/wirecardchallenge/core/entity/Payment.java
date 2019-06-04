@@ -62,6 +62,10 @@ public class Payment implements Serializable {
     @Builder.Default
     private Card card;
 
+    @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
+    @Builder.Default
+    private Buyer buyer;
+
     @CreationTimestamp
     @Column(name = "created_at", columnDefinition = "DATETIME", nullable = false)
     private LocalDateTime createdAt;
