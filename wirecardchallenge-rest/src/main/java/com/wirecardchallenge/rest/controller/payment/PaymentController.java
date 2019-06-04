@@ -1,6 +1,8 @@
 package com.wirecardchallenge.rest.controller.payment;
 
 
+import com.wirecardchallenge.core.dto.BuyerDto;
+import com.wirecardchallenge.core.dto.CardDto;
 import com.wirecardchallenge.core.dto.PaymentDto;
 import com.wirecardchallenge.core.enumerable.Type;
 import com.wirecardchallenge.core.service.PaymentService;
@@ -37,10 +39,34 @@ public class PaymentController {
     @PostMapping(value = "/{type}")
     public ResponseEntity<PaymentDto> add(@RequestBody @Valid PostPaymentRequest postPaymentRequest,
                                           @PathVariable Type type){
-        if (type.equals(Type.CREDIT_CARD)) log.info(type.toString());
+        PaymentDto paymentDto;
+        PaymentDto paymentDtoSaved = new PaymentDto();
 
+        if (type.equals(Type.BANK_SLIP)){
 
+        }
 
-        return null;
+        if (type.equals(Type.CREDIT_CARD)) {
+            paymentDto = buildPaymentDtoCard(postPaymentRequest);
+            paymentDtoSaved = paymentService.savePaymentCreditCard(paymentDto);
+            log.info("Save Payment " + paymentDtoSaved.getPublicId());
+        }
+
+        return ResponseEntity.ok(paymentDtoSaved);
+    }
+
+    private PaymentDto buildPaymentDtoCard(PostPaymentRequest postPaymentRequest){
+        return PaymentDto.builder()
+            .amount(postPaymentRequest.getAmount())
+            .cardDto(CardDto.builder()
+                .name(postPaymentRequest.getCardRequest().getName())
+                .number(postPaymentRequest.getCardRequest().getNumber())
+                .CVV(postPaymentRequest.getCardRequest().getCVV())
+                .expirationDate(postPaymentRequest.getCardRequest().getExpirationDate())
+                .buyerDto(BuyerDto.builder()
+                    .publicId(postPaymentRequest.getCardRequest().getBuyerPublicId())
+                    .build())
+                .build())
+            .build();
     }
 }

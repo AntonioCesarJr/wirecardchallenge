@@ -92,6 +92,7 @@ public class PaymentService {
             .amount(payment.getAmount())
             .type(payment.getType())
             .paymentStatus(payment.getPaymentStatus())
+            .bankSlipNumber(payment.getBankSlipNumber())
             .createdAt(payment.getCreatedAt())
             .updatedAt(payment.getUpdatedAt())
             .build();

@@ -48,7 +48,7 @@ public class Payment implements Serializable {
     @Column(nullable = false)
     private BigDecimal amount;
 
-    @Column
+    @Column(unique = true, updatable = false)
     private String bankSlipNumber;
 
     @Column(nullable = false)
@@ -77,5 +77,6 @@ public class Payment implements Serializable {
     @PrePersist
     protected void onCreateAbstractBaseEntity() {
         this.publicId = UUID.randomUUID();
+        this.bankSlipNumber = UUID.randomUUID().toString();
     }
 }

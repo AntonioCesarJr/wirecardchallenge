@@ -29,6 +29,9 @@ public class PaymentDto {
 
     private Type type;
 
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    private String bankSlipNumber;
+
     private PaymentStatus paymentStatus;
 
     @JsonProperty(value = "card")

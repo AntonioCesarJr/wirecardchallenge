@@ -67,7 +67,7 @@ insert into `payment`(`public_id`, `amount`, `payment_status`, `type`, `card_id`
 values (@UUIDPAYMENT5, 487.21, 'ACCEPTED', 'CREDIT_CARD',@ID8, @ID2, now(), now());
 insert into `payment`(`public_id`, `amount`, `payment_status`, `type`, `card_id`, `buyer_id`, `created_at`, `updated_at`)
 values (@UUIDPAYMENT6, 1257.54, 'WITHERROR', 'CREDIT_CARD',@ID8, @ID2, now(), now());
-insert into `payment`(`public_id`, `amount`, `payment_status`, `type`, `card_id`, `created_at`, `updated_at`)
-values (@UUIDPAYMENT7, 877.44, 'ACCEPTED', 'BANK_SLIP', null, now(), now());
-insert into `payment`(`public_id`, `amount`, `payment_status`, `type`, `card_id`, `created_at`, `updated_at`)
-values (@UUIDPAYMENT8, 6114.44, 'REJECTED', 'BANK_SLIP', null, now(), now());
+insert into `payment`(`public_id`, `amount`, `payment_status`, `type`, `bank_slip_number`, `created_at`, `updated_at`)
+values (@UUIDPAYMENT7, 877.44, 'ACCEPTED', 'BANK_SLIP', 'd8c0ed27-da75-409a-964e-a36df85e48f6', now(), now());
+insert into `payment`(`public_id`, `amount`, `payment_status`, `type`, `bank_slip_number`, `created_at`, `updated_at`)
+values (@UUIDPAYMENT8, 6114.44, 'REJECTED', 'BANK_SLIP', '1210dba7-983d-4e3a-9d7c-4ede66e14333', now(), now());
