@@ -471,6 +471,39 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Payment Post",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"amount\": 100.28,\n  \"buyer.publicId\": \"241d2c5c-8732-11e9-9f91-0242ac110002\",\n  \"card.publicId\": \"2444a93f-8732-11e9-9f91-0242ac110002\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8089/api/v1/payment/Credit_Card",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8089",
+							"path": [
+								"api",
+								"v1",
+								"payment",
+								"Credit_Card"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		}

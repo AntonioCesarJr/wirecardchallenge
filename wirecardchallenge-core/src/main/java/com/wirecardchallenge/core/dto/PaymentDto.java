@@ -3,7 +3,6 @@ package com.wirecardchallenge.core.dto;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.wirecardchallenge.core.entity.Card;
 import com.wirecardchallenge.core.enumerable.PaymentStatus;
 import com.wirecardchallenge.core.enumerable.Type;
 import lombok.AllArgsConstructor;
@@ -30,11 +29,18 @@ public class PaymentDto {
 
     private Type type;
 
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    private String bankSlipNumber;
+
     private PaymentStatus paymentStatus;
 
     @JsonProperty(value = "card")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private CardDto cardDto;
+
+    @JsonProperty(value = "buyer")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    private BuyerDto buyerDto;
 
     private LocalDateTime createdAt;
 

@@ -48,6 +48,9 @@ public class Payment implements Serializable {
     @Column(nullable = false)
     private BigDecimal amount;
 
+    @Column(unique = true, updatable = false)
+    private String bankSlipNumber;
+
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private Type type;
@@ -58,6 +61,10 @@ public class Payment implements Serializable {
     @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     @Builder.Default
     private Card card;
+
+    @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
+    @Builder.Default
+    private Buyer buyer;
 
     @CreationTimestamp
     @Column(name = "created_at", columnDefinition = "DATETIME", nullable = false)
@@ -70,5 +77,6 @@ public class Payment implements Serializable {
     @PrePersist
     protected void onCreateAbstractBaseEntity() {
         this.publicId = UUID.randomUUID();
+        this.bankSlipNumber = UUID.randomUUID().toString();
     }
 }

@@ -65,6 +65,10 @@ public class  Buyer implements Serializable {
     @JsonIgnore
     private Set<Card> cards =  new HashSet<>();
 
+    @OneToMany(fetch = FetchType.LAZY,mappedBy = "buyer")
+    @JsonIgnore
+    private Set<Payment> payments;
+
     @CreationTimestamp
     @Column(name = "created_at", columnDefinition = "DATETIME", nullable = false)
     private LocalDateTime createdAt;

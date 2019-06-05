@@ -55,7 +55,7 @@ public class Card implements Serializable {
     @Column(nullable = false, length = 3)
     private String CVV;
 
-    @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL, mappedBy = "card")
+    @OneToMany(fetch = FetchType.LAZY,mappedBy = "card")
     @JsonIgnore
     private Set<Payment> payments;
 
