@@ -1,6 +1,5 @@
 package com.wirecardchallenge.rest.controller.payment;
 
-
 import com.wirecardchallenge.core.dto.BuyerDto;
 import com.wirecardchallenge.core.dto.CardDto;
 import com.wirecardchallenge.core.dto.PaymentDto;
@@ -8,6 +7,8 @@ import com.wirecardchallenge.core.enumerable.Type;
 import com.wirecardchallenge.core.exceptions.buyer.BuyerNotFoundException;
 import com.wirecardchallenge.core.exceptions.card.CardNotFoundException;
 import com.wirecardchallenge.core.service.PaymentService;
+import com.wirecardchallenge.rest.controller.exception.buyer.BuyerNotFoundHttpException;
+import com.wirecardchallenge.rest.controller.exception.card.CardNotFoundHttpException;
 import com.wirecardchallenge.rest.controller.payment.request.PostPaymentRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +23,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
-import java.util.List;
 
 @RestController
 @RequestMapping(value = "/api/v1/payment")
@@ -41,27 +41,64 @@ public class PaymentController {
     @PostMapping(value = "/{type}")
     public ResponseEntity<PaymentDto> add(@RequestBody @Valid PostPaymentRequest postPaymentRequest,
                                           @PathVariable Type type){
-        PaymentDto paymentDto;
-        PaymentDto paymentDtoSaved = new PaymentDto();
 
-        if (type.equals(Type.Bank_Slip)) log.info("BOLETO");
+        PaymentDto paymentDtoToReturn = new PaymentDto();
 
-        if (type.equals(Type.Credit_Card)) {
-            paymentDto = buildPaymentDtoCard(postPaymentRequest);
-            try {
-                paymentDtoSaved = paymentService.createPaymentCreditCard(paymentDto);
-            } catch (CardNotFoundException e) {
-                e.printStackTrace();
-            } catch (BuyerNotFoundException e) {
-                e.printStackTrace();
-            }
-            log.info("New Credit Card Payment - " + paymentDtoSaved.getPublicId());
-        }
+        if (type.equals(Type.Bank_Slip))
+            paymentDtoToReturn = createBankSlipPaymentDto(postPaymentRequest);
 
-        return ResponseEntity.ok(paymentDtoSaved);
+        if (type.equals(Type.Credit_Card))
+            paymentDtoToReturn = createCreditCardPaymentDto(postPaymentRequest);
+
+        return ResponseEntity.ok(paymentDtoToReturn);
     }
 
-    private PaymentDto buildPaymentDtoCard(PostPaymentRequest postPaymentRequest){
+    private PaymentDto createBankSlipPaymentDto(PostPaymentRequest postPaymentRequest){
+
+        PaymentDto paymentDto = buildPaymentDtoBankSlip(postPaymentRequest);
+        PaymentDto paymentDtoSaved;
+        try {
+            paymentDtoSaved =paymentService.createPaymentBankSlip(paymentDto);
+        } catch (BuyerNotFoundException e) {
+            throw new BuyerNotFoundHttpException(e.getMessage() +
+                " -> PUBLICID =  " + postPaymentRequest.getBuyerPulbicId());
+        }
+
+        log.info("New Bank Slip Payment - " + paymentDtoSaved.getPublicId());
+        return paymentDtoSaved;
+    }
+
+    private PaymentDto createCreditCardPaymentDto(PostPaymentRequest postPaymentRequest) {
+
+        PaymentDto paymentDto = buildPaymentDtoCreditCard(postPaymentRequest);
+        PaymentDto paymentDtoSaved;
+
+        try {
+            paymentDtoSaved = paymentService.createPaymentCreditCard(paymentDto);
+        } catch (CardNotFoundException e) {
+            throw new CardNotFoundHttpException(e.getMessage() +
+                " -> PUBLICID =  " + postPaymentRequest.getBuyerPulbicId());
+        } catch (BuyerNotFoundException e) {
+            throw new BuyerNotFoundHttpException(e.getMessage() +
+                " -> PUBLICID =  " + postPaymentRequest.getBuyerPulbicId());
+        }
+
+        log.info("New Credit Card Payment - " + paymentDtoSaved.getPublicId());
+        return paymentDtoSaved;
+    }
+
+    private PaymentDto buildPaymentDtoBankSlip(PostPaymentRequest postPaymentRequest){
+
+        return PaymentDto.builder()
+            .amount(postPaymentRequest.getAmount())
+            .buyerDto(BuyerDto.builder()
+                .publicId(postPaymentRequest.getBuyerPulbicId())
+                .build())
+            .build();
+    }
+
+    private PaymentDto buildPaymentDtoCreditCard(PostPaymentRequest postPaymentRequest){
+
         return PaymentDto.builder()
             .amount(postPaymentRequest.getAmount())
             .cardDto(CardDto.builder()
