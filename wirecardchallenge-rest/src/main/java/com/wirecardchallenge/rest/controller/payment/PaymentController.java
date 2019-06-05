@@ -5,6 +5,8 @@ import com.wirecardchallenge.core.dto.BuyerDto;
 import com.wirecardchallenge.core.dto.CardDto;
 import com.wirecardchallenge.core.dto.PaymentDto;
 import com.wirecardchallenge.core.enumerable.Type;
+import com.wirecardchallenge.core.exceptions.buyer.BuyerNotFoundException;
+import com.wirecardchallenge.core.exceptions.card.CardNotFoundException;
 import com.wirecardchallenge.core.service.PaymentService;
 import com.wirecardchallenge.rest.controller.payment.request.PostPaymentRequest;
 import lombok.extern.slf4j.Slf4j;
@@ -42,14 +44,18 @@ public class PaymentController {
         PaymentDto paymentDto;
         PaymentDto paymentDtoSaved = new PaymentDto();
 
-        if (type.equals(Type.BANK_SLIP)){
+        if (type.equals(Type.Bank_Slip)) log.info("BOLETO");
 
-        }
-
-        if (type.equals(Type.CREDIT_CARD)) {
+        if (type.equals(Type.Credit_Card)) {
             paymentDto = buildPaymentDtoCard(postPaymentRequest);
-            paymentDtoSaved = paymentService.savePaymentCreditCard(paymentDto);
-            log.info("Save Payment " + paymentDtoSaved.getPublicId());
+            try {
+                paymentDtoSaved = paymentService.createPaymentCreditCard(paymentDto);
+            } catch (CardNotFoundException e) {
+                e.printStackTrace();
+            } catch (BuyerNotFoundException e) {
+                e.printStackTrace();
+            }
+            log.info("New Credit Card Payment - " + paymentDtoSaved.getPublicId());
         }
 
         return ResponseEntity.ok(paymentDtoSaved);
@@ -59,13 +65,10 @@ public class PaymentController {
         return PaymentDto.builder()
             .amount(postPaymentRequest.getAmount())
             .cardDto(CardDto.builder()
-                .name(postPaymentRequest.getCardRequest().getName())
-                .number(postPaymentRequest.getCardRequest().getNumber())
-                .CVV(postPaymentRequest.getCardRequest().getCVV())
-                .expirationDate(postPaymentRequest.getCardRequest().getExpirationDate())
-                .buyerDto(BuyerDto.builder()
-                    .publicId(postPaymentRequest.getCardRequest().getBuyerPublicId())
-                    .build())
+                .publicId(postPaymentRequest.getCardPublicId())
+                .build())
+            .buyerDto(BuyerDto.builder()
+                .publicId(postPaymentRequest.getBuyerPulbicId())
                 .build())
             .build();
     }

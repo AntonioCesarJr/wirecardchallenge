@@ -56,18 +56,18 @@ select (UNHEX(REPLACE(UUID(), '-', ''))) into @UUIDPAYMENT9;
 select `id` into @ID7 from `card` limit 0,1;
 select `id` into @ID8 from `card` limit 1,1;
 insert into `payment`(`public_id`, `amount`, `payment_status`, `type`, `card_id`, `buyer_id`, `created_at`, `updated_at`)
-values (@UUIDPAYMENT1, 100.34, 'CREATED', 'CREDIT_CARD',@ID7, @ID1, now(), now());
+values (@UUIDPAYMENT1, 100.34, 'Pending', 'Credit_Card',@ID7, @ID1, now(), now());
 insert into `payment`(`public_id`, `amount`, `payment_status`, `type`, `card_id`, `buyer_id`, `created_at`, `updated_at`)
-values (@UUIDPAYMENT2, 2345.87, 'ACCEPTED', 'CREDIT_CARD',@ID7, @ID1, now(), now());
+values (@UUIDPAYMENT2, 2345.87, 'Success', 'Credit_Card',@ID7, @ID1, now(), now());
 insert into `payment`(`public_id`, `amount`, `payment_status`, `type`, `card_id`, `buyer_id`, `created_at`, `updated_at`)
-values (@UUIDPAYMENT3, 87.45, 'WITHERROR', 'CREDIT_CARD',@ID7, @ID1, now(), now());
+values (@UUIDPAYMENT3, 87.45, 'Canceled', 'Credit_Card',@ID7, @ID1, now(), now());
 insert into `payment`(`public_id`, `amount`, `payment_status`, `type`, `card_id`, `buyer_id`, `created_at`, `updated_at`)
-values (@UUIDPAYMENT4, 584.78, 'REJECTED', 'CREDIT_CARD',@ID8, @ID2, now(), now());
+values (@UUIDPAYMENT4, 584.78, 'Rejected', 'Credit_Card',@ID8, @ID2, now(), now());
 insert into `payment`(`public_id`, `amount`, `payment_status`, `type`, `card_id`, `buyer_id`, `created_at`, `updated_at`)
-values (@UUIDPAYMENT5, 487.21, 'ACCEPTED', 'CREDIT_CARD',@ID8, @ID2, now(), now());
+values (@UUIDPAYMENT5, 487.21, 'Success', 'Credit_Card',@ID8, @ID2, now(), now());
 insert into `payment`(`public_id`, `amount`, `payment_status`, `type`, `card_id`, `buyer_id`, `created_at`, `updated_at`)
-values (@UUIDPAYMENT6, 1257.54, 'WITHERROR', 'CREDIT_CARD',@ID8, @ID2, now(), now());
-insert into `payment`(`public_id`, `amount`, `payment_status`, `type`, `bank_slip_number`, `created_at`, `updated_at`)
-values (@UUIDPAYMENT7, 877.44, 'ACCEPTED', 'BANK_SLIP', 'd8c0ed27-da75-409a-964e-a36df85e48f6', now(), now());
-insert into `payment`(`public_id`, `amount`, `payment_status`, `type`, `bank_slip_number`, `created_at`, `updated_at`)
-values (@UUIDPAYMENT8, 6114.44, 'REJECTED', 'BANK_SLIP', '1210dba7-983d-4e3a-9d7c-4ede66e14333', now(), now());
+values (@UUIDPAYMENT6, 1257.54, 'Success', 'Credit_Card',@ID8, @ID2, now(), now());
+insert into `payment`(`public_id`, `amount`, `payment_status`, `type`, `Bank_Slip_number`, `created_at`, `updated_at`)
+values (@UUIDPAYMENT7, 877.44, 'Canceled', 'Bank_Slip', 'd8c0ed27-da75-409a-964e-a36df85e48f6', now(), now());
+insert into `payment`(`public_id`, `amount`, `payment_status`, `type`, `Bank_Slip_number`, `created_at`, `updated_at`)
+values (@UUIDPAYMENT8, 6114.44, 'Complete', 'Bank_Slip', '1210dba7-983d-4e3a-9d7c-4ede66e14333', now(), now());

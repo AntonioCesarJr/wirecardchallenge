@@ -4,10 +4,14 @@ import com.wirecardchallenge.core.dto.BuyerDto;
 import com.wirecardchallenge.core.dto.CardDto;
 import com.wirecardchallenge.core.dto.ClientDto;
 import com.wirecardchallenge.core.dto.PaymentDto;
+import com.wirecardchallenge.core.entity.Buyer;
 import com.wirecardchallenge.core.entity.Card;
 import com.wirecardchallenge.core.entity.Payment;
+import com.wirecardchallenge.core.enumerable.PaymentStatus;
 import com.wirecardchallenge.core.enumerable.Type;
+import com.wirecardchallenge.core.exceptions.buyer.BuyerNotFoundException;
 import com.wirecardchallenge.core.exceptions.card.CardNotFoundException;
+import com.wirecardchallenge.core.repository.BuyerRepository;
 import com.wirecardchallenge.core.repository.CardRepository;
 import com.wirecardchallenge.core.repository.PaymentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,12 +34,15 @@ public class PaymentService {
     @Autowired
     CardRepository cardRepository;
 
+    @Autowired
+    BuyerRepository buyerRepository;
+
     public Page<PaymentDto> findAll(Pageable pageable){
 
         Page<Payment> paymentPage = paymentRepository.findAll(pageable);
         List<PaymentDto> paymentDtos = paymentPage.getContent().stream()
             .map(payment -> {
-                    if (payment.getType()== Type.BANK_SLIP){
+                    if (payment.getType()== Type.Bank_Slip){
                         return buildPaymentDtoSlip(payment);
                     }
                     return buildPaymentDtoWithCard(payment);
@@ -45,10 +52,26 @@ public class PaymentService {
         return new PageImpl<>(paymentDtos, pageable, paymentPage.getTotalElements());
     }
 
-    public PaymentDto savePaymentCreditCard(PaymentDto paymentDto){
+    public PaymentDto createPaymentCreditCard(PaymentDto paymentDto)
+        throws CardNotFoundException, BuyerNotFoundException {
 
+        Optional<Card> cardOptional = cardRepository.findByPublicId(paymentDto.getCardDto().getPublicId());
+        if(!cardOptional.isPresent()) throw new CardNotFoundException("Card Not Found !!");
 
-        return null;
+        Optional<Buyer> buyerOptional = buyerRepository.findByPublicId(paymentDto.getBuyerDto().getPublicId());
+        if(!buyerOptional.isPresent()) throw new BuyerNotFoundException("Buyer Not Found !!");
+
+        Payment payment = Payment.builder()
+            .amount(paymentDto.getAmount())
+            .card(cardOptional.get())
+            .buyer(buyerOptional.get())
+            .type(Type.Credit_Card)
+            .paymentStatus(PaymentStatus.Pending)
+            .build();
+
+        Payment paymentSaved = paymentRepository.save(payment);
+
+        return buildPaymentDtoWithCard(paymentSaved);
     }
 
     public PaymentDto save(PaymentDto paymentDto) throws CardNotFoundException {
@@ -59,7 +82,7 @@ public class PaymentService {
         Payment payment = buildPaymentEntity(paymentDto);
         payment =  paymentRepository.save(payment);
 
-        if (payment.getType().equals(Type.BANK_SLIP))
+        if (payment.getType().equals(Type.Bank_Slip))
             return buildPaymentDtoSlip(payment);
 
         return buildPaymentDtoWithCard(payment);
