@@ -22,12 +22,13 @@ public class CardRequestValidator implements Validator {
     public void validate(Object o, Errors errors) {
         log.info("Card Validator in action !!");
         CardRequest cardRequest = (CardRequest) o;
-        buildExpirationDate(cardRequest.getExpirationDate());
+        validateExpirationDate(cardRequest.getExpirationDate());
         validateCreditCardNumber(cardRequest.getNumber());
+        validateCVV(cardRequest.getCVV());
         log.info("Card Name is " + cardRequest.getName());
     }
 
-    private void buildExpirationDate(String strDate)
+    private void validateExpirationDate(String strDate)
         throws CardInvalidDataHttpException {
         LocalDate localDate;
         if (strDate.length() != 5) {
@@ -79,5 +80,10 @@ public class CardRequestValidator implements Validator {
             log.warn(str + " is an invalid credit card number");
             throw new CardInvalidDataHttpException(str +  " is an invalid credit card number");
         }
+    }
+
+    private void validateCVV(String CVV){
+        log.info("I have no idea how to validate CVV !! :(");
+        return;
     }
 }
