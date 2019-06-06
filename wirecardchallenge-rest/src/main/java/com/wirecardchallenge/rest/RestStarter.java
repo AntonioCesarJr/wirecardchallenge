@@ -16,8 +16,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EntityScan(basePackages = {"com.wirecardchallenge.core.entity"})
 @EnableTransactionManagement(proxyTargetClass = true)
 @EnableJpaRepositories(basePackages = {"com.wirecardchallenge.core.repository"})
-@ComponentScan(basePackages = {"com.wirecardchallenge.core.config",
-        "com.wirecardchallenge.core.service",
+@ComponentScan(basePackages = {"com.wirecardchallenge.core",
         "com.wirecardchallenge.rest.config",
         "com.wirecardchallenge.rest.controller"})
 @EnableCaching

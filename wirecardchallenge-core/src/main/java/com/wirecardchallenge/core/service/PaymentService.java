@@ -90,18 +90,17 @@ public class PaymentService {
 
         return buildPaymentDtoBankSlip(paymentSaved);
     }
-
-    private Payment buildPaymentEntity(PaymentDto paymentDto){
-        return Payment.builder()
-            .id(paymentDto.getId())
-            .publicId(paymentDto.getPublicId())
-            .amount(paymentDto.getAmount())
-            .type(paymentDto.getType())
-            .paymentStatus(paymentDto.getPaymentStatus())
-            .createdAt(paymentDto.getCreatedAt())
-            .updatedAt(paymentDto.getUpdatedAt())
-            .build();
-    }
+//    private Payment buildPaymentEntity(PaymentDto paymentDto){
+//        return Payment.builder()
+//            .id(paymentDto.getId())
+//            .publicId(paymentDto.getPublicId())
+//            .amount(paymentDto.getAmount())
+//            .type(paymentDto.getType())
+//            .paymentStatus(paymentDto.getPaymentStatus())
+//            .createdAt(paymentDto.getCreatedAt())
+//            .updatedAt(paymentDto.getUpdatedAt())
+//            .build();
+//    }
 
     private PaymentDto buildPaymentDtoBankSlip(Payment payment){
         return PaymentDto.builder()
@@ -124,7 +123,7 @@ public class PaymentService {
             .cardDto(CardDto.builder()
                 .publicId(payment.getCard().getPublicId())
                 .number(payment.getCard().getNumber())
-                .expirationDate(payment.getCard().getExpirationDate())
+                .expirationDate(payment.getCard().getExpirationDate().format(""))
                 .CVV(payment.getCard().getCVV())
                 .name(payment.getCard().getName())
                 .buyerDto(BuyerDto.builder()

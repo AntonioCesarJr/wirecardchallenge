@@ -38,7 +38,7 @@ public class PaymentController {
         return ResponseEntity.ok(paymentDtos);
     }
 
-    @PostMapping(value = "/{type}")
+    @PostMapping(value = "//{type}")
     public ResponseEntity<PaymentDto> add(@RequestBody @Valid PostPaymentRequest postPaymentRequest,
                                           @PathVariable Type type){
 

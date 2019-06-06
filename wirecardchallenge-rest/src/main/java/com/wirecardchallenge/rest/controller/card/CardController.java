@@ -3,18 +3,24 @@ package com.wirecardchallenge.rest.controller.card;
 import com.wirecardchallenge.core.dto.BuyerDto;
 import com.wirecardchallenge.core.dto.CardDto;
 import com.wirecardchallenge.core.exceptions.buyer.BuyerNotFoundException;
+import com.wirecardchallenge.core.exceptions.card.CardInvalidDataException;
 import com.wirecardchallenge.core.exceptions.card.CardNotFoundException;
 import com.wirecardchallenge.core.service.CardService;
 import com.wirecardchallenge.rest.controller.card.request.CardRequest;
+import com.wirecardchallenge.rest.controller.card.validator.CardRequestValidator;
 import com.wirecardchallenge.rest.controller.exception.buyer.BuyerNotFoundHttpException;
+import com.wirecardchallenge.rest.controller.exception.card.CardInvalidDataHttpException;
 import com.wirecardchallenge.rest.controller.exception.card.CardNotFoundHttpException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -27,10 +33,16 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping(value = "/api/v1/card")
+@Slf4j
 public class CardController {
 
     @Autowired
     CardService cardService;
+
+    @InitBinder
+    public void initBinder(WebDataBinder webDataBinder){
+        webDataBinder.addValidators(new CardRequestValidator());
+    }
 
     @GetMapping
     public ResponseEntity<Page<CardDto>> findAll(Pageable pageRequest){
@@ -40,7 +52,7 @@ public class CardController {
 
     @GetMapping(value = "/{publicId}")
     public ResponseEntity<CardDto> findByPublicId(@PathVariable UUID publicId){
-        CardDto cardDto = null;
+        CardDto cardDto;
         try {
             cardDto = cardService.findByPublicId(publicId);
         } catch (CardNotFoundException e) {
@@ -50,9 +62,9 @@ public class CardController {
     }
 
     @PostMapping
-    public ResponseEntity<CardDto> add(@RequestBody @Valid CardRequest cardRequest){
+    public ResponseEntity<CardDto> add(@Valid @RequestBody CardRequest cardRequest){
         CardDto cardDto = buildCardDto(cardRequest);
-        CardDto cardDtoSaved = null;
+        CardDto cardDtoSaved;
         try {
             cardDtoSaved = cardService.create(cardDto);
         } catch (BuyerNotFoundException e) {
@@ -63,11 +75,11 @@ public class CardController {
     }
 
     @PutMapping("/{publicId}")
-    public ResponseEntity<CardDto> update(@PathVariable UUID publicId,
-                                           @RequestBody @Valid CardRequest cardRequest){
+    public ResponseEntity<CardDto> update(@Valid @RequestBody CardRequest cardRequest,
+                                          @PathVariable UUID publicId){
         CardDto cardDto = buildCardDto(cardRequest);
         cardDto.setPublicId(publicId);
-        CardDto cardDtoSaved = null;
+        CardDto cardDtoSaved;
         try {
             cardDtoSaved = cardService.update(publicId, cardDto);
         } catch (CardNotFoundException e) {
@@ -75,6 +87,8 @@ public class CardController {
         } catch (BuyerNotFoundException e) {
             throw new BuyerNotFoundHttpException("Buyer " +
                 cardRequest.getBuyerPublicId() + " not found!");
+        } catch (CardInvalidDataException e) {
+            throw new CardInvalidDataHttpException("Card Data is Invalid !!");
         }
         return ResponseEntity.ok(cardDtoSaved);
     }
@@ -90,6 +104,7 @@ public class CardController {
     }
 
     private CardDto buildCardDto(CardRequest cardRequest){
+
         return CardDto.builder()
             .name(cardRequest.getName())
             .number(cardRequest.getNumber())
