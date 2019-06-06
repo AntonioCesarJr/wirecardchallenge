@@ -7,9 +7,9 @@ import com.wirecardchallenge.core.exceptions.buyer.BuyerServiceIntegrityConstrai
 import com.wirecardchallenge.core.exceptions.client.ClientNotFoundException;
 import com.wirecardchallenge.core.service.BuyerService;
 import com.wirecardchallenge.rest.controller.buyer.request.BuyerRequest;
-import com.wirecardchallenge.rest.controller.exception.buyer.BuyerInternalErrorHttpException;
-import com.wirecardchallenge.rest.controller.exception.buyer.BuyerNotFoundHttpException;
-import com.wirecardchallenge.rest.controller.exception.client.ClientNotFoundHttpException;
+import com.wirecardchallenge.rest.exception.buyer.BuyerInternalErrorHttpException;
+import com.wirecardchallenge.rest.exception.buyer.BuyerNotFoundHttpException;
+import com.wirecardchallenge.rest.exception.client.ClientNotFoundHttpException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

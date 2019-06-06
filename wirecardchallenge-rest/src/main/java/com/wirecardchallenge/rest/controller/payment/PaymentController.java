@@ -6,16 +6,21 @@ import com.wirecardchallenge.core.dto.PaymentDto;
 import com.wirecardchallenge.core.enumerable.Type;
 import com.wirecardchallenge.core.exceptions.buyer.BuyerNotFoundException;
 import com.wirecardchallenge.core.exceptions.card.CardNotFoundException;
+import com.wirecardchallenge.core.service.CardService;
 import com.wirecardchallenge.core.service.PaymentService;
-import com.wirecardchallenge.rest.controller.exception.buyer.BuyerNotFoundHttpException;
-import com.wirecardchallenge.rest.controller.exception.card.CardNotFoundHttpException;
+import com.wirecardchallenge.rest.controller.payment.validator.PostPaymentRequestValidator;
+import com.wirecardchallenge.rest.exception.buyer.BuyerNotFoundHttpException;
+import com.wirecardchallenge.rest.exception.card.CardAndBuyerDoesNotMatchException;
+import com.wirecardchallenge.rest.exception.card.CardNotFoundHttpException;
 import com.wirecardchallenge.rest.controller.payment.request.PostPaymentRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,6 +28,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import java.util.UUID;
 
 @RestController
 @RequestMapping(value = "/api/v1/payment")
@@ -30,7 +36,13 @@ import javax.validation.Valid;
 public class PaymentController {
 
     @Autowired
+    CardService cardService;
+
+    @Autowired
     private PaymentService paymentService;
+
+    @InitBinder
+    public void initBinder(WebDataBinder webDataBinder){webDataBinder.addValidators(new PostPaymentRequestValidator());}
 
     @GetMapping
     public ResponseEntity<Page<PaymentDto>> listPayments(Pageable pageable){
@@ -38,8 +50,8 @@ public class PaymentController {
         return ResponseEntity.ok(paymentDtos);
     }
 
-    @PostMapping(value = "//{type}")
-    public ResponseEntity<PaymentDto> add(@RequestBody @Valid PostPaymentRequest postPaymentRequest,
+    @PostMapping(value = "/{type}")
+    public ResponseEntity<PaymentDto> add(@Valid @RequestBody PostPaymentRequest postPaymentRequest,
                                           @PathVariable Type type){
 
         PaymentDto paymentDtoToReturn = new PaymentDto();
@@ -47,13 +59,15 @@ public class PaymentController {
         if (type.equals(Type.Bank_Slip))
             paymentDtoToReturn = createBankSlipPaymentDto(postPaymentRequest);
 
-        if (type.equals(Type.Credit_Card))
+        if (type.equals(Type.Credit_Card)) {
+            validateCardIssuer(postPaymentRequest.getCardPublicId(), postPaymentRequest.getBuyerPulbicId());
             paymentDtoToReturn = createCreditCardPaymentDto(postPaymentRequest);
+        }
 
         return ResponseEntity.ok(paymentDtoToReturn);
     }
 
-    private PaymentDto createBankSlipPaymentDto(PostPaymentRequest postPaymentRequest){
+    private PaymentDto createBankSlipPaymentDto(@RequestBody PostPaymentRequest postPaymentRequest){
 
         PaymentDto paymentDto = buildPaymentDtoBankSlip(postPaymentRequest);
         PaymentDto paymentDtoSaved;
@@ -108,5 +122,16 @@ public class PaymentController {
                 .publicId(postPaymentRequest.getBuyerPulbicId())
                 .build())
             .build();
+    }
+
+    private void validateCardIssuer(UUID cardPublicId, UUID buyerPublicId){
+        CardDto cardDto = CardDto.builder().build();
+        try {
+            cardDto = cardService.findByPublicId(cardPublicId);
+        } catch (CardNotFoundException e) {
+            throw new CardNotFoundHttpException("Credit Card Not found !!"+ e.getMessage());
+        }
+        if (!cardDto.getBuyerDto().getPublicId().equals(buyerPublicId))
+            throw new CardAndBuyerDoesNotMatchException("Credit Card and Buyer does not match !!");
     }
 }

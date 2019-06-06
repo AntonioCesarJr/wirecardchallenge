@@ -1,4 +1,4 @@
-package com.wirecardchallenge.rest.controller.exception.payment;
+package com.wirecardchallenge.rest.exception.buyer;
 
 import lombok.NoArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -6,9 +6,9 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(value= HttpStatus.INTERNAL_SERVER_ERROR)
 @NoArgsConstructor
-public class PaymentHttpException extends RuntimeException{
+public class BuyerInternalErrorHttpException extends RuntimeException{
 
-    public PaymentHttpException(String message){
+    public BuyerInternalErrorHttpException(String message){
         super(message);
     }
 }

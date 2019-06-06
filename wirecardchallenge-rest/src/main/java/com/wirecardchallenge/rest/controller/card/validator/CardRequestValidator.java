@@ -1,7 +1,7 @@
 package com.wirecardchallenge.rest.controller.card.validator;
 
 import com.wirecardchallenge.rest.controller.card.request.CardRequest;
-import com.wirecardchallenge.rest.controller.exception.card.CardInvalidDataHttpException;
+import com.wirecardchallenge.rest.exception.card.CardInvalidDataHttpException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
@@ -39,7 +39,8 @@ public class CardRequestValidator implements Validator {
             String month = strDate.substring(0,2);
             String year = DEFAULT_INIT_YEAR + strDate.substring(3,5);
             localDate = LocalDate.of(Integer.valueOf(year),
-                Integer.valueOf(month), lastDayOfMonth(Integer.valueOf(month),
+                Integer.valueOf(month),
+                lastDayOfMonth(Integer.valueOf(month),
                     Integer.valueOf(year)));
         }catch (Exception e){
             log.warn("Invalid Expiration Date Format (MM/yy) !!");
