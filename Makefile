@@ -1,3 +1,5 @@
+test:
+	mvn test
 
 package:
 	mvn clean package -U
