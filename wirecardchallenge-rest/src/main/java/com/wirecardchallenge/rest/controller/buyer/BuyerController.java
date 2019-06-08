@@ -42,28 +42,26 @@ public class BuyerController {
 
     @GetMapping(value = "/{publicId}")
     public ResponseEntity<BuyerDto> findByPublicId(@PathVariable UUID publicId){
-        BuyerDto buyerDto;
         try {
-            buyerDto = buyerService.findByPublicId(publicId);
+            BuyerDto buyerDto = buyerService.findByPublicId(publicId);
+            return ResponseEntity.ok(buyerDto);
         } catch (BuyerNotFoundException e) {
             throw new BuyerNotFoundHttpException(e.getMessage() + " -> PUBLICID = " + publicId);
         }
-        return ResponseEntity.ok(buyerDto);
     }
 
     @PostMapping
     public ResponseEntity<BuyerDto> add(@RequestBody @Valid BuyerRequest buyerRequest){
         BuyerDto buyerDto = buildBuyerDto(buyerRequest);
-        BuyerDto buyerDtoSaved = new BuyerDto();
         try {
-            buyerDtoSaved = buyerService.create(buyerDto);
+            BuyerDto buyerDtoSaved = buyerService.create(buyerDto);
+            return ResponseEntity.ok(buyerDtoSaved);
         } catch (ClientNotFoundException e) {
             throw new ClientNotFoundHttpException(e.getMessage() + " -> PUBLICID =  " +
                 buyerRequest.getClientRequest().getPublicId());
         } catch (BuyerServiceIntegrityConstraintException e) {
             throw new BuyerInternalErrorHttpException(e.getMessage());
         }
-        return ResponseEntity.ok(buyerDtoSaved);
     }
 
     @PutMapping("/{publicId}")
@@ -71,9 +69,9 @@ public class BuyerController {
                                            @RequestBody @Valid BuyerRequest buyerRequest){
         BuyerDto buyerDto = buildBuyerDto(buyerRequest);
         buyerDto.setPublicId(publicId);
-        BuyerDto buyerDtoSaved;
         try {
-            buyerDtoSaved = buyerService.update(publicId, buyerDto);
+            BuyerDto buyerDtoSaved = buyerService.update(publicId, buyerDto);
+            return ResponseEntity.ok(buyerDtoSaved);
         } catch (ClientNotFoundException e) {
             throw new ClientNotFoundHttpException(e.getMessage() + " -> PUBLICID =  " +
                 buyerRequest.getClientRequest().getPublicId());
@@ -82,19 +80,18 @@ public class BuyerController {
         } catch (BuyerServiceIntegrityConstraintException e) {
             throw new BuyerInternalErrorHttpException(e.getMessage());
         }
-        return ResponseEntity.ok(buyerDtoSaved);
     }
 
     @DeleteMapping("/{publicId}")
     public ResponseEntity<BuyerDto> delete(@PathVariable UUID publicId){
         try {
             buyerService.delete(publicId);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (BuyerNotFoundException e) {
             throw new BuyerNotFoundHttpException(e.getMessage() + " -> PUBLICID = " + publicId);
         } catch (BuyerServiceIntegrityConstraintException e) {
             throw new BuyerInternalErrorHttpException(e.getMessage());
         }
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     private BuyerDto buildBuyerDto(BuyerRequest buyerRequest){

@@ -52,26 +52,24 @@ public class CardController {
 
     @GetMapping(value = "/{publicId}")
     public ResponseEntity<CardDto> findByPublicId(@PathVariable UUID publicId){
-        CardDto cardDto;
         try {
-            cardDto = cardService.findByPublicId(publicId);
+            CardDto  cardDto = cardService.findByPublicId(publicId);
+            return ResponseEntity.ok(cardDto);
         } catch (CardNotFoundException e) {
             throw new CardNotFoundHttpException("Card " + publicId + " not found!");
         }
-        return ResponseEntity.ok(cardDto);
     }
 
     @PostMapping
     public ResponseEntity<CardDto> add(@Valid @RequestBody CardRequest cardRequest){
         CardDto cardDto = buildCardDto(cardRequest);
-        CardDto cardDtoSaved;
         try {
-            cardDtoSaved = cardService.create(cardDto);
+            CardDto cardDtoSaved = cardService.create(cardDto);
+            return ResponseEntity.ok(cardDtoSaved);
         } catch (BuyerNotFoundException e) {
             throw new BuyerNotFoundHttpException("Buyer " +
                 cardRequest.getBuyerPublicId() + " not found!");
         }
-        return ResponseEntity.ok(cardDtoSaved);
     }
 
     @PutMapping("/{publicId}")
@@ -79,9 +77,9 @@ public class CardController {
                                           @PathVariable UUID publicId){
         CardDto cardDto = buildCardDto(cardRequest);
         cardDto.setPublicId(publicId);
-        CardDto cardDtoSaved;
         try {
-            cardDtoSaved = cardService.update(publicId, cardDto);
+            CardDto cardDtoSaved = cardService.update(publicId, cardDto);
+            return ResponseEntity.ok(cardDtoSaved);
         } catch (CardNotFoundException e) {
             throw new CardNotFoundHttpException("Card " + publicId + " not found!");
         } catch (BuyerNotFoundException e) {
@@ -90,17 +88,16 @@ public class CardController {
         } catch (CardInvalidDataException e) {
             throw new CardInvalidDataHttpException("Card Data is Invalid !!");
         }
-        return ResponseEntity.ok(cardDtoSaved);
     }
 
     @DeleteMapping("/{publicId}")
     public ResponseEntity<CardDto> delete(@PathVariable UUID publicId){
         try {
             cardService.delete(publicId);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (CardNotFoundException e) {
             throw new CardNotFoundHttpException("Card " + publicId + " not found!");
         }
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     private CardDto buildCardDto(CardRequest cardRequest){

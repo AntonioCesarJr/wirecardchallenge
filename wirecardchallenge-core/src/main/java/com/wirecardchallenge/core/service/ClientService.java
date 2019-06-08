@@ -35,9 +35,8 @@ public class ClientService {
         return buildClientDto(clientOptional.get());
     }
 
-    public ClientDto create(ClientDto clientDto){
-        Client client = buildClient(clientDto);
-        Client clientSaved = clientRepository.save(client);
+    public ClientDto create(){
+        Client clientSaved = clientRepository.save(Client.builder().build());
         return buildClientDto(clientSaved);
     }
 

@@ -30,6 +30,7 @@ public class ClientController {
     @GetMapping
     public ResponseEntity<Page<ClientDto>> findAll(Pageable pageRequest){
         Page<ClientDto> clientDtos = clientService.findAll(pageRequest);
+        log.info("Found " + clientDtos.getSize() + " Clients !");
         return ResponseEntity.ok(clientDtos);
     }
 
@@ -38,27 +39,29 @@ public class ClientController {
         ClientDto clientDtos;
         try {
             clientDtos = clientService.findByPublicId(publicId);
+            log.info("Client " + publicId + " found!");
         } catch (ClientNotFoundException e) {
+            log.warn("Client " + publicId + " not found!");
             throw new ClientNotFoundHttpException("Client " + publicId + " not found!");
-
         }
         return ResponseEntity.ok(clientDtos);
     }
 
     @PostMapping
     public ResponseEntity<ClientDto> add(){
-        ClientDto clientDto = ClientDto.builder().build();
-        ClientDto clientDtoSaved = clientService.create(clientDto);
+        ClientDto clientDtoSaved = clientService.create();
+        log.info("New Client with publicId = " +clientDtoSaved.getPublicId());
         return ResponseEntity.ok(clientDtoSaved);
     }
 
     @DeleteMapping("/{publicId}")
-    public ResponseEntity<ClientDto> delete(@PathVariable UUID publicId) {
+    public ResponseEntity<String> delete(@PathVariable UUID publicId) {
         try {
             clientService.delete(publicId);
+            log.info("Client " + publicId + " deleted !!");
+            return new ResponseEntity<>("{'message': 'Bye bye " + publicId + "'}", HttpStatus.OK);
         } catch (ClientNotFoundException e) {
             throw new ClientNotFoundHttpException("Client " + publicId + " not found!");
         }
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

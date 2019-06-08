@@ -70,25 +70,24 @@ public class PaymentController {
     private PaymentDto createBankSlipPaymentDto(@RequestBody PostPaymentRequest postPaymentRequest){
 
         PaymentDto paymentDto = buildPaymentDtoBankSlip(postPaymentRequest);
-        PaymentDto paymentDtoSaved;
         try {
-            paymentDtoSaved =paymentService.createPaymentBankSlip(paymentDto);
+            PaymentDto paymentDtoSaved = paymentService.createPaymentBankSlip(paymentDto);
+            log.info("New Bank Slip Payment - " + paymentDtoSaved.getPublicId());
+            return paymentDtoSaved;
         } catch (BuyerNotFoundException e) {
             throw new BuyerNotFoundHttpException(e.getMessage() +
                 " -> PUBLICID =  " + postPaymentRequest.getBuyerPulbicId());
         }
 
-        log.info("New Bank Slip Payment - " + paymentDtoSaved.getPublicId());
-        return paymentDtoSaved;
     }
 
     private PaymentDto createCreditCardPaymentDto(PostPaymentRequest postPaymentRequest) {
 
         PaymentDto paymentDto = buildPaymentDtoCreditCard(postPaymentRequest);
-        PaymentDto paymentDtoSaved;
-
         try {
-            paymentDtoSaved = paymentService.createPaymentCreditCard(paymentDto);
+            PaymentDto  paymentDtoSaved = paymentService.createPaymentCreditCard(paymentDto);
+            log.info("New Credit Card Payment - " + paymentDtoSaved.getPublicId());
+            return paymentDtoSaved;
         } catch (CardNotFoundException e) {
             throw new CardNotFoundHttpException(e.getMessage() +
                 " -> PUBLICID =  " + postPaymentRequest.getBuyerPulbicId());
@@ -96,9 +95,6 @@ public class PaymentController {
             throw new BuyerNotFoundHttpException(e.getMessage() +
                 " -> PUBLICID =  " + postPaymentRequest.getBuyerPulbicId());
         }
-
-        log.info("New Credit Card Payment - " + paymentDtoSaved.getPublicId());
-        return paymentDtoSaved;
     }
 
     private PaymentDto buildPaymentDtoBankSlip(PostPaymentRequest postPaymentRequest){
@@ -125,13 +121,12 @@ public class PaymentController {
     }
 
     private void validateCardIssuer(UUID cardPublicId, UUID buyerPublicId){
-        CardDto cardDto = CardDto.builder().build();
         try {
-            cardDto = cardService.findByPublicId(cardPublicId);
+            CardDto  cardDto = cardService.findByPublicId(cardPublicId);
+            if (!cardDto.getBuyerDto().getPublicId().equals(buyerPublicId))
+                throw new CardAndBuyerDoesNotMatchException("Credit Card and Buyer does not match !!");
         } catch (CardNotFoundException e) {
             throw new CardNotFoundHttpException("Credit Card Not found !!"+ e.getMessage());
         }
-        if (!cardDto.getBuyerDto().getPublicId().equals(buyerPublicId))
-            throw new CardAndBuyerDoesNotMatchException("Credit Card and Buyer does not match !!");
     }
 }
