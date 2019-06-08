@@ -123,7 +123,7 @@ public class PaymentService {
             .cardDto(CardDto.builder()
                 .publicId(payment.getCard().getPublicId())
                 .number(payment.getCard().getNumber())
-                .expirationDate(payment.getCard().getExpirationDate().format(""))
+                .expirationDate(payment.getCard().getExpirationDate())
                 .CVV(payment.getCard().getCVV())
                 .name(payment.getCard().getName())
                 .buyerDto(BuyerDto.builder()

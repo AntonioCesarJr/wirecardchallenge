@@ -17,7 +17,7 @@ public class PostPaymentRequestValidator implements Validator {
 
     @Override
     public void validate(Object o, Errors errors) {
-        PostPaymentRequest postPaymentRequest = (PostPaymentRequest) o;
+//        PostPaymentRequest postPaymentRequest = (PostPaymentRequest) o;
         log.info("Validating Payment !!");
     }
 
