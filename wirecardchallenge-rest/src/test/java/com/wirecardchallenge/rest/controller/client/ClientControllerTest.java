@@ -25,6 +25,7 @@ import java.util.UUID;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
 @RunWith(JUnit4.class)
@@ -75,7 +76,7 @@ public class ClientControllerTest {
     }
 
     @Test
-    public void findByPUBLIC_ID() throws ClientNotFoundException {
+    public void findByPublicId() throws ClientNotFoundException {
 
         when(clientService.findByPublicId(CLIENT_PUBLIC_ID_1))
             .thenReturn(ClientDto.builder()
@@ -117,7 +118,11 @@ public class ClientControllerTest {
     }
 
     @Test
-    public void delete() {
+    public void delete() throws ClientNotFoundException {
+        doNothing().when(clientService).delete(CLIENT_PUBLIC_ID_1);
+        ResponseEntity<String> responseEntity = clientController.delete(CLIENT_PUBLIC_ID_1);
+        assertNotNull(responseEntity);
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
     }
 
     private List<ClientDto> buildClientDtoList(){
