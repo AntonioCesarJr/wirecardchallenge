@@ -22,6 +22,7 @@ wirecardchallenge-rest-*.jar
 *.iws
 *.iml
 *.ipr
+.attach_*
 
 ### NetBeans ###
 /nbproject/private/
