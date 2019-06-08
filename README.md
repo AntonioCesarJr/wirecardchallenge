@@ -49,7 +49,7 @@ Linux 4.15.0-50-generic Ubuntu x86_64 GNU/Linux
 *Use the following commands on a terminal in the root directory.* 
 
 ### - Create Docker Infrastructure - SONARQUBE  
-###### - Go to "/docker-files/" folder and type
+###### - Go to "/sonar-docker-files/" folder and type
     make sonarqube
 
 ### - Create Docker Infrastructure - MYSQL - REDIS
