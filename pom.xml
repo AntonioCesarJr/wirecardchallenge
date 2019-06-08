@@ -18,6 +18,28 @@
     <properties>
         <java.version>1.8</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <sonar.host.url>http://localhost:9000</sonar.host.url>
+        <sonar.login>admin</sonar.login>
+        <sonar.password>admin</sonar.password>
+        <sonar.sources>src</sonar.sources>
+        <sonar.sourceEncoding>UTF-8</sonar.sourceEncoding>
+        <sonar.binaries>build/classes</sonar.binaries>
+        <sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
+        <sonar.jacoco.reportPaths>${basedir}/target/coverage-reports/jacoco-unit.exec</sonar.jacoco.reportPaths>
+        <sonar.dynamicAnalytics>reuseReports</sonar.dynamicAnalytics>
+        <sonar.exclusions>
+            **/*Dto.java,
+            **/*Entity.java,
+            **/*Repository.java,
+            **/*Exception.java,
+            **/*Config.java,
+            **/*Starter.java,
+            **/*Test.java,
+            **/*Teste.java,
+            **/*Configuration.java,
+            **/*.properties,
+            **/*.txt
+        </sonar.exclusions>
     </properties>
     <modules>
         <module>wirecardchallenge-core</module>
@@ -30,6 +52,24 @@
             <version>1.18.2</version>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>org.codehaus.sonar</groupId>
+            <artifactId>sonar-maven-plugin</artifactId>
+            <version>5.1</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>findbugs-maven-plugin</artifactId>
+            <version>3.0.4</version>
+            <type>maven-plugin</type>
+        </dependency>
+        <dependency>
+            <groupId>org.jacoco</groupId>
+            <artifactId>jacoco-maven-plugin</artifactId>
+            <version>0.8.1</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
@@ -41,6 +81,35 @@
                     <source>1.8</source>
                     <target>1.8</target>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.sonarsource.scanner.maven</groupId>
+                <artifactId>sonar-maven-plugin</artifactId>
+                <version>3.6.0.1398</version>
+                <executions>
+                    <execution>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>sonar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.8.1</version>
+                <configuration>
+                    <destFile>${project.basedir}/target/coverage-reports/jacoco-unit.exec</destFile>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>jacoco-initialize</id>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>

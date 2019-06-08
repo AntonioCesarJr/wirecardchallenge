@@ -48,19 +48,28 @@ Linux 4.15.0-50-generic Ubuntu x86_64 GNU/Linux
 ## How to use Application
 *Use the following commands on a terminal in the root directory.* 
 
-### 1 - Create Docker Infrastructure - MYSQL and REDIS  
+### - Create Docker Infrastructure - SONARQUBE  
+###### - Go to "/docker-files/" folder and type
+    make sonarqube
+
+### - Create Docker Infrastructure - MYSQL - REDIS
+###### - Back to project root folder and type
+    make docker
+    
+    or
+  
     docker-compose up -d
 __PS: You must wait until MYSQL database start to listener the confgured port!\
 This may take a few minutes__
 
-## 2 - Build application with Make or Maven
+## - Build application with Make or Maven
     make install
     
     or
     
     mvn clean package install -U    
     
-## 3 - Start application with Make or Maven
+## - Start application with Make or Maven
     make run
     
     or

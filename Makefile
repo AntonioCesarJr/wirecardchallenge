@@ -1,3 +1,6 @@
+sonar:
+	mvn sonar:sonar
+
 test:
 	mvn test
 
@@ -18,3 +21,7 @@ runrest-install-no-test:install-no-test
 
 runrest:
 	mvn spring-boot:run -pl wirecardchallenge-rest
+
+docker:
+	docker-compose up -d
+
