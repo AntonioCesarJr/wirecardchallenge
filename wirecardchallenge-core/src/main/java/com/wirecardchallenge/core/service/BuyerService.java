@@ -62,7 +62,6 @@ public class BuyerService {
 
     public BuyerDto update(UUID uuid,
                            BuyerDto buyerDto) throws ClientNotFoundException,
-
         BuyerNotFoundException, BuyerServiceIntegrityConstraintException {
 
         Optional<ClientEntity> client = clientRepository.findByPublicId(buyerDto.getClientDto().getPublicId());

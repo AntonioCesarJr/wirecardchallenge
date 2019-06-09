@@ -15,7 +15,6 @@ import java.util.UUID;
 @Repository
 public interface ClientRepository extends JpaRepository<ClientEntity, Long> {
 
-
     @Cacheable("clientsPage")
     Page<ClientEntity> findAll(Pageable pageable);
 
@@ -26,14 +25,14 @@ public interface ClientRepository extends JpaRepository<ClientEntity, Long> {
     Optional<ClientEntity> findByPublicId(UUID publicId);
 
     @Caching(evict = {
-            @CacheEvict(value="clientsPage", allEntries=true),
-            @CacheEvict(value="clientId", allEntries=true),
-            @CacheEvict(value="clientPublicId", allEntries=true)})
+        @CacheEvict(value="clientsPage", allEntries=true),
+        @CacheEvict(value="clientId", allEntries=true),
+        @CacheEvict(value="clientPublicId", allEntries=true)})
     ClientEntity save(ClientEntity clientEntity);
 
     @Caching(evict = {
-            @CacheEvict(value="clientsPage", allEntries=true),
-            @CacheEvict(value="clientId", allEntries=true),
-            @CacheEvict(value="clientPublicId", allEntries=true)})
+        @CacheEvict(value="clientsPage", allEntries=true),
+        @CacheEvict(value="clientId", allEntries=true),
+        @CacheEvict(value="clientPublicId", allEntries=true)})
     void delete(ClientEntity clientEntity);
 }

@@ -32,6 +32,10 @@ import java.util.UUID;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @RunWith(JUnit4.class)
@@ -47,7 +51,7 @@ public class BuyerServiceTest {
     @Spy
     BuyerService buyerService;
 
-    private static final Long BUYER_ID_1 = 1l;
+    private static final Long BUYER_ID_1 = 1L;
     private static final UUID BUYER_PUBLIC_ID_1 = UUID.randomUUID();
     private static final String BUYER_NAME_1 = "José da Silva";
     private static final String BUYER_EMAIL_1 = "jose.silva@wirecard.com";
@@ -55,7 +59,7 @@ public class BuyerServiceTest {
     private static final LocalDateTime BUYER_CREATED_AT_1 = LocalDateTime.now();
     private static final LocalDateTime BUYER_UPDATED_AT_1 = LocalDateTime.now().plusMinutes(10);
 
-    private static final Long BUYER_ID_2 = 2l;
+    private static final Long BUYER_ID_2 = 2L;
     private static final UUID BUYER_PUBLIC_ID_2 = UUID.randomUUID();
     private static final String BUYER_NAME_2 = "João Santos";
     private static final String BUYER_EMAIL_2 = "joao.santos@wirecard.com";
@@ -63,7 +67,7 @@ public class BuyerServiceTest {
     private static final LocalDateTime BUYER_CREATED_AT_2 = LocalDateTime.now();
     private static final LocalDateTime BUYER_UPDATED_AT_2 = LocalDateTime.now().plusMinutes(10);
 
-    private static final Long BUYER_ID_3 = 3l;
+    private static final Long BUYER_ID_3 = 3L;
     private static final UUID BUYER_PUBLIC_ID_3 = UUID.randomUUID();
     private static final String BUYER_NAME_3 = "Carlos Alberto";
     private static final String BUYER_EMAIL_3 = "carlos.alberto@wirecard.com";
@@ -71,7 +75,7 @@ public class BuyerServiceTest {
     private static final LocalDateTime BUYER_CREATED_AT_3 = LocalDateTime.now();
     private static final LocalDateTime BUYER_UPDATED_AT_3 = LocalDateTime.now().plusMinutes(10);
 
-    private static final Long CLIENT_ID_1 = 1L;
+    private static final Long CLIENT_ID_1 = 4L;
     private static final UUID CLIENT_PUBLIC_ID_1 = UUID.randomUUID();
     private static final LocalDateTime CLIENT_CREATED_AT_1 = LocalDateTime.now();
     private static final LocalDateTime CLIENT_UPDATED_AT_1 = LocalDateTime.now().plusMinutes(10);
@@ -81,7 +85,7 @@ public class BuyerServiceTest {
 
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         MockitoAnnotations.initMocks(this);
     }
 
@@ -170,7 +174,8 @@ public class BuyerServiceTest {
     }
 
     @Test(expected = ClientNotFoundException.class)
-    public void createClientNotFoundException() throws BuyerServiceIntegrityConstraintException, ClientNotFoundException {
+    public void createClientNotFoundException()
+        throws BuyerServiceIntegrityConstraintException, ClientNotFoundException {
 
         when(clientRepository.findByPublicId(CLIENT_PUBLIC_ID_1))
             .thenReturn(Optional.empty());
@@ -179,23 +184,102 @@ public class BuyerServiceTest {
     }
 
     @Test(expected = BuyerServiceIntegrityConstraintException.class)
-    public void createBuyerServiceIntegrityConstraintException() throws BuyerServiceIntegrityConstraintException, ClientNotFoundException {
+    public void createBuyerServiceIntegrityConstraintException()
+        throws BuyerServiceIntegrityConstraintException, ClientNotFoundException {
 
         when(clientRepository.findByPublicId(CLIENT_PUBLIC_ID_1))
             .thenReturn(Optional.of(buildClientEntity()));
+
         DataIntegrityViolationException dataIntegrityViolationException =
             new DataIntegrityViolationException(DI_EXCEPTION_MESSAGE, DI_EXCEPTION_CAUSE);
         when(buyerRepository.save(any(BuyerEntity.class)))
             .thenThrow(dataIntegrityViolationException);
+
         buyerService.create(buildBuyerDto());
     }
 
     @Test
-    public void update() {
+    public void update()
+        throws ClientNotFoundException, BuyerServiceIntegrityConstraintException, BuyerNotFoundException {
+
+        when(clientRepository.findByPublicId(CLIENT_PUBLIC_ID_1))
+            .thenReturn(Optional.of(buildClientEntity()));
+
+        when(buyerRepository.findByPublicId(any(UUID.class)))
+            .thenReturn(Optional.of(buildBuyerEntity()));
+
+        when(buyerRepository.save(any(BuyerEntity.class)))
+            .thenReturn(buildBuyerEntity());
+
+        BuyerDto buyerDto = buyerService.update(CLIENT_PUBLIC_ID_1, buildBuyerDto());
+        assertNotNull(buyerDto);
+        assertEquals(BUYER_PUBLIC_ID_1, buyerDto.getPublicId());
+        assertEquals(BUYER_NAME_1, buyerDto.getName());
+        assertEquals(BUYER_EMAIL_1, buyerDto.getEmail());
+        assertEquals(BUYER_CPF_1, buyerDto.getCpf());
+        assertEquals(BUYER_CREATED_AT_1, buyerDto.getCreatedAt());
+        assertEquals(BUYER_UPDATED_AT_1, buyerDto.getUpdatedAt());
+    }
+
+    @Test(expected = BuyerNotFoundException.class)
+    public void updateBuyerNotFoundException()
+        throws ClientNotFoundException, BuyerServiceIntegrityConstraintException, BuyerNotFoundException {
+
+        when(clientRepository.findByPublicId(CLIENT_PUBLIC_ID_1))
+            .thenReturn(Optional.of(buildClientEntity()));
+
+        when(buyerRepository.findByPublicId(any(UUID.class)))
+            .thenReturn(Optional.empty());
+
+        buyerService.update(CLIENT_PUBLIC_ID_1, buildBuyerDto());
+    }
+
+    @Test(expected = BuyerServiceIntegrityConstraintException.class)
+    public void updateBuyerServiceIntegrityConstraintException()
+        throws ClientNotFoundException, BuyerServiceIntegrityConstraintException, BuyerNotFoundException {
+
+        when(clientRepository.findByPublicId(CLIENT_PUBLIC_ID_1))
+            .thenReturn(Optional.of(buildClientEntity()));
+
+        when(buyerRepository.findByPublicId(any(UUID.class)))
+            .thenReturn(Optional.empty());
+
+        buyerService.update(CLIENT_PUBLIC_ID_1, buildBuyerDto());
     }
 
     @Test
-    public void delete() {
+    public void delete() throws BuyerServiceIntegrityConstraintException, BuyerNotFoundException {
+
+        int invocations = 1;
+        when(buyerRepository.findByPublicId(BUYER_PUBLIC_ID_1))
+            .thenReturn(Optional.of(buildBuyerEntity()));
+        doNothing().when(buyerRepository).delete(any(BuyerEntity.class));
+        buyerService.delete(BUYER_PUBLIC_ID_1);
+        verify(buyerRepository, times(invocations)).delete(any(BuyerEntity.class));
+    }
+
+    @Test(expected = BuyerNotFoundException.class)
+    public void deleteBuyerNotFoundException()
+        throws BuyerServiceIntegrityConstraintException, BuyerNotFoundException {
+
+        when(buyerRepository.findByPublicId(BUYER_PUBLIC_ID_1))
+            .thenReturn(Optional.empty());
+        buyerService.delete(BUYER_PUBLIC_ID_1);
+    }
+
+    @Test(expected = BuyerServiceIntegrityConstraintException.class)
+    public void deleteBuyerServiceIntegrityConstraintException()
+        throws BuyerServiceIntegrityConstraintException, BuyerNotFoundException {
+
+        when(buyerRepository.findByPublicId(BUYER_PUBLIC_ID_1))
+            .thenReturn(Optional.of(buildBuyerEntity()));
+
+        DataIntegrityViolationException dataIntegrityViolationException =
+            new DataIntegrityViolationException(DI_EXCEPTION_MESSAGE, DI_EXCEPTION_CAUSE);
+        doThrow(dataIntegrityViolationException)
+            .when(buyerRepository).delete(any(BuyerEntity.class));
+
+        buyerService.delete(BUYER_PUBLIC_ID_1);
     }
 
     private List<BuyerEntity> buildBuyerEntities(){
@@ -281,6 +365,4 @@ public class BuyerServiceTest {
             .updatedAt(CLIENT_UPDATED_AT_1)
             .build();
     }
-
-
 }
