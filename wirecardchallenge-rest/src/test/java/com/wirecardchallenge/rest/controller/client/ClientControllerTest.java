@@ -31,6 +31,12 @@ import static org.mockito.Mockito.when;
 @RunWith(JUnit4.class)
 public class ClientControllerTest {
 
+    @InjectMocks
+    ClientController clientController;
+
+    @Mock
+    ClientService clientService;
+
     private static final Long CLIENT_ID_1 = 1L;
     private static final UUID CLIENT_PUBLIC_ID_1 = UUID.randomUUID();
     private static final LocalDateTime CREATED_AT_1 = LocalDateTime.now();
@@ -45,13 +51,6 @@ public class ClientControllerTest {
     private static final UUID CLIENT_PUBLIC_ID_3 = UUID.randomUUID();
     private static final LocalDateTime CREATED_AT_3 = LocalDateTime.now();
     private static final LocalDateTime UPDATED_AT_3 = LocalDateTime.now().plusMinutes(20);
-
-
-    @InjectMocks
-    ClientController clientController;
-
-    @Mock
-    ClientService clientService;
 
     @Before
     public void setUp() throws Exception {

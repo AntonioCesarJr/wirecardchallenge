@@ -28,12 +28,12 @@ import java.util.UUID;
 
 @Entity(name = "Payment")
 @Table(name = "payment")
-@Builder
+@Builder(toBuilder = true)
 @Data
 @AllArgsConstructor
 public class PaymentEntity implements Serializable {
 
-    public PaymentEntity(){};
+    public PaymentEntity(){}
 
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO,generator="native")

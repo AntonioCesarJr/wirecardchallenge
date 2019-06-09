@@ -25,7 +25,7 @@ import java.util.UUID;
 
 @Entity(name = "Card")
 @Table(name = "card")
-@Builder
+@Builder(toBuilder = true)
 @Data
 @AllArgsConstructor
 public class CardEntity implements Serializable {

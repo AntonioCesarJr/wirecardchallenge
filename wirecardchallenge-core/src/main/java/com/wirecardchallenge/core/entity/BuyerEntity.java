@@ -28,12 +28,12 @@ import java.util.UUID;
 
 @Entity(name = "Buyer")
 @Table(name = "buyer")
-@Builder
+@Builder(toBuilder = true)
 @Data
 @AllArgsConstructor
 public class BuyerEntity implements Serializable {
 
-    public BuyerEntity(){};
+    public BuyerEntity(){}
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")

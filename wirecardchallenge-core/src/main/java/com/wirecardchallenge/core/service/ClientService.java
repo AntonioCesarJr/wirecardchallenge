@@ -40,15 +40,6 @@ public class ClientService {
         return buildClientDto(clientEntitySaved);
     }
 
-    public ClientDto update(UUID publicId,
-                            ClientDto clientDto) throws ClientNotFoundException {
-        Optional<ClientEntity> optionalClient = clientRepository.findByPublicId(publicId);
-        if (!optionalClient.isPresent()) throw new ClientNotFoundException(ExceptionMessages.CLIENT_NOT_FOUND);
-        ClientEntity clientEntity = optionalClient.get();
-        ClientEntity clientEntitySaved = clientRepository.save(clientEntity);
-        return buildClientDto(clientEntitySaved);
-    }
-
     public void delete(UUID publicId) throws ClientNotFoundException {
         Optional<ClientEntity> client = clientRepository.findByPublicId(publicId);
         if (!client.isPresent()) throw new ClientNotFoundException(ExceptionMessages.CLIENT_NOT_FOUND);
@@ -60,13 +51,6 @@ public class ClientService {
             .publicId(clientEntity.getPublicId())
             .createdAt(clientEntity.getCreatedAt())
             .updatedAt(clientEntity.getUpdatedAt())
-            .build();
-    }
-
-    private ClientEntity buildClient(ClientDto clientDto){
-        return ClientEntity.builder()
-            .id(clientDto.getId())
-            .publicId(clientDto.getPublicId())
             .build();
     }
 }
