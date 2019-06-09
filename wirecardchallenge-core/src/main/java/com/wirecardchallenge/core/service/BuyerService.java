@@ -36,18 +36,10 @@ public class BuyerService {
 
         Page<BuyerEntity> buyerPage = buyerRepository.findAll(pageable);
         List<BuyerDto> buyerDtos = buyerPage.getContent().stream()
-            .map(buyer -> buildBuyerDto(buyer))
+            .map(this::buildBuyerDto)
             .collect(Collectors.toList());
 
         return new PageImpl<>(buyerDtos, pageable, buyerPage.getTotalElements());
-    }
-
-    public BuyerDto findById(Long id) throws BuyerNotFoundException {
-
-        Optional<BuyerEntity> buyerOptional = buyerRepository.findById(id);
-        if (!buyerOptional.isPresent()) throw new BuyerNotFoundException(ExceptionMessages.BUYER_NOT_FOUND);
-
-        return buildBuyerDto(buyerOptional.get());
     }
 
     public BuyerDto findByPublicId(UUID publicId) throws BuyerNotFoundException {
@@ -109,7 +101,7 @@ public class BuyerService {
         try {
             buyerEntitySaved = buyerRepository.save(buyerEntity);
         } catch (DataIntegrityViolationException e) {
-            log.error(e.getMessage() + " // " + e.getCause().getCause());
+            log.error(e.getMessage() + " - " + e.getCause().getCause());
             throw new BuyerServiceIntegrityConstraintException(e.getMessage());
         }
 

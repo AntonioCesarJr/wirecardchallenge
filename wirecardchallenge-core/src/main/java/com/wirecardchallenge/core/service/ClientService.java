@@ -24,7 +24,7 @@ public class ClientService {
     public Page<ClientDto> findAll(Pageable pageable){
         Page<ClientEntity> clientPage = clientRepository.findAll(pageable);
         List<ClientDto> clientDtos = clientPage.getContent().stream()
-            .map(clientEntity -> buildClientDto(clientEntity))
+            .map(this::buildClientDto)
             .collect(Collectors.toList());
         return new PageImpl<>(clientDtos, pageable, clientPage.getTotalElements());
     }

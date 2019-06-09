@@ -4,7 +4,11 @@ import com.wirecardchallenge.core.dto.BuyerDto;
 import com.wirecardchallenge.core.dto.ClientDto;
 import com.wirecardchallenge.core.entity.BuyerEntity;
 import com.wirecardchallenge.core.entity.ClientEntity;
+import com.wirecardchallenge.core.exceptions.buyer.BuyerNotFoundException;
+import com.wirecardchallenge.core.exceptions.buyer.BuyerServiceIntegrityConstraintException;
+import com.wirecardchallenge.core.exceptions.client.ClientNotFoundException;
 import com.wirecardchallenge.core.repository.BuyerRepository;
+import com.wirecardchallenge.core.repository.ClientRepository;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -13,6 +17,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -21,6 +26,7 @@ import org.springframework.data.domain.Pageable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.junit.Assert.assertEquals;
@@ -33,6 +39,9 @@ public class BuyerServiceTest {
 
     @Mock
     BuyerRepository buyerRepository;
+
+    @Mock
+    ClientRepository clientRepository;
 
     @InjectMocks
     @Spy
@@ -67,6 +76,9 @@ public class BuyerServiceTest {
     private static final LocalDateTime CLIENT_CREATED_AT_1 = LocalDateTime.now();
     private static final LocalDateTime CLIENT_UPDATED_AT_1 = LocalDateTime.now().plusMinutes(10);
 
+    private static final String DI_EXCEPTION_MESSAGE = "Something wrong is not right !!";
+    private static final Throwable DI_EXCEPTION_CAUSE = new Throwable();
+
 
     @Before
     public void setUp() throws Exception {
@@ -75,7 +87,7 @@ public class BuyerServiceTest {
 
     @Test
     public void findAll() {
-        
+
         List<BuyerEntity> buyerEntities = buildBuyerEntities();
         Page<BuyerEntity> buyerEntitiesPage = new PageImpl<>(buyerEntities);
 
@@ -112,15 +124,70 @@ public class BuyerServiceTest {
     }
 
     @Test
-    public void findById() {
+    public void findByPublicId() throws BuyerNotFoundException {
+
+        when(buyerRepository.findByPublicId(BUYER_PUBLIC_ID_1))
+            .thenReturn(Optional.of(buildBuyerEntity()));
+        BuyerDto buyerDto = buyerService.findByPublicId(BUYER_PUBLIC_ID_1);
+
+        assertNotNull(buyerDto);
+        assertEquals(BUYER_PUBLIC_ID_1, buyerDto.getPublicId());
+        assertEquals(BUYER_NAME_1,buyerDto.getName());
+        assertEquals(BUYER_EMAIL_1,buyerDto.getEmail());
+        assertEquals(BUYER_CPF_1, buyerDto.getCpf());
+        assertEquals(BUYER_CREATED_AT_1, buyerDto.getCreatedAt());
+        assertEquals(BUYER_UPDATED_AT_1, buyerDto.getUpdatedAt());
+        assertEquals(CLIENT_PUBLIC_ID_1, buyerDto.getClientDto().getPublicId());
+    }
+
+    @Test(expected = BuyerNotFoundException.class)
+    public void findByPublicIdBuyerNotFoundException() throws BuyerNotFoundException {
+
+        when(buyerRepository.findByPublicId(BUYER_PUBLIC_ID_1))
+            .thenReturn(Optional.empty());
+
+        buyerService.findByPublicId(BUYER_PUBLIC_ID_1);
     }
 
     @Test
-    public void findByPublicId() {
+    public void create() throws BuyerServiceIntegrityConstraintException, ClientNotFoundException {
+
+        when(clientRepository.findByPublicId(CLIENT_PUBLIC_ID_1))
+            .thenReturn(Optional.of(buildClientEntity()));
+        when(buyerRepository.save(any(BuyerEntity.class)))
+            .thenReturn(buildBuyerEntity());
+
+        BuyerDto buyerDto = buyerService.create(buildBuyerDto());
+
+        assertNotNull(buyerDto);
+        assertEquals(BUYER_PUBLIC_ID_1,buyerDto.getPublicId());
+        assertEquals(BUYER_NAME_1,buyerDto.getName());
+        assertEquals(BUYER_EMAIL_1,buyerDto.getEmail());
+        assertEquals(BUYER_CPF_1,buyerDto.getCpf());
+        assertEquals(CLIENT_PUBLIC_ID_1,buyerDto.getClientDto().getPublicId());
+        assertEquals(BUYER_CREATED_AT_1,buyerDto.getCreatedAt());
+        assertEquals(BUYER_UPDATED_AT_1,buyerDto.getUpdatedAt());
     }
 
-    @Test
-    public void create() {
+    @Test(expected = ClientNotFoundException.class)
+    public void createClientNotFoundException() throws BuyerServiceIntegrityConstraintException, ClientNotFoundException {
+
+        when(clientRepository.findByPublicId(CLIENT_PUBLIC_ID_1))
+            .thenReturn(Optional.empty());
+
+        buyerService.create(buildBuyerDto());
+    }
+
+    @Test(expected = BuyerServiceIntegrityConstraintException.class)
+    public void createBuyerServiceIntegrityConstraintException() throws BuyerServiceIntegrityConstraintException, ClientNotFoundException {
+
+        when(clientRepository.findByPublicId(CLIENT_PUBLIC_ID_1))
+            .thenReturn(Optional.of(buildClientEntity()));
+        DataIntegrityViolationException dataIntegrityViolationException =
+            new DataIntegrityViolationException(DI_EXCEPTION_MESSAGE, DI_EXCEPTION_CAUSE);
+        when(buyerRepository.save(any(BuyerEntity.class)))
+            .thenThrow(dataIntegrityViolationException);
+        buyerService.create(buildBuyerDto());
     }
 
     @Test
@@ -171,6 +238,20 @@ public class BuyerServiceTest {
         return buyerEntities;
     }
 
+    private BuyerEntity buildBuyerEntity(){
+        return BuyerEntity.builder()
+            .id(BUYER_ID_1)
+            .publicId(BUYER_PUBLIC_ID_1)
+            .name(BUYER_NAME_1)
+            .email(BUYER_EMAIL_1)
+            .cpf(BUYER_CPF_1)
+            .client(buildClientEntity())
+            .createdAt(BUYER_CREATED_AT_1)
+            .updatedAt(BUYER_UPDATED_AT_1)
+            .build();
+
+    }
+
     private ClientEntity buildClientEntity(){
         return ClientEntity.builder()
             .id(CLIENT_ID_1)
@@ -179,4 +260,27 @@ public class BuyerServiceTest {
             .updatedAt(CLIENT_UPDATED_AT_1)
             .build();
     }
+
+    private BuyerDto buildBuyerDto() {
+        return BuyerDto.builder()
+            .publicId(BUYER_PUBLIC_ID_1)
+            .name(BUYER_NAME_1)
+            .email(BUYER_EMAIL_1)
+            .cpf(BUYER_CPF_1)
+            .clientDto(buidlClientDto())
+            .createdAt(BUYER_CREATED_AT_1)
+            .updatedAt(BUYER_UPDATED_AT_1)
+            .build();
+    }
+
+    private ClientDto buidlClientDto() {
+        return ClientDto.builder()
+            .id(CLIENT_ID_1)
+            .publicId(CLIENT_PUBLIC_ID_1)
+            .createdAt(CLIENT_CREATED_AT_1)
+            .updatedAt(CLIENT_UPDATED_AT_1)
+            .build();
+    }
+
+
 }

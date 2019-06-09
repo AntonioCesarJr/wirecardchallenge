@@ -109,8 +109,7 @@ public class ClientServiceTest {
         when(clientRepository.findByPublicId(CLIENT_PUBLIC_ID_1))
             .thenReturn(Optional.empty());
 
-        ClientDto clientDto = clientService.findByPublicId(CLIENT_PUBLIC_ID_1);
-        assertEquals(CLIENT_PUBLIC_ID_1,clientDto.getPublicId());
+        clientService.findByPublicId(CLIENT_PUBLIC_ID_1);
     }
 
     @Test

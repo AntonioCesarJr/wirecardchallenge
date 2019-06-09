@@ -33,18 +33,10 @@ public class CardService {
 
         Page<CardEntity> cardPage = cardRepository.findAll(pageable);
         List<CardDto> cardDtos = cardPage.getContent().stream()
-            .map(card -> buildCardDto(card))
+            .map(this::buildCardDto)
             .collect(Collectors.toList());
 
         return new PageImpl<>(cardDtos, pageable, cardPage.getTotalElements());
-    }
-
-    public CardDto findById(Long id) throws CardNotFoundException {
-        Optional<CardEntity> cardOptional = cardRepository.findById(id);
-
-        if (!cardOptional.isPresent()) throw new CardNotFoundException(ExceptionMessages.CARD_NOT_FOUND);
-
-        return buildCardDto(cardOptional.get());
     }
 
     public CardDto findByPublicId(UUID publicId) throws CardNotFoundException {
