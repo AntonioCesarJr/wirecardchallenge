@@ -13,8 +13,8 @@ import java.time.format.DateTimeFormatter;
 @Slf4j
 public class CardRequestValidator implements Validator {
 
-    private final String DEFAULT_INIT_YEAR = "20";
-    private final String SEPARATOR = "/";
+    private static final String DEFAULT_INIT_YEAR = "20";
+    private static final String SEPARATOR = "/";
 
     @Override
     public boolean supports(Class<?> aClass) {
