@@ -13,8 +13,8 @@ import java.time.format.DateTimeFormatter;
 @Slf4j
 public class CardRequestValidator implements Validator {
 
-    private final static String DEFAULT_INIT_YEAR = "20";
-    private final static String SEPARATOR = "/";
+    private final String DEFAULT_INIT_YEAR = "20";
+    private final String SEPARATOR = "/";
 
     @Override
     public boolean supports(Class<?> aClass) {
@@ -23,17 +23,14 @@ public class CardRequestValidator implements Validator {
 
     @Override
     public void validate(Object o, Errors errors) {
-        log.info("CardEntity Validator in action !!");
         CardRequest cardRequest = (CardRequest) o;
         validateExpirationDate(cardRequest.getExpirationDate());
         validateCreditCardNumber(cardRequest.getNumber());
         validateCVV(cardRequest.getCVV());
-        log.info("CardEntity Name is " + cardRequest.getName());
     }
 
     @SuppressFBWarnings("BX_UNBOXING_IMMEDIATELY_REBOXED")
-    private void validateExpirationDate(String strDate)
-        throws CardInvalidDataHttpException {
+    private void validateExpirationDate(String strDate){
 
         Boolean isBeforeNow = false;
         if (strDate.length() != 5) {
@@ -96,6 +93,5 @@ public class CardRequestValidator implements Validator {
 
     private void validateCVV(String CVV){
         log.info("I have no idea how to validate CVV !! :(");
-        return;
     }
 }

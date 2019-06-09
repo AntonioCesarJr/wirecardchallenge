@@ -6,6 +6,7 @@ import com.wirecardchallenge.core.exceptions.buyer.BuyerNotFoundException;
 import com.wirecardchallenge.core.exceptions.card.CardInvalidDataException;
 import com.wirecardchallenge.core.exceptions.card.CardNotFoundException;
 import com.wirecardchallenge.core.service.CardService;
+import com.wirecardchallenge.core.service.ExceptionMessages;
 import com.wirecardchallenge.rest.controller.card.request.CardRequest;
 import com.wirecardchallenge.rest.controller.card.validator.CardRequestValidator;
 import com.wirecardchallenge.rest.exception.buyer.BuyerNotFoundHttpException;
@@ -56,7 +57,7 @@ public class CardController {
             CardDto  cardDto = cardService.findByPublicId(publicId);
             return ResponseEntity.ok(cardDto);
         } catch (CardNotFoundException e) {
-            throw new CardNotFoundHttpException("CardEntity " + publicId + " not found!");
+            throw new CardNotFoundHttpException(ExceptionMessages.CARD_NOT_FOUND + " - " + publicId);
         }
     }
 
@@ -67,8 +68,8 @@ public class CardController {
             CardDto cardDtoSaved = cardService.create(cardDto);
             return ResponseEntity.ok(cardDtoSaved);
         } catch (BuyerNotFoundException e) {
-            throw new BuyerNotFoundHttpException("BuyerEntity " +
-                cardRequest.getBuyerPublicId() + " not found!");
+            throw new BuyerNotFoundHttpException(ExceptionMessages.BUYER_NOT_FOUND +
+                " - " + cardRequest.getBuyerPublicId());
         }
     }
 
@@ -81,12 +82,12 @@ public class CardController {
             CardDto cardDtoSaved = cardService.update(publicId, cardDto);
             return ResponseEntity.ok(cardDtoSaved);
         } catch (CardNotFoundException e) {
-            throw new CardNotFoundHttpException("CardEntity " + publicId + " not found!");
+            throw new CardNotFoundHttpException(ExceptionMessages.CARD_NOT_FOUND + " - " + publicId);
         } catch (BuyerNotFoundException e) {
-            throw new BuyerNotFoundHttpException("BuyerEntity " +
-                cardRequest.getBuyerPublicId() + " not found!");
+            throw new BuyerNotFoundHttpException(ExceptionMessages.BUYER_NOT_FOUND +
+                cardRequest.getBuyerPublicId());
         } catch (CardInvalidDataException e) {
-            throw new CardInvalidDataHttpException("CardEntity Data is Invalid !!");
+            throw new CardInvalidDataHttpException(ExceptionMessages.CARD_DATA_INVALID);
         }
     }
 
@@ -96,7 +97,7 @@ public class CardController {
             cardService.delete(publicId);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (CardNotFoundException e) {
-            throw new CardNotFoundHttpException("CardEntity " + publicId + " not found!");
+            throw new CardNotFoundHttpException(ExceptionMessages.CARD_NOT_FOUND + " - " + publicId);
         }
     }
 
