@@ -29,7 +29,7 @@ import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
 @RunWith(JUnit4.class)
-public class ClientEntityControllerTest {
+public class ClientControllerTest {
 
     private static final Long CLIENT_ID_1 = 1L;
     private static final UUID CLIENT_PUBLIC_ID_1 = UUID.randomUUID();
