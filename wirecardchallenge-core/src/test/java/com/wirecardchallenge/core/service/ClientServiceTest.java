@@ -103,6 +103,16 @@ public class ClientServiceTest {
         assertEquals(UPDATED_AT_1,clientDto.getUpdatedAt());
     }
 
+    @Test(expected = ClientNotFoundException.class)
+    public void findByPublicIdClientNotFonudException() throws ClientNotFoundException {
+
+        when(clientRepository.findByPublicId(CLIENT_PUBLIC_ID_1))
+            .thenReturn(Optional.empty());
+
+        ClientDto clientDto = clientService.findByPublicId(CLIENT_PUBLIC_ID_1);
+        assertEquals(CLIENT_PUBLIC_ID_1,clientDto.getPublicId());
+    }
+
     @Test
     public void create() {
 
@@ -135,6 +145,15 @@ public class ClientServiceTest {
         clientService.delete(CLIENT_PUBLIC_ID_1);
         verify(clientRepository, times(invocations)).delete(clientEntity);
 
+    }
+
+    @Test(expected = ClientNotFoundException.class)
+    public void deleteClientNotFoundException() throws ClientNotFoundException {
+
+        when(clientRepository.findByPublicId(CLIENT_PUBLIC_ID_1))
+            .thenReturn(Optional.empty());
+        doNothing().when(clientRepository).delete(any(ClientEntity.class));
+        clientService.delete(CLIENT_PUBLIC_ID_1);
     }
 
     private List<ClientEntity> buildClientList(){
