@@ -56,7 +56,7 @@ public class CardController {
             CardDto  cardDto = cardService.findByPublicId(publicId);
             return ResponseEntity.ok(cardDto);
         } catch (CardNotFoundException e) {
-            throw new CardNotFoundHttpException("Card " + publicId + " not found!");
+            throw new CardNotFoundHttpException("CardEntity " + publicId + " not found!");
         }
     }
 
@@ -67,7 +67,7 @@ public class CardController {
             CardDto cardDtoSaved = cardService.create(cardDto);
             return ResponseEntity.ok(cardDtoSaved);
         } catch (BuyerNotFoundException e) {
-            throw new BuyerNotFoundHttpException("Buyer " +
+            throw new BuyerNotFoundHttpException("BuyerEntity " +
                 cardRequest.getBuyerPublicId() + " not found!");
         }
     }
@@ -81,12 +81,12 @@ public class CardController {
             CardDto cardDtoSaved = cardService.update(publicId, cardDto);
             return ResponseEntity.ok(cardDtoSaved);
         } catch (CardNotFoundException e) {
-            throw new CardNotFoundHttpException("Card " + publicId + " not found!");
+            throw new CardNotFoundHttpException("CardEntity " + publicId + " not found!");
         } catch (BuyerNotFoundException e) {
-            throw new BuyerNotFoundHttpException("Buyer " +
+            throw new BuyerNotFoundHttpException("BuyerEntity " +
                 cardRequest.getBuyerPublicId() + " not found!");
         } catch (CardInvalidDataException e) {
-            throw new CardInvalidDataHttpException("Card Data is Invalid !!");
+            throw new CardInvalidDataHttpException("CardEntity Data is Invalid !!");
         }
     }
 
@@ -96,7 +96,7 @@ public class CardController {
             cardService.delete(publicId);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (CardNotFoundException e) {
-            throw new CardNotFoundHttpException("Card " + publicId + " not found!");
+            throw new CardNotFoundHttpException("CardEntity " + publicId + " not found!");
         }
     }
 

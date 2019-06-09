@@ -39,10 +39,10 @@ public class ClientController {
         ClientDto clientDtos;
         try {
             clientDtos = clientService.findByPublicId(publicId);
-            log.info("Client " + publicId + " found!");
+            log.info("ClientEntity " + publicId + " found!");
         } catch (ClientNotFoundException e) {
-            log.warn("Client " + publicId + " not found!");
-            throw new ClientNotFoundHttpException("Client " + publicId + " not found!");
+            log.warn("ClientEntity " + publicId + " not found!");
+            throw new ClientNotFoundHttpException("ClientEntity " + publicId + " not found!");
         }
         return ResponseEntity.ok(clientDtos);
     }
@@ -50,7 +50,7 @@ public class ClientController {
     @PostMapping
     public ResponseEntity<ClientDto> add(){
         ClientDto clientDtoSaved = clientService.create();
-        log.info("New Client with publicId = " +clientDtoSaved.getPublicId());
+        log.info("New ClientEntity with publicId = " +clientDtoSaved.getPublicId());
         return ResponseEntity.ok(clientDtoSaved);
     }
 
@@ -58,10 +58,10 @@ public class ClientController {
     public ResponseEntity<String> delete(@PathVariable UUID publicId) {
         try {
             clientService.delete(publicId);
-            log.info("Client " + publicId + " deleted !!");
+            log.info("ClientEntity " + publicId + " deleted !!");
             return new ResponseEntity<>("{'message': 'Bye bye " + publicId + "'}", HttpStatus.OK);
         } catch (ClientNotFoundException e) {
-            throw new ClientNotFoundHttpException("Client " + publicId + " not found!");
+            throw new ClientNotFoundHttpException("ClientEntity " + publicId + " not found!");
         }
     }
 }

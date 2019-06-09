@@ -1,7 +1,6 @@
 package com.wirecardchallenge.core.entity;
 
-import com.wirecardchallenge.core.enumerable.PaymentStatus;
-import com.wirecardchallenge.core.enumerable.Type;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -9,31 +8,29 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Set;
 import java.util.UUID;
 
-@Entity(name = "Payment")
-@Table(name = "payment")
+@Entity(name = "Card")
+@Table(name = "card")
 @Builder
 @Data
 @AllArgsConstructor
-public class Payment implements Serializable {
+public class CardEntity implements Serializable {
 
-    public Payment(){};
+    public CardEntity(){}
 
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO,generator="native")
@@ -44,25 +41,24 @@ public class Payment implements Serializable {
     private UUID publicId;
 
     @Column(nullable = false)
-    private BigDecimal amount;
+    private String name;
 
-    @Column(unique = true, updatable = false)
-    private String bankSlipNumber;
+    @Column(unique = true, nullable = false, length = 16)
+    private String number;
 
-    @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    private Type type;
+    @Column(name = "expiration_date", nullable = false)
+    private String expirationDate;
 
-    @Enumerated(EnumType.STRING)
-    private PaymentStatus paymentStatus;
+    @Column(nullable = false, length = 3)
+    private String CVV;
 
-    @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
+    @OneToMany(fetch = FetchType.LAZY,mappedBy = "card")
+    @JsonIgnore
+    private Set<PaymentEntity> payments;
+
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @Builder.Default
-    private Card card;
-
-    @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
-    @Builder.Default
-    private Buyer buyer;
+    private BuyerEntity buyer;
 
     @CreationTimestamp
     @Column(name = "created_at", columnDefinition = "DATETIME", nullable = false)
@@ -75,6 +71,5 @@ public class Payment implements Serializable {
     @PrePersist
     protected void onCreateAbstractBaseEntity() {
         this.publicId = UUID.randomUUID();
-        this.bankSlipNumber = UUID.randomUUID().toString();
     }
 }

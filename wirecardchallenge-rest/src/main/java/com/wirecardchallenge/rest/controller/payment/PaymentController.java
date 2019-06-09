@@ -72,7 +72,7 @@ public class PaymentController {
         PaymentDto paymentDto = buildPaymentDtoBankSlip(postPaymentRequest);
         try {
             PaymentDto paymentDtoSaved = paymentService.createPaymentBankSlip(paymentDto);
-            log.info("New Bank Slip Payment - " + paymentDtoSaved.getPublicId());
+            log.info("New Bank Slip PaymentEntity - " + paymentDtoSaved.getPublicId());
             return paymentDtoSaved;
         } catch (BuyerNotFoundException e) {
             throw new BuyerNotFoundHttpException(e.getMessage() +
@@ -86,7 +86,7 @@ public class PaymentController {
         PaymentDto paymentDto = buildPaymentDtoCreditCard(postPaymentRequest);
         try {
             PaymentDto  paymentDtoSaved = paymentService.createPaymentCreditCard(paymentDto);
-            log.info("New Credit Card Payment - " + paymentDtoSaved.getPublicId());
+            log.info("New Credit CardEntity PaymentEntity - " + paymentDtoSaved.getPublicId());
             return paymentDtoSaved;
         } catch (CardNotFoundException e) {
             throw new CardNotFoundHttpException(e.getMessage() +
@@ -124,9 +124,9 @@ public class PaymentController {
         try {
             CardDto  cardDto = cardService.findByPublicId(cardPublicId);
             if (!cardDto.getBuyerDto().getPublicId().equals(buyerPublicId))
-                throw new CardAndBuyerDoesNotMatchException("Credit Card and Buyer does not match !!");
+                throw new CardAndBuyerDoesNotMatchException("Credit CardEntity and BuyerEntity does not match !!");
         } catch (CardNotFoundException e) {
-            throw new CardNotFoundHttpException("Credit Card Not found !!"+ e.getMessage());
+            throw new CardNotFoundHttpException("Credit CardEntity Not found !!"+ e.getMessage());
         }
     }
 }

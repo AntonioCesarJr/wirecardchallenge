@@ -30,7 +30,7 @@ public class CardDto {
 
     private String CVV;
 
-    @JsonProperty(value = "buyer")
+    @JsonProperty(value = "buyerEntity")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private BuyerDto buyerDto;
 

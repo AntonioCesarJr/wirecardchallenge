@@ -23,12 +23,12 @@ public class CardRequestValidator implements Validator {
 
     @Override
     public void validate(Object o, Errors errors) {
-        log.info("Card Validator in action !!");
+        log.info("CardEntity Validator in action !!");
         CardRequest cardRequest = (CardRequest) o;
         validateExpirationDate(cardRequest.getExpirationDate());
         validateCreditCardNumber(cardRequest.getNumber());
         validateCVV(cardRequest.getCVV());
-        log.info("Card Name is " + cardRequest.getName());
+        log.info("CardEntity Name is " + cardRequest.getName());
     }
 
     @SuppressFBWarnings("BX_UNBOXING_IMMEDIATELY_REBOXED")
@@ -87,10 +87,10 @@ public class CardRequestValidator implements Validator {
             sum += ints[i];
         }
         if (sum % 10 == 0) {
-            log.info(str + " is a valid credit card number");
+            log.info(str + " is a valid credit cardEntity number");
         } else {
-            log.warn(str + " is an invalid credit card number");
-            throw new CardInvalidDataHttpException(str +  " is an invalid credit card number");
+            log.warn(str + " is an invalid credit cardEntity number");
+            throw new CardInvalidDataHttpException(str +  " is an invalid credit cardEntity number");
         }
     }
 

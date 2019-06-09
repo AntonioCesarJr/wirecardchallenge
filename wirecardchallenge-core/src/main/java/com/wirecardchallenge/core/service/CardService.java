@@ -2,8 +2,8 @@ package com.wirecardchallenge.core.service;
 
 import com.wirecardchallenge.core.dto.BuyerDto;
 import com.wirecardchallenge.core.dto.CardDto;
-import com.wirecardchallenge.core.entity.Buyer;
-import com.wirecardchallenge.core.entity.Card;
+import com.wirecardchallenge.core.entity.BuyerEntity;
+import com.wirecardchallenge.core.entity.CardEntity;
 import com.wirecardchallenge.core.exceptions.buyer.BuyerNotFoundException;
 import com.wirecardchallenge.core.exceptions.card.CardInvalidDataException;
 import com.wirecardchallenge.core.exceptions.card.CardNotFoundException;
@@ -31,7 +31,7 @@ public class CardService {
 
     public Page<CardDto> findAll(Pageable pageable){
 
-        Page<Card> cardPage = cardRepository.findAll(pageable);
+        Page<CardEntity> cardPage = cardRepository.findAll(pageable);
         List<CardDto> cardDtos = cardPage.getContent().stream()
             .map(card -> buildCardDto(card))
             .collect(Collectors.toList());
@@ -40,92 +40,92 @@ public class CardService {
     }
 
     public CardDto findById(Long id) throws CardNotFoundException {
-        Optional<Card> cardOptional = cardRepository.findById(id);
+        Optional<CardEntity> cardOptional = cardRepository.findById(id);
 
-        if (!cardOptional.isPresent()) throw new CardNotFoundException("Card Not Found !!");
+        if (!cardOptional.isPresent()) throw new CardNotFoundException(ExceptionMessages.CARD_NOT_FOUND);
 
         return buildCardDto(cardOptional.get());
     }
 
     public CardDto findByPublicId(UUID publicId) throws CardNotFoundException {
 
-        Optional<Card> cardOptional = cardRepository.findByPublicId(publicId);
-        if (!cardOptional.isPresent()) throw new CardNotFoundException("Card Not Found !!");
+        Optional<CardEntity> cardOptional = cardRepository.findByPublicId(publicId);
+        if (!cardOptional.isPresent()) throw new CardNotFoundException(ExceptionMessages.CARD_NOT_FOUND);
 
         return buildCardDto(cardOptional.get());
     }
 
     public CardDto create(CardDto cardDto) throws BuyerNotFoundException {
 
-        Optional<Buyer> buyerOptional = buyerRepository.findByPublicId(cardDto.getBuyerDto().getPublicId());
+        Optional<BuyerEntity> buyerOptional = buyerRepository.findByPublicId(cardDto.getBuyerDto().getPublicId());
 
-        if(!buyerOptional.isPresent())  throw new BuyerNotFoundException("Buyer Not Found !!");
+        if(!buyerOptional.isPresent())  throw new BuyerNotFoundException(ExceptionMessages.BUYER_NOT_FOUND);
 
-        Card card = buildCard(cardDto);
-        card.setBuyer(buyerOptional.get());
-        Card cardSaved = cardRepository.save(card);
+        CardEntity cardEntity = buildCard(cardDto);
+        cardEntity.setBuyer(buyerOptional.get());
+        CardEntity cardEntitySaved = cardRepository.save(cardEntity);
 
-        return buildCardDto(cardSaved);
+        return buildCardDto(cardEntitySaved);
     }
 
     public CardDto update(UUID uuid,
                           CardDto cardDto) throws CardNotFoundException,
         BuyerNotFoundException, CardInvalidDataException {
 
-        Optional<Buyer> buyerOptional = buyerRepository.findByPublicId(cardDto.getBuyerDto().getPublicId());
-        if(!buyerOptional.isPresent())  throw new BuyerNotFoundException("Buyer Not Found !!");
+        Optional<BuyerEntity> buyerOptional = buyerRepository.findByPublicId(cardDto.getBuyerDto().getPublicId());
+        if(!buyerOptional.isPresent())  throw new BuyerNotFoundException(ExceptionMessages.BUYER_NOT_FOUND);
 
-        Optional<Card> cardOptional = cardRepository.findByPublicId(uuid);
-        if (!cardOptional.isPresent()) throw new CardNotFoundException("Card Not Found !!");
+        Optional<CardEntity> cardOptional = cardRepository.findByPublicId(uuid);
+        if (!cardOptional.isPresent()) throw new CardNotFoundException(ExceptionMessages.CARD_NOT_FOUND);
 
-        Card card = cardOptional.get();
-        card.setName(cardDto.getName());
-        card.setNumber(cardDto.getNumber());
-        card.setExpirationDate(cardDto.getExpirationDate());
-        card.setCVV(cardDto.getCVV());
-        card.setBuyer(buyerOptional.get());
-        Card cardSaved = cardRepository.save(card);
+        CardEntity cardEntity = cardOptional.get();
+        cardEntity.setName(cardDto.getName());
+        cardEntity.setNumber(cardDto.getNumber());
+        cardEntity.setExpirationDate(cardDto.getExpirationDate());
+        cardEntity.setCVV(cardDto.getCVV());
+        cardEntity.setBuyer(buyerOptional.get());
+        CardEntity cardEntitySaved = cardRepository.save(cardEntity);
 
-        return buildCardDto(cardSaved);
+        return buildCardDto(cardEntitySaved);
     }
 
     public void delete(UUID uuid) throws CardNotFoundException {
 
-        Optional<Card> cardOptional = cardRepository.findByPublicId(uuid);
-        if (!cardOptional.isPresent()) throw new CardNotFoundException("Card Not Found !!");
+        Optional<CardEntity> cardOptional = cardRepository.findByPublicId(uuid);
+        if (!cardOptional.isPresent()) throw new CardNotFoundException(ExceptionMessages.CARD_NOT_FOUND);
 
-        Card card = cardOptional.get();
-        cardRepository.delete(card);
+        CardEntity cardEntity = cardOptional.get();
+        cardRepository.delete(cardEntity);
     }
 
-    private CardDto buildCardDto(Card card){
+    private CardDto buildCardDto(CardEntity cardEntity){
 
         return CardDto.builder()
-            .publicId(card.getPublicId())
-            .name(card.getName())
-            .number(card.getNumber())
-            .expirationDate(card.getExpirationDate())
-            .CVV(card.getCVV())
+            .publicId(cardEntity.getPublicId())
+            .name(cardEntity.getName())
+            .number(cardEntity.getNumber())
+            .expirationDate(cardEntity.getExpirationDate())
+            .CVV(cardEntity.getCVV())
             .buyerDto(BuyerDto.builder()
-                .publicId(card.getBuyer().getPublicId())
-                .name(card.getBuyer().getName())
-                .email(card.getBuyer().getEmail())
-                .cpf(card.getBuyer().getCpf())
+                .publicId(cardEntity.getBuyer().getPublicId())
+                .name(cardEntity.getBuyer().getName())
+                .email(cardEntity.getBuyer().getEmail())
+                .cpf(cardEntity.getBuyer().getCpf())
                 .build())
-            .createdAt(card.getCreatedAt())
-            .updatedAt(card.getUpdatedAt())
+            .createdAt(cardEntity.getCreatedAt())
+            .updatedAt(cardEntity.getUpdatedAt())
             .build();
     }
 
-    private Card buildCard(CardDto cardDto) {
-        return Card.builder()
+    private CardEntity buildCard(CardDto cardDto) {
+        return CardEntity.builder()
             .id(cardDto.getId())
             .publicId(cardDto.getPublicId())
             .name(cardDto.getName())
             .number(cardDto.getNumber())
             .expirationDate(cardDto.getExpirationDate())
             .CVV(cardDto.getCVV())
-            .buyer(Buyer.builder()
+            .buyer(BuyerEntity.builder()
                 .publicId(cardDto.getBuyerDto().getPublicId())
                 .build())
             .build();

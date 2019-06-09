@@ -2,8 +2,8 @@ package com.wirecardchallenge.core.service;
 
 import com.wirecardchallenge.core.dto.BuyerDto;
 import com.wirecardchallenge.core.dto.ClientDto;
-import com.wirecardchallenge.core.entity.Buyer;
-import com.wirecardchallenge.core.entity.Client;
+import com.wirecardchallenge.core.entity.BuyerEntity;
+import com.wirecardchallenge.core.entity.ClientEntity;
 import com.wirecardchallenge.core.exceptions.buyer.BuyerNotFoundException;
 import com.wirecardchallenge.core.exceptions.buyer.BuyerServiceIntegrityConstraintException;
 import com.wirecardchallenge.core.exceptions.client.ClientNotFoundException;
@@ -34,7 +34,7 @@ public class BuyerService {
 
     public Page<BuyerDto> findAll(Pageable pageable){
 
-        Page<Buyer> buyerPage = buyerRepository.findAll(pageable);
+        Page<BuyerEntity> buyerPage = buyerRepository.findAll(pageable);
         List<BuyerDto> buyerDtos = buyerPage.getContent().stream()
             .map(buyer -> buildBuyerDto(buyer))
             .collect(Collectors.toList());
@@ -44,28 +44,28 @@ public class BuyerService {
 
     public BuyerDto findById(Long id) throws BuyerNotFoundException {
 
-        Optional<Buyer> buyerOptional = buyerRepository.findById(id);
-        if (!buyerOptional.isPresent()) throw new BuyerNotFoundException("Buyer Not Found !!");
+        Optional<BuyerEntity> buyerOptional = buyerRepository.findById(id);
+        if (!buyerOptional.isPresent()) throw new BuyerNotFoundException(ExceptionMessages.BUYER_NOT_FOUND);
 
         return buildBuyerDto(buyerOptional.get());
     }
 
     public BuyerDto findByPublicId(UUID publicId) throws BuyerNotFoundException {
 
-        Optional<Buyer> buyerOptional = buyerRepository.findByPublicId(publicId);
+        Optional<BuyerEntity> buyerOptional = buyerRepository.findByPublicId(publicId);
 
-        if (!buyerOptional.isPresent()) throw new BuyerNotFoundException("Buyer Not Found !!");
+        if (!buyerOptional.isPresent()) throw new BuyerNotFoundException(ExceptionMessages.BUYER_NOT_FOUND);
         return buildBuyerDto(buyerOptional.get());
     }
 
     public BuyerDto create(BuyerDto buyerDto) throws ClientNotFoundException,
         BuyerServiceIntegrityConstraintException {
 
-        Optional<Client> client = clientRepository.findByPublicId(buyerDto.getClientDto().getPublicId());
-        if(!client.isPresent()) throw new ClientNotFoundException("Client Not Found !!");
+        Optional<ClientEntity> client = clientRepository.findByPublicId(buyerDto.getClientDto().getPublicId());
+        if(!client.isPresent()) throw new ClientNotFoundException(ExceptionMessages.CLIENT_NOT_FOUND);
 
-        Buyer buyer = buildBuyer(buyerDto);
-        return saveBuyerOrThrow(client.get(), buyer);
+        BuyerEntity buyerEntity = buildBuyer(buyerDto);
+        return saveBuyerOrThrow(client.get(), buyerEntity);
     }
 
     public BuyerDto update(UUID uuid,
@@ -73,65 +73,65 @@ public class BuyerService {
 
         BuyerNotFoundException, BuyerServiceIntegrityConstraintException {
 
-        Optional<Client> client = clientRepository.findByPublicId(buyerDto.getClientDto().getPublicId());
+        Optional<ClientEntity> client = clientRepository.findByPublicId(buyerDto.getClientDto().getPublicId());
 
-        if(!client.isPresent()) throw new ClientNotFoundException("Client Not Found !!");
-        Optional<Buyer> optionalBuyer = buyerRepository.findByPublicId(uuid);
+        if(!client.isPresent()) throw new ClientNotFoundException(ExceptionMessages.CLIENT_NOT_FOUND);
+        Optional<BuyerEntity> optionalBuyer = buyerRepository.findByPublicId(uuid);
 
-        if (!optionalBuyer.isPresent()) throw new BuyerNotFoundException("Buyer Not Found !!");
+        if (!optionalBuyer.isPresent()) throw new BuyerNotFoundException(ExceptionMessages.BUYER_NOT_FOUND);
 
-        Buyer buyer = optionalBuyer.get();
-        buyer.setName(buyerDto.getName());
-        buyer.setEmail(buyerDto.getEmail());
-        buyer.setCpf(buyerDto.getCpf());
-        return saveBuyerOrThrow(client.get(), buyer);
+        BuyerEntity buyerEntity = optionalBuyer.get();
+        buyerEntity.setName(buyerDto.getName());
+        buyerEntity.setEmail(buyerDto.getEmail());
+        buyerEntity.setCpf(buyerDto.getCpf());
+        return saveBuyerOrThrow(client.get(), buyerEntity);
     }
 
     public void delete(UUID uuid) throws BuyerNotFoundException, BuyerServiceIntegrityConstraintException {
 
-        Optional<Buyer> buyerOptional = buyerRepository.findByPublicId(uuid);
+        Optional<BuyerEntity> buyerOptional = buyerRepository.findByPublicId(uuid);
 
-        if (!buyerOptional.isPresent()) throw new BuyerNotFoundException("Buyer Not Found !!");
+        if (!buyerOptional.isPresent()) throw new BuyerNotFoundException(ExceptionMessages.BUYER_NOT_FOUND);
 
-        Buyer buyer = buyerOptional.get();
+        BuyerEntity buyerEntity = buyerOptional.get();
         try{
-            buyerRepository.delete(buyer);
+            buyerRepository.delete(buyerEntity);
         }catch (DataIntegrityViolationException e){
             log.error(e.getMessage() + " // " + e.getCause().getCause());
             throw new BuyerServiceIntegrityConstraintException(e.getMessage());
         }
     }
 
-    private BuyerDto saveBuyerOrThrow(Client client, Buyer buyer)
+    private BuyerDto saveBuyerOrThrow(ClientEntity clientEntity, BuyerEntity buyerEntity)
         throws BuyerServiceIntegrityConstraintException {
-        buyer.setClient(client);
-        Buyer buyerSaved;
+        buyerEntity.setClient(clientEntity);
+        BuyerEntity buyerEntitySaved;
         try {
-            buyerSaved = buyerRepository.save(buyer);
+            buyerEntitySaved = buyerRepository.save(buyerEntity);
         } catch (DataIntegrityViolationException e) {
             log.error(e.getMessage() + " // " + e.getCause().getCause());
             throw new BuyerServiceIntegrityConstraintException(e.getMessage());
         }
 
-        return buildBuyerDto(buyerSaved);
+        return buildBuyerDto(buyerEntitySaved);
     }
 
-    private BuyerDto buildBuyerDto(Buyer buyer){
+    private BuyerDto buildBuyerDto(BuyerEntity buyerEntity){
         return BuyerDto.builder()
-            .publicId(buyer.getPublicId())
-            .email(buyer.getEmail())
-            .name(buyer.getName())
-            .cpf(buyer.getCpf())
+            .publicId(buyerEntity.getPublicId())
+            .email(buyerEntity.getEmail())
+            .name(buyerEntity.getName())
+            .cpf(buyerEntity.getCpf())
             .clientDto(ClientDto.builder()
-                .publicId(buyer.getClient().getPublicId())
+                .publicId(buyerEntity.getClient().getPublicId())
                 .build())
-            .createdAt(buyer.getCreatedAt())
-            .updatedAt(buyer.getUpdatedAt())
+            .createdAt(buyerEntity.getCreatedAt())
+            .updatedAt(buyerEntity.getUpdatedAt())
             .build();
     }
 
-    private Buyer buildBuyer(BuyerDto buyerDto){
-        return Buyer.builder()
+    private BuyerEntity buildBuyer(BuyerDto buyerDto){
+        return BuyerEntity.builder()
             .id(buyerDto.getId())
             .publicId(buyerDto.getPublicId())
             .email(buyerDto.getEmail())
