@@ -242,7 +242,11 @@ public class BuyerServiceTest {
             .thenReturn(Optional.of(buildClientEntity()));
 
         when(buyerRepository.findByPublicId(any(UUID.class)))
-            .thenReturn(Optional.empty());
+            .thenReturn(Optional.of(buildBuyerEntity()));
+
+        DataIntegrityViolationException dataIntegrityViolationException =
+            new DataIntegrityViolationException(DI_EXCEPTION_MESSAGE, DI_EXCEPTION_CAUSE);
+        doThrow(dataIntegrityViolationException).when(buyerRepository).save(any(BuyerEntity.class));
 
         buyerService.update(CLIENT_PUBLIC_ID_1, buildBuyerDto());
     }
