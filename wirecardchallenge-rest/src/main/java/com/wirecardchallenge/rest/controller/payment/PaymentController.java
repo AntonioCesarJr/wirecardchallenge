@@ -45,7 +45,7 @@ public class PaymentController {
     public void initBinder(WebDataBinder webDataBinder){webDataBinder.addValidators(new PostPaymentRequestValidator());}
 
     @GetMapping
-    public ResponseEntity<Page<PaymentDto>> listPayments(Pageable pageable){
+    public ResponseEntity<Page<PaymentDto>> findAll(Pageable pageable){
         Page<PaymentDto> paymentDtos = paymentService.findAll(pageable);
         return ResponseEntity.ok(paymentDtos);
     }
@@ -56,10 +56,10 @@ public class PaymentController {
 
         PaymentDto paymentDtoToReturn = new PaymentDto();
 
-        if (type.equals(Type.Bank_Slip))
+        if (type.equals(Type.BANK_SLIP))
             paymentDtoToReturn = createBankSlipPaymentDto(postPaymentRequest);
 
-        if (type.equals(Type.Credit_Card)) {
+        if (type.equals(Type.CREDIT_CARD)) {
             validateCardIssuer(postPaymentRequest.getCardPublicId(), postPaymentRequest.getBuyerPulbicId());
             paymentDtoToReturn = createCreditCardPaymentDto(postPaymentRequest);
         }

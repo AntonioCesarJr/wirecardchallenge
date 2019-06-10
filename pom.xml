@@ -35,7 +35,7 @@
             **/*Config.java,
             **/*Starter.java,
             **/*Test.java,
-            **/*Teste.java,
+            **/*Messages.java,
             **/*Configuration.java,
             **/*.properties,
             **/*.txt

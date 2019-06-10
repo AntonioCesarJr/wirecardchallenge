@@ -251,6 +251,16 @@ public class BuyerServiceTest {
         buyerService.update(CLIENT_PUBLIC_ID_1, buildBuyerDto());
     }
 
+    @Test(expected = ClientNotFoundException.class)
+    public void updateClientNotFoundException()
+        throws ClientNotFoundException, BuyerServiceIntegrityConstraintException, BuyerNotFoundException {
+
+        when(clientRepository.findByPublicId(CLIENT_PUBLIC_ID_1))
+            .thenReturn(Optional.empty());
+
+        buyerService.update(CLIENT_PUBLIC_ID_1, buildBuyerDto());
+    }
+
     @Test
     public void delete() throws BuyerServiceIntegrityConstraintException, BuyerNotFoundException {
 

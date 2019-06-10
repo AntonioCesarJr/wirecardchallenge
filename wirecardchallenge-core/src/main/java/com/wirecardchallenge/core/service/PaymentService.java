@@ -41,7 +41,7 @@ public class PaymentService {
         Page<PaymentEntity> paymentPage = paymentRepository.findAll(pageable);
         List<PaymentDto> paymentDtos = paymentPage.getContent().stream()
             .map(paymentEntity -> {
-                    if (paymentEntity.getType()== Type.Bank_Slip)
+                    if (paymentEntity.getType() == Type.BANK_SLIP)
                         return buildPaymentDtoBankSlip(paymentEntity);
                     return buildPaymentDtoCreditCard(paymentEntity);
                 }
@@ -63,8 +63,8 @@ public class PaymentService {
             .amount(paymentDto.getAmount())
             .card(cardOptional.get())
             .buyer(buyerOptional.get())
-            .type(Type.Credit_Card)
-            .paymentStatus(PaymentStatus.Success)
+            .type(Type.CREDIT_CARD)
+            .paymentStatus(PaymentStatus.SUCCESS)
             .build();
 
         PaymentEntity paymentEntitySaved = paymentRepository.save(paymentEntity);
@@ -81,8 +81,8 @@ public class PaymentService {
         PaymentEntity paymentEntity = PaymentEntity.builder()
             .amount(paymentDto.getAmount())
             .buyer(buyerOptional.get())
-            .type(Type.Bank_Slip)
-            .paymentStatus(PaymentStatus.Pending)
+            .type(Type.BANK_SLIP)
+            .paymentStatus(PaymentStatus.PENDING)
             .build();
 
         PaymentEntity paymentEntitySaved = paymentRepository.save(paymentEntity);

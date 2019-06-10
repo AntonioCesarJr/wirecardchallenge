@@ -1,5 +1,6 @@
 package com.wirecardchallenge.rest.controller.card.validator;
 
+import com.wirecardchallenge.core.service.ExceptionMessages;
 import com.wirecardchallenge.rest.controller.card.request.CardRequest;
 import com.wirecardchallenge.rest.exception.card.CardInvalidDataHttpException;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
@@ -34,8 +35,7 @@ public class CardRequestValidator implements Validator {
 
         Boolean isBeforeNow = false;
         if (strDate.length() != 5) {
-            log.warn("Invalid Expiration Date length !!");
-            throw new CardInvalidDataHttpException("Invalid Expiration Date length !!");
+            throw new CardInvalidDataHttpException(ExceptionMessages.INVALID_EXPIRATION_DATE_LENGTH);
         }
         try{
             String year = DEFAULT_INIT_YEAR + strDate.substring(3,5);
@@ -50,14 +50,12 @@ public class CardRequestValidator implements Validator {
             final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("dd/MM/yyyy");
             LocalDate localDate = LocalDate.parse(strDateToValidate, DATE_FORMAT);
             if (localDate.isBefore(LocalDate.now())) {
-                log.warn("Invalid Expiration Date !! Past Date !!");
                 isBeforeNow = true;
             }
         }catch (Exception e){
-            log.warn("Invalid Expiration Date Format (MM/yy) !!");
-            throw new CardInvalidDataHttpException("Invalid Expiration Date Format (MM/yy) !!");
+            throw new CardInvalidDataHttpException(ExceptionMessages.INVALID_EXPIRATION_DATE_FORMAT);
         }
-        if (isBeforeNow) throw new CardInvalidDataHttpException("Invalid Expiration Date !! Past Date !!");
+        if (isBeforeNow) throw new CardInvalidDataHttpException(ExceptionMessages.INVALID_EXPIRATION_DATE_PAST);
     }
 
     private Integer lastDayOfMonth(Integer month, Integer year){
@@ -84,14 +82,14 @@ public class CardRequestValidator implements Validator {
             sum += ints[i];
         }
         if (sum % 10 == 0) {
-            log.info(str + " is a valid credit cardEntity number");
+            log.info(str + " - " + ExceptionMessages.CARD_DATA_VALID);
         } else {
-            log.warn(str + " is an invalid credit cardEntity number");
-            throw new CardInvalidDataHttpException(str +  " is an invalid credit cardEntity number");
+            log.warn(str + " - "  + ExceptionMessages.CARD_DATA_INVALID);
+            throw new CardInvalidDataHttpException(str +  ExceptionMessages.CARD_DATA_INVALID);
         }
     }
 
     private void validateCVV(String CVV){
-        log.info("I have no idea how to validate CVV !! :(");
+        log.info(ExceptionMessages.NO_IDEA);
     }
 }

@@ -5,7 +5,6 @@ import com.wirecardchallenge.core.dto.CardDto;
 import com.wirecardchallenge.core.entity.BuyerEntity;
 import com.wirecardchallenge.core.entity.CardEntity;
 import com.wirecardchallenge.core.exceptions.buyer.BuyerNotFoundException;
-import com.wirecardchallenge.core.exceptions.card.CardInvalidDataException;
 import com.wirecardchallenge.core.exceptions.card.CardNotFoundException;
 import com.wirecardchallenge.core.repository.BuyerRepository;
 import com.wirecardchallenge.core.repository.CardRepository;
@@ -61,8 +60,7 @@ public class CardService {
     }
 
     public CardDto update(UUID uuid,
-                          CardDto cardDto) throws CardNotFoundException,
-        BuyerNotFoundException, CardInvalidDataException {
+                          CardDto cardDto) throws CardNotFoundException, BuyerNotFoundException {
 
         Optional<BuyerEntity> buyerOptional = buyerRepository.findByPublicId(cardDto.getBuyerDto().getPublicId());
         if(!buyerOptional.isPresent())  throw new BuyerNotFoundException(ExceptionMessages.BUYER_NOT_FOUND);

@@ -1,11 +1,11 @@
-sonar:
-	mvn sonar:sonar
-
 test:
 	mvn test
 
 package:
 	mvn clean package -U
+
+sonar:package
+	mvn sonar:sonar
 
 install:
 	mvn clean package install -U

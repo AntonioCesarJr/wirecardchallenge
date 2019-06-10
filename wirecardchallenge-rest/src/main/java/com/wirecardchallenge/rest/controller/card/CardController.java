@@ -3,14 +3,12 @@ package com.wirecardchallenge.rest.controller.card;
 import com.wirecardchallenge.core.dto.BuyerDto;
 import com.wirecardchallenge.core.dto.CardDto;
 import com.wirecardchallenge.core.exceptions.buyer.BuyerNotFoundException;
-import com.wirecardchallenge.core.exceptions.card.CardInvalidDataException;
 import com.wirecardchallenge.core.exceptions.card.CardNotFoundException;
 import com.wirecardchallenge.core.service.CardService;
 import com.wirecardchallenge.core.service.ExceptionMessages;
 import com.wirecardchallenge.rest.controller.card.request.CardRequest;
 import com.wirecardchallenge.rest.controller.card.validator.CardRequestValidator;
 import com.wirecardchallenge.rest.exception.buyer.BuyerNotFoundHttpException;
-import com.wirecardchallenge.rest.exception.card.CardInvalidDataHttpException;
 import com.wirecardchallenge.rest.exception.card.CardNotFoundHttpException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -86,8 +84,6 @@ public class CardController {
         } catch (BuyerNotFoundException e) {
             throw new BuyerNotFoundHttpException(ExceptionMessages.BUYER_NOT_FOUND +
                 cardRequest.getBuyerPublicId());
-        } catch (CardInvalidDataException e) {
-            throw new CardInvalidDataHttpException(ExceptionMessages.CARD_DATA_INVALID);
         }
     }
 
