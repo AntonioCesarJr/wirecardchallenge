@@ -3,7 +3,7 @@ package com.wirecardchallenge.rest.controller.payment;
 import com.wirecardchallenge.core.dto.BuyerDto;
 import com.wirecardchallenge.core.dto.CardDto;
 import com.wirecardchallenge.core.dto.PaymentDto;
-import com.wirecardchallenge.core.enumerable.Type;
+import com.wirecardchallenge.core.enumerable.TypeEnum;
 import com.wirecardchallenge.core.exceptions.buyer.BuyerNotFoundException;
 import com.wirecardchallenge.core.exceptions.card.CardNotFoundException;
 import com.wirecardchallenge.core.service.CardService;
@@ -50,16 +50,16 @@ public class PaymentController {
         return ResponseEntity.ok(paymentDtos);
     }
 
-    @PostMapping(value = "/{type}")
+    @PostMapping(value = "/{typeEnum}")
     public ResponseEntity<PaymentDto> add(@Valid @RequestBody PostPaymentRequest postPaymentRequest,
-                                          @PathVariable Type type){
+                                          @PathVariable TypeEnum typeEnum){
 
         PaymentDto paymentDtoToReturn = new PaymentDto();
 
-        if (type.equals(Type.BANK_SLIP))
+        if (typeEnum.equals(TypeEnum.BANK_SLIP))
             paymentDtoToReturn = createBankSlipPaymentDto(postPaymentRequest);
 
-        if (type.equals(Type.CREDIT_CARD)) {
+        if (typeEnum.equals(TypeEnum.CREDIT_CARD)) {
             validateCardIssuer(postPaymentRequest.getCardPublicId(), postPaymentRequest.getBuyerPulbicId());
             paymentDtoToReturn = createCreditCardPaymentDto(postPaymentRequest);
         }

@@ -7,8 +7,8 @@ import com.wirecardchallenge.core.dto.PaymentDto;
 import com.wirecardchallenge.core.entity.BuyerEntity;
 import com.wirecardchallenge.core.entity.CardEntity;
 import com.wirecardchallenge.core.entity.PaymentEntity;
-import com.wirecardchallenge.core.enumerable.PaymentStatus;
-import com.wirecardchallenge.core.enumerable.Type;
+import com.wirecardchallenge.core.enumerable.PaymentStatusEnum;
+import com.wirecardchallenge.core.enumerable.TypeEnum;
 import com.wirecardchallenge.core.exceptions.buyer.BuyerNotFoundException;
 import com.wirecardchallenge.core.exceptions.card.CardNotFoundException;
 import com.wirecardchallenge.core.repository.BuyerRepository;
@@ -41,7 +41,7 @@ public class PaymentService {
         Page<PaymentEntity> paymentPage = paymentRepository.findAll(pageable);
         List<PaymentDto> paymentDtos = paymentPage.getContent().stream()
             .map(paymentEntity -> {
-                    if (paymentEntity.getType() == Type.BANK_SLIP)
+                    if (paymentEntity.getType() == TypeEnum.BANK_SLIP)
                         return buildPaymentDtoBankSlip(paymentEntity);
                     return buildPaymentDtoCreditCard(paymentEntity);
                 }
@@ -63,8 +63,8 @@ public class PaymentService {
             .amount(paymentDto.getAmount())
             .card(cardOptional.get())
             .buyer(buyerOptional.get())
-            .type(Type.CREDIT_CARD)
-            .paymentStatus(PaymentStatus.SUCCESS)
+            .type(TypeEnum.CREDIT_CARD)
+            .paymentStatus(PaymentStatusEnum.SUCCESS)
             .build();
 
         PaymentEntity paymentEntitySaved = paymentRepository.save(paymentEntity);
@@ -81,8 +81,8 @@ public class PaymentService {
         PaymentEntity paymentEntity = PaymentEntity.builder()
             .amount(paymentDto.getAmount())
             .buyer(buyerOptional.get())
-            .type(Type.BANK_SLIP)
-            .paymentStatus(PaymentStatus.PENDING)
+            .type(TypeEnum.BANK_SLIP)
+            .paymentStatus(PaymentStatusEnum.PENDING)
             .build();
 
         PaymentEntity paymentEntitySaved = paymentRepository.save(paymentEntity);
@@ -120,7 +120,7 @@ public class PaymentService {
                     .email(paymentEntity.getCard().getBuyer().getEmail())
                     .cpf(paymentEntity.getCard().getBuyer().getCpf())
                     .clientDto(ClientDto.builder()
-                        .publicId(paymentEntity.getCard().getBuyer().getClient().getPublicId())
+                        .publicId(paymentEntity.getBuyer().getClient().getPublicId())
                         .build())
                     .build())
                 .build())
