@@ -1,5 +1,5 @@
 package com.wirecardchallenge.core.enumerable;
 
-public enum PaymentStatus {
+public enum PaymentStatusEnum {
     PENDING, SUCCESS, COMPLETED, CANCELED, REJECTED
 }

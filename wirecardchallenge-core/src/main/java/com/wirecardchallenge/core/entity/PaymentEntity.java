@@ -1,7 +1,7 @@
 package com.wirecardchallenge.core.entity;
 
-import com.wirecardchallenge.core.enumerable.PaymentStatus;
-import com.wirecardchallenge.core.enumerable.Type;
+import com.wirecardchallenge.core.enumerable.PaymentStatusEnum;
+import com.wirecardchallenge.core.enumerable.TypeEnum;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -51,10 +51,10 @@ public class PaymentEntity implements Serializable {
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private Type type;
+    private TypeEnum type;
 
     @Enumerated(EnumType.STRING)
-    private PaymentStatus paymentStatus;
+    private PaymentStatusEnum paymentStatus;
 
     @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     @Builder.Default

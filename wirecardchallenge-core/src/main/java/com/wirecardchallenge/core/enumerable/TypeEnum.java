@@ -1,5 +1,5 @@
 package com.wirecardchallenge.core.enumerable;
 
-public enum Type {
+public enum TypeEnum {
     CREDIT_CARD, BANK_SLIP
 }

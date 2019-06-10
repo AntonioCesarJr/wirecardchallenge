@@ -3,8 +3,8 @@ package com.wirecardchallenge.core.dto;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.wirecardchallenge.core.enumerable.PaymentStatus;
-import com.wirecardchallenge.core.enumerable.Type;
+import com.wirecardchallenge.core.enumerable.PaymentStatusEnum;
+import com.wirecardchallenge.core.enumerable.TypeEnum;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -27,12 +27,12 @@ public class PaymentDto {
 
     private BigDecimal amount;
 
-    private Type type;
+    private TypeEnum type;
 
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private String bankSlipNumber;
 
-    private PaymentStatus paymentStatus;
+    private PaymentStatusEnum paymentStatus;
 
     @JsonProperty(value = "cardEntity")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
