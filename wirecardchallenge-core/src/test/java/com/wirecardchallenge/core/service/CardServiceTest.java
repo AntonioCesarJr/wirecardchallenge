@@ -29,6 +29,9 @@ import java.util.UUID;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @RunWith(JUnit4.class)
@@ -199,11 +202,61 @@ public class CardServiceTest {
     }
 
     @Test
-    public void update() {
+    public void update() throws CardNotFoundException, BuyerNotFoundException {
+
+
+        when(buyerRepository.findByPublicId(buildCardDto().getBuyerDto().getPublicId()))
+            .thenReturn(Optional.of(buildBuyerEntity()));
+        when(cardRepository.findByPublicId(buildCardDto().getPublicId()))
+            .thenReturn(Optional.of(buildCardEntity()));
+        when(cardRepository.save(any(CardEntity.class)))
+            .thenReturn(buildCardEntity());
+
+        CardDto cardDtoResponse = cardService.update(CARD_PUBLIC_ID_1, buildCardDto());
+        assertNotNull(cardDtoResponse);
+    }
+
+    @Test(expected = BuyerNotFoundException.class)
+    public void updateBuyerNotFoundException() throws CardNotFoundException, BuyerNotFoundException {
+
+        when(buyerRepository.findByPublicId(buildCardDto().getBuyerDto().getPublicId()))
+            .thenReturn(Optional.empty());
+
+        cardService.update(CARD_PUBLIC_ID_1, buildCardDto());
+    }
+
+    @Test(expected = CardNotFoundException.class)
+    public void updateCardNotFoundException() throws CardNotFoundException, BuyerNotFoundException {
+
+        when(buyerRepository.findByPublicId(buildCardDto().getBuyerDto().getPublicId()))
+            .thenReturn(Optional.of(buildBuyerEntity()));
+        when(cardRepository.findByPublicId(buildCardDto().getPublicId()))
+            .thenReturn(Optional.empty());
+
+        cardService.update(CARD_PUBLIC_ID_1, buildCardDto());
     }
 
     @Test
-    public void delete() {
+    public void delete() throws CardNotFoundException {
+
+        int invocations = 1;
+
+        when(cardRepository.findByPublicId(CARD_PUBLIC_ID_1))
+            .thenReturn(Optional.of(buildCardEntity()));
+        doNothing().when(cardRepository).delete(any(CardEntity.class));
+
+        cardService.delete(CARD_PUBLIC_ID_1);
+        verify(cardRepository, times(invocations)).delete(buildCardEntity());
+    }
+
+    @Test(expected = CardNotFoundException.class)
+    public void deleteCardNotFoundException() throws CardNotFoundException {
+
+        when(cardRepository.findByPublicId(CARD_PUBLIC_ID_1))
+            .thenReturn(Optional.empty());
+        doNothing().when(cardRepository).delete(any(CardEntity.class));
+
+        cardService.delete(CARD_PUBLIC_ID_1);
     }
 
     private CardEntity buildCardEntity(){
@@ -276,20 +329,22 @@ public class CardServiceTest {
 
     private CardDto buildCardDto() {
         return CardDto.builder()
-            .publicId(CARD_PUBLIC_ID_3)
-            .name(CARD_NAME_3)
-            .number(CARD_NUMBER_3)
-            .expirationDate(CARD_EXPIRATION_DATE_3)
-            .CVV(CARD_CVV_3)
+            .id(CARD_ID_1)
+            .publicId(CARD_PUBLIC_ID_1)
+            .name(CARD_NAME_1)
+            .number(CARD_NUMBER_1)
+            .expirationDate(CARD_EXPIRATION_DATE_1)
+            .CVV(CARD_CVV_1)
             .buyerDto(buildBuyerDto())
-            .createdAt(CARD_CREATED_AT_3)
-            .updatedAt(CARD_UPDATED_AT_3)
+            .createdAt(CARD_CREATED_AT_1)
+            .updatedAt(CARD_UPDATED_AT_1)
             .build();
 
     }
 
     private BuyerDto buildBuyerDto() {
         return BuyerDto.builder()
+            .id(BUYER_ID_1)
             .publicId(BUYER_PUBLIC_ID_1)
             .name(BUYER_NAME_1)
             .email(BUYER_EMAIL_1)
