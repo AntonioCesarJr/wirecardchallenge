@@ -4,9 +4,9 @@ import com.wirecardchallenge.core.dto.BuyerDto;
 import com.wirecardchallenge.core.dto.CardDto;
 import com.wirecardchallenge.core.dto.ClientDto;
 import com.wirecardchallenge.core.dto.PaymentDto;
-import com.wirecardchallenge.core.entity.Buyer;
-import com.wirecardchallenge.core.entity.Card;
-import com.wirecardchallenge.core.entity.Payment;
+import com.wirecardchallenge.core.entity.BuyerEntity;
+import com.wirecardchallenge.core.entity.CardEntity;
+import com.wirecardchallenge.core.entity.PaymentEntity;
 import com.wirecardchallenge.core.enumerable.PaymentStatus;
 import com.wirecardchallenge.core.enumerable.Type;
 import com.wirecardchallenge.core.exceptions.buyer.BuyerNotFoundException;
@@ -38,13 +38,12 @@ public class PaymentService {
 
     public Page<PaymentDto> findAll(Pageable pageable){
 
-        Page<Payment> paymentPage = paymentRepository.findAll(pageable);
+        Page<PaymentEntity> paymentPage = paymentRepository.findAll(pageable);
         List<PaymentDto> paymentDtos = paymentPage.getContent().stream()
-            .map(payment -> {
-                    if (payment.getType()== Type.Bank_Slip){
-                        return buildPaymentDtoBankSlip(payment);
-                    }
-                    return buildPaymentDtoCreditCard(payment);
+            .map(paymentEntity -> {
+                    if (paymentEntity.getType() == Type.BANK_SLIP)
+                        return buildPaymentDtoBankSlip(paymentEntity);
+                    return buildPaymentDtoCreditCard(paymentEntity);
                 }
             ).collect(Collectors.toList());
 
@@ -54,90 +53,79 @@ public class PaymentService {
     public PaymentDto createPaymentCreditCard(PaymentDto paymentDto)
         throws CardNotFoundException, BuyerNotFoundException {
 
-        Optional<Card> cardOptional = cardRepository.findByPublicId(paymentDto.getCardDto().getPublicId());
-        if(!cardOptional.isPresent()) throw new CardNotFoundException("Card Not Found !!");
+        Optional<CardEntity> cardOptional = cardRepository.findByPublicId(paymentDto.getCardDto().getPublicId());
+        if(!cardOptional.isPresent()) throw new CardNotFoundException(ExceptionMessages.CARD_NOT_FOUND);
 
-        Optional<Buyer> buyerOptional = buyerRepository.findByPublicId(paymentDto.getBuyerDto().getPublicId());
-        if(!buyerOptional.isPresent()) throw new BuyerNotFoundException("Buyer Not Found !!");
+        Optional<BuyerEntity> buyerOptional = buyerRepository.findByPublicId(paymentDto.getBuyerDto().getPublicId());
+        if(!buyerOptional.isPresent()) throw new BuyerNotFoundException(ExceptionMessages.BUYER_NOT_FOUND);
 
-        Payment payment = Payment.builder()
+        PaymentEntity paymentEntity = PaymentEntity.builder()
             .amount(paymentDto.getAmount())
             .card(cardOptional.get())
             .buyer(buyerOptional.get())
-            .type(Type.Credit_Card)
-            .paymentStatus(PaymentStatus.Success)
+            .type(Type.CREDIT_CARD)
+            .paymentStatus(PaymentStatus.SUCCESS)
             .build();
 
-        Payment paymentSaved = paymentRepository.save(payment);
+        PaymentEntity paymentEntitySaved = paymentRepository.save(paymentEntity);
 
-        return buildPaymentDtoCreditCard(paymentSaved);
+        return buildPaymentDtoCreditCard(paymentEntitySaved);
     }
 
     public PaymentDto createPaymentBankSlip(PaymentDto paymentDto)
         throws BuyerNotFoundException {
 
-        Optional<Buyer> buyerOptional = buyerRepository.findByPublicId(paymentDto.getBuyerDto().getPublicId());
-        if(!buyerOptional.isPresent()) throw new BuyerNotFoundException("Buyer Not Found !!");
+        Optional<BuyerEntity> buyerOptional = buyerRepository.findByPublicId(paymentDto.getBuyerDto().getPublicId());
+        if(!buyerOptional.isPresent()) throw new BuyerNotFoundException(ExceptionMessages.BUYER_NOT_FOUND);
 
-        Payment payment = Payment.builder()
+        PaymentEntity paymentEntity = PaymentEntity.builder()
             .amount(paymentDto.getAmount())
             .buyer(buyerOptional.get())
-            .type(Type.Bank_Slip)
-            .paymentStatus(PaymentStatus.Pending)
+            .type(Type.BANK_SLIP)
+            .paymentStatus(PaymentStatus.PENDING)
             .build();
 
-        Payment paymentSaved = paymentRepository.save(payment);
+        PaymentEntity paymentEntitySaved = paymentRepository.save(paymentEntity);
 
-        return buildPaymentDtoBankSlip(paymentSaved);
+        return buildPaymentDtoBankSlip(paymentEntitySaved);
     }
-//    private Payment buildPaymentEntity(PaymentDto paymentDto){
-//        return Payment.builder()
-//            .id(paymentDto.getId())
-//            .publicId(paymentDto.getPublicId())
-//            .amount(paymentDto.getAmount())
-//            .type(paymentDto.getType())
-//            .paymentStatus(paymentDto.getPaymentStatus())
-//            .createdAt(paymentDto.getCreatedAt())
-//            .updatedAt(paymentDto.getUpdatedAt())
-//            .build();
-//    }
 
-    private PaymentDto buildPaymentDtoBankSlip(Payment payment){
+    private PaymentDto buildPaymentDtoBankSlip(PaymentEntity paymentEntity){
         return PaymentDto.builder()
-            .publicId(payment.getPublicId())
-            .amount(payment.getAmount())
-            .type(payment.getType())
-            .paymentStatus(payment.getPaymentStatus())
-            .bankSlipNumber(payment.getBankSlipNumber())
-            .createdAt(payment.getCreatedAt())
-            .updatedAt(payment.getUpdatedAt())
+            .publicId(paymentEntity.getPublicId())
+            .amount(paymentEntity.getAmount())
+            .type(paymentEntity.getType())
+            .paymentStatus(paymentEntity.getPaymentStatus())
+            .bankSlipNumber(paymentEntity.getBankSlipNumber())
+            .createdAt(paymentEntity.getCreatedAt())
+            .updatedAt(paymentEntity.getUpdatedAt())
             .build();
     }
 
-    private PaymentDto buildPaymentDtoCreditCard(Payment payment){
+    private PaymentDto buildPaymentDtoCreditCard(PaymentEntity paymentEntity){
         return PaymentDto.builder()
-            .publicId(payment.getPublicId())
-            .amount(payment.getAmount())
-            .type(payment.getType())
-            .paymentStatus(payment.getPaymentStatus())
+            .publicId(paymentEntity.getPublicId())
+            .amount(paymentEntity.getAmount())
+            .type(paymentEntity.getType())
+            .paymentStatus(paymentEntity.getPaymentStatus())
             .cardDto(CardDto.builder()
-                .publicId(payment.getCard().getPublicId())
-                .number(payment.getCard().getNumber())
-                .expirationDate(payment.getCard().getExpirationDate().format(""))
-                .CVV(payment.getCard().getCVV())
-                .name(payment.getCard().getName())
+                .publicId(paymentEntity.getCard().getPublicId())
+                .number(paymentEntity.getCard().getNumber())
+                .expirationDate(paymentEntity.getCard().getExpirationDate())
+                .CVV(paymentEntity.getCard().getCVV())
+                .name(paymentEntity.getCard().getName())
                 .buyerDto(BuyerDto.builder()
-                    .publicId(payment.getCard().getBuyer().getPublicId())
-                    .name(payment.getCard().getBuyer().getName())
-                    .email(payment.getCard().getBuyer().getEmail())
-                    .cpf(payment.getCard().getBuyer().getCpf())
+                    .publicId(paymentEntity.getCard().getBuyer().getPublicId())
+                    .name(paymentEntity.getCard().getBuyer().getName())
+                    .email(paymentEntity.getCard().getBuyer().getEmail())
+                    .cpf(paymentEntity.getCard().getBuyer().getCpf())
                     .clientDto(ClientDto.builder()
-                        .publicId(payment.getCard().getBuyer().getClient().getPublicId())
+                        .publicId(paymentEntity.getCard().getBuyer().getClient().getPublicId())
                         .build())
                     .build())
                 .build())
-            .createdAt(payment.getCreatedAt())
-            .updatedAt(payment.getUpdatedAt())
+            .createdAt(paymentEntity.getCreatedAt())
+            .updatedAt(paymentEntity.getUpdatedAt())
             .build();
     }
 }

@@ -17,8 +17,7 @@ public class RedisConfig {
         poolConfig.setMaxTotal(5);
         poolConfig.setTestOnBorrow(true);
         poolConfig.setTestOnReturn(true);
-        JedisConnectionFactory connectionFactory = new JedisConnectionFactory(poolConfig);
-        return connectionFactory;
+        return new JedisConnectionFactory(poolConfig);
     }
 
     @Bean

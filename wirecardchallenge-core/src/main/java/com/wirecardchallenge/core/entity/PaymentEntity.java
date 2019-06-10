@@ -28,12 +28,12 @@ import java.util.UUID;
 
 @Entity(name = "Payment")
 @Table(name = "payment")
-@Builder
+@Builder(toBuilder = true)
 @Data
 @AllArgsConstructor
-public class Payment implements Serializable {
+public class PaymentEntity implements Serializable {
 
-    public Payment(){};
+    public PaymentEntity(){}
 
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO,generator="native")
@@ -58,11 +58,11 @@ public class Payment implements Serializable {
 
     @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     @Builder.Default
-    private Card card;
+    private CardEntity card;
 
     @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     @Builder.Default
-    private Buyer buyer;
+    private BuyerEntity buyer;
 
     @CreationTimestamp
     @Column(name = "created_at", columnDefinition = "DATETIME", nullable = false)

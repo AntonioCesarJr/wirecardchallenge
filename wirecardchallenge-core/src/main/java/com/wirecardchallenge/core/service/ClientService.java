@@ -1,7 +1,7 @@
 package com.wirecardchallenge.core.service;
 
 import com.wirecardchallenge.core.dto.ClientDto;
-import com.wirecardchallenge.core.entity.Client;
+import com.wirecardchallenge.core.entity.ClientEntity;
 import com.wirecardchallenge.core.exceptions.client.ClientNotFoundException;
 import com.wirecardchallenge.core.repository.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,51 +22,35 @@ public class ClientService {
     ClientRepository clientRepository;
 
     public Page<ClientDto> findAll(Pageable pageable){
-        Page<Client> clientPage = clientRepository.findAll(pageable);
+        Page<ClientEntity> clientPage = clientRepository.findAll(pageable);
         List<ClientDto> clientDtos = clientPage.getContent().stream()
-            .map(client -> buildClientDto(client))
+            .map(this::buildClientDto)
             .collect(Collectors.toList());
         return new PageImpl<>(clientDtos, pageable, clientPage.getTotalElements());
     }
 
     public ClientDto findByPublicId(UUID publicId) throws ClientNotFoundException {
-        Optional<Client> clientOptional = clientRepository.findByPublicId(publicId);
-        if (!clientOptional.isPresent()) throw new ClientNotFoundException("Client Not Found !!");
+        Optional<ClientEntity> clientOptional = clientRepository.findByPublicId(publicId);
+        if (!clientOptional.isPresent()) throw new ClientNotFoundException(ExceptionMessages.CLIENT_NOT_FOUND);
         return buildClientDto(clientOptional.get());
     }
 
     public ClientDto create(){
-        Client clientSaved = clientRepository.save(Client.builder().build());
-        return buildClientDto(clientSaved);
-    }
-
-    public ClientDto update(UUID publicId,
-                            ClientDto clientDto) throws ClientNotFoundException {
-        Optional<Client> optionalClient = clientRepository.findByPublicId(publicId);
-        if (!optionalClient.isPresent()) throw new ClientNotFoundException("Client Not Found !!");
-        Client client = optionalClient.get();
-        Client clientSaved = clientRepository.save(client);
-        return buildClientDto(clientSaved);
+        ClientEntity clientEntitySaved = clientRepository.save(ClientEntity.builder().build());
+        return buildClientDto(clientEntitySaved);
     }
 
     public void delete(UUID publicId) throws ClientNotFoundException {
-        Optional<Client> client = clientRepository.findByPublicId(publicId);
-        if (!client.isPresent()) throw new ClientNotFoundException("Client Not Found !!");
+        Optional<ClientEntity> client = clientRepository.findByPublicId(publicId);
+        if (!client.isPresent()) throw new ClientNotFoundException(ExceptionMessages.CLIENT_NOT_FOUND);
         clientRepository.delete(client.get());
     }
 
-    private ClientDto buildClientDto(Client client){
+    private ClientDto buildClientDto(ClientEntity clientEntity){
         return ClientDto.builder()
-            .publicId(client.getPublicId())
-            .createdAt(client.getCreatedAt())
-            .updatedAt(client.getUpdatedAt())
-            .build();
-    }
-
-    private Client buildClient(ClientDto clientDto){
-        return Client.builder()
-            .id(clientDto.getId())
-            .publicId(clientDto.getPublicId())
+            .publicId(clientEntity.getPublicId())
+            .createdAt(clientEntity.getCreatedAt())
+            .updatedAt(clientEntity.getUpdatedAt())
             .build();
     }
 }

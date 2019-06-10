@@ -22,11 +22,11 @@ import java.util.UUID;
 
 @Entity(name = "Client")
 @Table(name = "client")
-@Builder
+@Builder(toBuilder = true)
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Client implements Serializable {
+public class ClientEntity implements Serializable {
 
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO,generator="native")
@@ -37,7 +37,7 @@ public class Client implements Serializable {
     private UUID publicId;
 
     @OneToOne(mappedBy = "client")
-    private Buyer buyer;
+    private BuyerEntity buyer;
 
     @CreationTimestamp
     @Column(name = "created_at", columnDefinition = "DATETIME", nullable = false)

@@ -7,7 +7,6 @@ import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.UpdateTimestamp;
-import org.hibernate.validator.constraints.br.CPF;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -15,56 +14,51 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;
-import javax.validation.constraints.Email;
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
-@Entity(name = "Buyer")
-@Table(name = "buyer")
-@Builder
+@Entity(name = "Card")
+@Table(name = "card")
+@Builder(toBuilder = true)
 @Data
 @AllArgsConstructor
-public class  Buyer implements Serializable {
+public class CardEntity implements Serializable {
 
-    public  Buyer(){};
+    public CardEntity(){}
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
-    @GenericGenerator(name = "native", strategy = "native")
+    @GeneratedValue(strategy= GenerationType.AUTO,generator="native")
+    @GenericGenerator(name = "native",strategy = "native")
     private Long id;
 
-    @Column(unique = true, updatable = false, columnDefinition = "BINARY(16)", length = 16, nullable = false)
+    @Column(unique = true, updatable = false,columnDefinition = "BINARY(16)",length = 16, nullable = false)
     private UUID publicId;
 
     @Column(nullable = false)
     private String name;
 
-    @Column(unique = true, nullable = false)
-    @Email
-    private String email;
+    @Column(unique = true, nullable = false, length = 16)
+    private String number;
 
-    @Column(unique = true, nullable = false)
-    @CPF
-    private String cpf;
+    @Column(name = "expiration_date", nullable = false)
+    private String expirationDate;
 
-    @OneToOne(fetch = FetchType.EAGER, optional = false)
+    @Column(nullable = false, length = 3)
+    private String CVV;
+
+    @OneToMany(fetch = FetchType.LAZY,mappedBy = "card")
+    @JsonIgnore
+    private Set<PaymentEntity> payments;
+
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @Builder.Default
-    private Client client;
-
-    @OneToMany(mappedBy = "buyer", fetch = FetchType.LAZY)
-    @JsonIgnore
-    private Set<Card> cards =  new HashSet<>();
-
-    @OneToMany(fetch = FetchType.LAZY,mappedBy = "buyer")
-    @JsonIgnore
-    private Set<Payment> payments;
+    private BuyerEntity buyer;
 
     @CreationTimestamp
     @Column(name = "created_at", columnDefinition = "DATETIME", nullable = false)

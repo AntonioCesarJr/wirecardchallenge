@@ -30,7 +30,7 @@ public class BuyerDto {
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private String cpf;
 
-    @JsonProperty(value = "client")
+    @JsonProperty(value = "clientEntity")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private ClientDto clientDto;
 

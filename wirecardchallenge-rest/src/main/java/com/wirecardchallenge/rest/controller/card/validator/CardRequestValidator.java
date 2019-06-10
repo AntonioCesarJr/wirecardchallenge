@@ -1,17 +1,21 @@
 package com.wirecardchallenge.rest.controller.card.validator;
 
+import com.wirecardchallenge.core.service.ExceptionMessages;
 import com.wirecardchallenge.rest.controller.card.request.CardRequest;
 import com.wirecardchallenge.rest.exception.card.CardInvalidDataHttpException;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 @Slf4j
 public class CardRequestValidator implements Validator {
 
-    private final static String DEFAULT_INIT_YEAR = "20";
+    private static final String DEFAULT_INIT_YEAR = "20";
+    private static final String SEPARATOR = "/";
 
     @Override
     public boolean supports(Class<?> aClass) {
@@ -20,36 +24,38 @@ public class CardRequestValidator implements Validator {
 
     @Override
     public void validate(Object o, Errors errors) {
-        log.info("Card Validator in action !!");
         CardRequest cardRequest = (CardRequest) o;
         validateExpirationDate(cardRequest.getExpirationDate());
         validateCreditCardNumber(cardRequest.getNumber());
         validateCVV(cardRequest.getCVV());
-        log.info("Card Name is " + cardRequest.getName());
     }
 
-    private void validateExpirationDate(String strDate)
-        throws CardInvalidDataHttpException {
-        LocalDate localDate;
+    @SuppressFBWarnings("BX_UNBOXING_IMMEDIATELY_REBOXED")
+    private void validateExpirationDate(String strDate){
+
+        Boolean isBeforeNow = false;
         if (strDate.length() != 5) {
-            log.warn("Invalid Expiration Date length !!");
-            throw new CardInvalidDataHttpException("Invalid Expiration Date length !!");
+            throw new CardInvalidDataHttpException(ExceptionMessages.INVALID_EXPIRATION_DATE_LENGTH);
         }
         try{
-            String month = strDate.substring(0,2);
             String year = DEFAULT_INIT_YEAR + strDate.substring(3,5);
-            localDate = LocalDate.of(Integer.valueOf(year),
-                Integer.valueOf(month),
-                lastDayOfMonth(Integer.valueOf(month),
-                    Integer.valueOf(year)));
+            String month = strDate.substring(0,2);
+            String strDateToValidate = new StringBuilder()
+                .append(lastDayOfMonth(Integer.valueOf(month), Integer.valueOf(year)))
+                .append(SEPARATOR)
+                .append(month)
+                .append(SEPARATOR)
+                .append(year)
+                .toString();
+            final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            LocalDate localDate = LocalDate.parse(strDateToValidate, DATE_FORMAT);
+            if (localDate.isBefore(LocalDate.now())) {
+                isBeforeNow = true;
+            }
         }catch (Exception e){
-            log.warn("Invalid Expiration Date Format (MM/yy) !!");
-            throw new CardInvalidDataHttpException("Invalid Expiration Date Format (MM/yy) !!");
+            throw new CardInvalidDataHttpException(ExceptionMessages.INVALID_EXPIRATION_DATE_FORMAT);
         }
-        if (localDate.isBefore(LocalDate.now())) {
-            log.warn("Invalid Expiration Date !! Past Date !!");
-            throw new CardInvalidDataHttpException("Invalid Expiration Date !! Past Date !!");
-        }
+        if (isBeforeNow) throw new CardInvalidDataHttpException(ExceptionMessages.INVALID_EXPIRATION_DATE_PAST);
     }
 
     private Integer lastDayOfMonth(Integer month, Integer year){
@@ -76,15 +82,14 @@ public class CardRequestValidator implements Validator {
             sum += ints[i];
         }
         if (sum % 10 == 0) {
-            log.info(str + " is a valid credit card number");
+            log.info(str + " - " + ExceptionMessages.CARD_DATA_VALID);
         } else {
-            log.warn(str + " is an invalid credit card number");
-            throw new CardInvalidDataHttpException(str +  " is an invalid credit card number");
+            log.warn(str + " - "  + ExceptionMessages.CARD_DATA_INVALID);
+            throw new CardInvalidDataHttpException(str +  ExceptionMessages.CARD_DATA_INVALID);
         }
     }
 
     private void validateCVV(String CVV){
-        log.info("I have no idea how to validate CVV !! :(");
-        return;
+        log.info(ExceptionMessages.NO_IDEA);
     }
 }

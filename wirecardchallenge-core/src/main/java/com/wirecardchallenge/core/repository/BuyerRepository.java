@@ -1,6 +1,6 @@
 package com.wirecardchallenge.core.repository;
 
-import com.wirecardchallenge.core.entity.Buyer;
+import com.wirecardchallenge.core.entity.BuyerEntity;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
@@ -13,26 +13,26 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Repository
-public interface BuyerRepository extends JpaRepository<Buyer, Long>{
+public interface BuyerRepository extends JpaRepository<BuyerEntity, Long>{
 
     @Cacheable("buyersPage")
-    Page<Buyer> findAll(Pageable pageable);
+    Page<BuyerEntity> findAll(Pageable pageable);
 
     @Cacheable("buyerId")
-    Optional<Buyer> findById(Long id);
+    Optional<BuyerEntity> findById(Long id);
 
     @Cacheable("buyerPublicId")
-    Optional<Buyer> findByPublicId(UUID publicId);
+    Optional<BuyerEntity> findByPublicId(UUID publicId);
 
     @Caching(evict = {
         @CacheEvict(value="buyersPage", allEntries=true),
         @CacheEvict(value="buyerId", allEntries=true),
         @CacheEvict(value="buyerPublicId", allEntries=true)})
-    Buyer save(Buyer buyer);
+    BuyerEntity save(BuyerEntity buyerEntity);
 
     @Caching(evict = {
         @CacheEvict(value="buyersPage", allEntries=true),
         @CacheEvict(value="buyerId", allEntries=true),
         @CacheEvict(value="buyerPublicId", allEntries=true)})
-    void delete(Buyer buyer);
+    void delete(BuyerEntity buyerEntity);
 }

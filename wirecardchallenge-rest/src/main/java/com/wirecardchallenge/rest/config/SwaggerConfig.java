@@ -29,7 +29,7 @@ public class SwaggerConfig {
     private ApiInfo apiInfo() {
         return new ApiInfo(
                 "WireCard Backend Challenge",
-                "Rest API - Payment Informations",
+                "Rest API - PaymentEntity Informations",
                 "API TOS",
                 "Terms of service",
                 new Contact("Antonio Cesar", "https://github.com/AntonioCesarJr",

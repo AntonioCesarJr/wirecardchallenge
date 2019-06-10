@@ -34,11 +34,11 @@ public class PaymentDto {
 
     private PaymentStatus paymentStatus;
 
-    @JsonProperty(value = "card")
+    @JsonProperty(value = "cardEntity")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private CardDto cardDto;
 
-    @JsonProperty(value = "buyer")
+    @JsonProperty(value = "buyerEntity")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private BuyerDto buyerDto;
 

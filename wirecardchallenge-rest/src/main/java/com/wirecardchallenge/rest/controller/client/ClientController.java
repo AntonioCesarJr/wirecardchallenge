@@ -3,6 +3,7 @@ package com.wirecardchallenge.rest.controller.client;
 import com.wirecardchallenge.core.dto.ClientDto;
 import com.wirecardchallenge.core.exceptions.client.ClientNotFoundException;
 import com.wirecardchallenge.core.service.ClientService;
+import com.wirecardchallenge.core.service.ExceptionMessages;
 import com.wirecardchallenge.rest.exception.client.ClientNotFoundHttpException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +31,6 @@ public class ClientController {
     @GetMapping
     public ResponseEntity<Page<ClientDto>> findAll(Pageable pageRequest){
         Page<ClientDto> clientDtos = clientService.findAll(pageRequest);
-        log.info("Found " + clientDtos.getSize() + " Clients !");
         return ResponseEntity.ok(clientDtos);
     }
 
@@ -39,10 +39,8 @@ public class ClientController {
         ClientDto clientDtos;
         try {
             clientDtos = clientService.findByPublicId(publicId);
-            log.info("Client " + publicId + " found!");
         } catch (ClientNotFoundException e) {
-            log.warn("Client " + publicId + " not found!");
-            throw new ClientNotFoundHttpException("Client " + publicId + " not found!");
+            throw new ClientNotFoundHttpException(ExceptionMessages.CLIENT_NOT_FOUND + "  " + publicId);
         }
         return ResponseEntity.ok(clientDtos);
     }
@@ -50,7 +48,6 @@ public class ClientController {
     @PostMapping
     public ResponseEntity<ClientDto> add(){
         ClientDto clientDtoSaved = clientService.create();
-        log.info("New Client with publicId = " +clientDtoSaved.getPublicId());
         return ResponseEntity.ok(clientDtoSaved);
     }
 
@@ -58,10 +55,9 @@ public class ClientController {
     public ResponseEntity<String> delete(@PathVariable UUID publicId) {
         try {
             clientService.delete(publicId);
-            log.info("Client " + publicId + " deleted !!");
             return new ResponseEntity<>("{'message': 'Bye bye " + publicId + "'}", HttpStatus.OK);
         } catch (ClientNotFoundException e) {
-            throw new ClientNotFoundHttpException("Client " + publicId + " not found!");
+            throw new ClientNotFoundHttpException(ExceptionMessages.CLIENT_NOT_FOUND + "  " + publicId);
         }
     }
 }

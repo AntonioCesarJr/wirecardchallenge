@@ -4,6 +4,9 @@ test:
 package:
 	mvn clean package -U
 
+sonar:package
+	mvn sonar:sonar
+
 install:
 	mvn clean package install -U
 
@@ -18,3 +21,7 @@ runrest-install-no-test:install-no-test
 
 runrest:
 	mvn spring-boot:run -pl wirecardchallenge-rest
+
+docker:
+	docker-compose up -d
+

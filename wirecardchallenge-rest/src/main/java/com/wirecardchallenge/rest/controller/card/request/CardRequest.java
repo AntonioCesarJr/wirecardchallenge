@@ -16,6 +16,6 @@ public class CardRequest {
 
     private String CVV;
 
-    @JsonProperty(value = "buyer.publicId")
+    @JsonProperty(value = "buyerEntity.publicId")
     private UUID buyerPublicId;
 }

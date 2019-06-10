@@ -1,6 +1,6 @@
 package com.wirecardchallenge.core.repository;
 
-import com.wirecardchallenge.core.entity.Payment;
+import com.wirecardchallenge.core.entity.PaymentEntity;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
@@ -13,26 +13,26 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Repository
-public interface PaymentRepository extends JpaRepository<Payment, Long> {
+public interface PaymentRepository extends JpaRepository<PaymentEntity, Long> {
 
     @Cacheable("paymentsPage")
-    Page<Payment> findAll(Pageable pageable);
+    Page<PaymentEntity> findAll(Pageable pageable);
 
     @Cacheable("paymentId")
-    Optional<Payment> findById(Long id);
+    Optional<PaymentEntity> findById(Long id);
 
     @Cacheable("paymentPublicId")
-    Optional<Payment> findByPublicId(UUID publicId);
+    Optional<PaymentEntity> findByPublicId(UUID publicId);
 
     @Caching(evict = {
         @CacheEvict(value="paymentsPage", allEntries=true),
         @CacheEvict(value="paymentId", allEntries=true),
         @CacheEvict(value="paymentPublicId", allEntries=true)})
-    Payment save(Payment payment);
+    PaymentEntity save(PaymentEntity paymentEntity);
 
     @Caching(evict = {
         @CacheEvict(value="paymentsPage", allEntries=true),
         @CacheEvict(value="paymentId", allEntries=true),
         @CacheEvict(value="paymentPublicId", allEntries=true)})
-    void delete(Payment payment);
+    void delete(PaymentEntity paymentEntity);
 }

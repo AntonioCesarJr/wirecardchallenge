@@ -25,10 +25,17 @@ import java.util.UUID;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
 @RunWith(JUnit4.class)
 public class ClientControllerTest {
+
+    @InjectMocks
+    ClientController clientController;
+
+    @Mock
+    ClientService clientService;
 
     private static final Long CLIENT_ID_1 = 1L;
     private static final UUID CLIENT_PUBLIC_ID_1 = UUID.randomUUID();
@@ -44,13 +51,6 @@ public class ClientControllerTest {
     private static final UUID CLIENT_PUBLIC_ID_3 = UUID.randomUUID();
     private static final LocalDateTime CREATED_AT_3 = LocalDateTime.now();
     private static final LocalDateTime UPDATED_AT_3 = LocalDateTime.now().plusMinutes(20);
-
-
-    @InjectMocks
-    ClientController clientController;
-
-    @Mock
-    ClientService clientService;
 
     @Before
     public void setUp() throws Exception {
@@ -75,7 +75,7 @@ public class ClientControllerTest {
     }
 
     @Test
-    public void findByPUBLIC_ID() throws ClientNotFoundException {
+    public void findByPublicId() throws ClientNotFoundException {
 
         when(clientService.findByPublicId(CLIENT_PUBLIC_ID_1))
             .thenReturn(ClientDto.builder()
@@ -117,7 +117,11 @@ public class ClientControllerTest {
     }
 
     @Test
-    public void delete() {
+    public void delete() throws ClientNotFoundException {
+        doNothing().when(clientService).delete(CLIENT_PUBLIC_ID_1);
+        ResponseEntity<String> responseEntity = clientController.delete(CLIENT_PUBLIC_ID_1);
+        assertNotNull(responseEntity);
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
     }
 
     private List<ClientDto> buildClientDtoList(){

@@ -11,10 +11,10 @@ public class PostPaymentRequest {
 
     private BigDecimal amount;
 
-    @JsonProperty(value = "card.publicId")
+    @JsonProperty(value = "cardEntity.publicId")
     private UUID cardPublicId;
 
-    @JsonProperty(value = "buyer.publicId")
+    @JsonProperty(value = "buyerEntity.publicId")
     private UUID buyerPulbicId;
 
 }
