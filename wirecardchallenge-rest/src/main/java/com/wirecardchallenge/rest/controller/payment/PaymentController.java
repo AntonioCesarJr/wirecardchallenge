@@ -35,6 +35,10 @@ import java.util.UUID;
 @Slf4j
 public class PaymentController {
 
+    private static final String PUBLIC_ID_SYMBOL = " -> PUBLICID =  ";
+    private static final String CREDIT_CARD_AND_BUYER_NOT_MATCH = "Credit Card and Buyer does not match !!  ";
+    private static final String CREDIT_CARD_NOT_FOUND = "Credit Card Not found !!  ";
+
     @Autowired
     CardService cardService;
 
@@ -76,7 +80,7 @@ public class PaymentController {
             return paymentDtoSaved;
         } catch (BuyerNotFoundException e) {
             throw new BuyerNotFoundHttpException(e.getMessage() +
-                " -> PUBLICID =  " + postPaymentRequest.getBuyerPulbicId());
+                PUBLIC_ID_SYMBOL + postPaymentRequest.getBuyerPulbicId());
         }
 
     }
@@ -90,10 +94,10 @@ public class PaymentController {
             return paymentDtoSaved;
         } catch (CardNotFoundException e) {
             throw new CardNotFoundHttpException(e.getMessage() +
-                " -> PUBLICID =  " + postPaymentRequest.getBuyerPulbicId());
+                PUBLIC_ID_SYMBOL + postPaymentRequest.getBuyerPulbicId());
         } catch (BuyerNotFoundException e) {
             throw new BuyerNotFoundHttpException(e.getMessage() +
-                " -> PUBLICID =  " + postPaymentRequest.getBuyerPulbicId());
+                PUBLIC_ID_SYMBOL + postPaymentRequest.getBuyerPulbicId());
         }
     }
 
@@ -124,9 +128,9 @@ public class PaymentController {
         try {
             CardDto  cardDto = cardService.findByPublicId(cardPublicId);
             if (!cardDto.getBuyerDto().getPublicId().equals(buyerPublicId))
-                throw new CardAndBuyerDoesNotMatchException("Credit CardEntity and BuyerEntity does not match !!");
+                throw new CardAndBuyerDoesNotMatchException(CREDIT_CARD_AND_BUYER_NOT_MATCH);
         } catch (CardNotFoundException e) {
-            throw new CardNotFoundHttpException("Credit CardEntity Not found !!"+ e.getMessage());
+            throw new CardNotFoundHttpException(CREDIT_CARD_NOT_FOUND + e.getMessage());
         }
     }
 }
