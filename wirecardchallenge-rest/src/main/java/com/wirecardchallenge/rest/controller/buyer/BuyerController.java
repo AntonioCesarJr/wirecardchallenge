@@ -31,6 +31,8 @@ import java.util.UUID;
 @RequestMapping(value = "/api/v1/buyer")
 public class BuyerController {
 
+    public static final String PUBLIC_ID_SYMBOL = " -> PUBLIC_ID =  ";
+
     @Autowired
     BuyerService buyerService;
 
@@ -46,7 +48,7 @@ public class BuyerController {
             BuyerDto buyerDto = buyerService.findByPublicId(publicId);
             return ResponseEntity.ok(buyerDto);
         } catch (BuyerNotFoundException e) {
-            throw new BuyerNotFoundHttpException(e.getMessage() + " -> PUBLICID = " + publicId);
+            throw new BuyerNotFoundHttpException(e.getMessage() + PUBLIC_ID_SYMBOL + publicId);
         }
     }
 
@@ -57,7 +59,7 @@ public class BuyerController {
             BuyerDto buyerDtoSaved = buyerService.create(buyerDto);
             return ResponseEntity.ok(buyerDtoSaved);
         } catch (ClientNotFoundException e) {
-            throw new ClientNotFoundHttpException(e.getMessage() + " -> PUBLICID =  " +
+            throw new ClientNotFoundHttpException(e.getMessage() + PUBLIC_ID_SYMBOL +
                 buyerRequest.getClientRequest().getPublicId());
         } catch (BuyerServiceIntegrityConstraintException e) {
             throw new BuyerInternalErrorHttpException(e.getMessage());
@@ -73,10 +75,10 @@ public class BuyerController {
             BuyerDto buyerDtoSaved = buyerService.update(publicId, buyerDto);
             return ResponseEntity.ok(buyerDtoSaved);
         } catch (ClientNotFoundException e) {
-            throw new ClientNotFoundHttpException(e.getMessage() + " -> PUBLICID =  " +
+            throw new ClientNotFoundHttpException(e.getMessage() + PUBLIC_ID_SYMBOL +
                 buyerRequest.getClientRequest().getPublicId());
         } catch (BuyerNotFoundException e) {
-            throw new BuyerNotFoundHttpException(e.getMessage() + " -> PUBLICID =  " + publicId);
+            throw new BuyerNotFoundHttpException(e.getMessage() + PUBLIC_ID_SYMBOL + publicId);
         } catch (BuyerServiceIntegrityConstraintException e) {
             throw new BuyerInternalErrorHttpException(e.getMessage());
         }
@@ -88,7 +90,7 @@ public class BuyerController {
             buyerService.delete(publicId);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (BuyerNotFoundException e) {
-            throw new BuyerNotFoundHttpException(e.getMessage() + " -> PUBLICID = " + publicId);
+            throw new BuyerNotFoundHttpException(e.getMessage() + PUBLIC_ID_SYMBOL + publicId);
         } catch (BuyerServiceIntegrityConstraintException e) {
             throw new BuyerInternalErrorHttpException(e.getMessage());
         }
