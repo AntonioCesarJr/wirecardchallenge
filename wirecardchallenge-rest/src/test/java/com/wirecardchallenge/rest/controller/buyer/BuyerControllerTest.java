@@ -284,7 +284,7 @@ public class BuyerControllerTest {
             .name(BUYER_NAME_1)
             .email(BUYER_EMAIL_1)
             .cpf(BUYER_CPF_1)
-            .clientRequest(buildClientRequest())
+            .client(buildClientRequest())
             .build();
     }
 

@@ -54,7 +54,7 @@ Linux 4.15.0-50-generic Ubuntu x86_64 GNU/Linux
  
 
 ## How to use Application
-*Use the following commands on terminal in the root application directory.* 
+* Follow the steps below.* 
 
 ### - Create Docker Infrastructure - SONARQUBE - MYSQL - REDIS  
 ###### - Go to "/docker-files/" folder and type:
@@ -70,14 +70,15 @@ Linux 4.15.0-50-generic Ubuntu x86_64 GNU/Linux
 __PS: You must wait until MYSQL database start to listener the confgured port!\
 This may take a few minutes__
 
-## - Build application with Make or Maven
+### - Build application with Make or Maven
+###### - Go to root application folder and execute:
     make install
     
     or
     
     mvn clean package install -U    
     
-## - Start application with Make or Maven
+### - Start application with Make or Maven
     make runrest
     
     or
@@ -96,4 +97,3 @@ __If application fail to start it is probably because the Data Store Infrastruct
 ## - See Sonar Information
 <a href="http://localhost:9000" target="_blank">SonarQube - http://localhost:9000<a/> \
 User: _admin_ / Password: _admin_
-

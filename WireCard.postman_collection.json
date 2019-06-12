@@ -41,6 +41,23 @@
 			"item": [
 				{
 					"name": "Client Get List",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "9b6c4927-4f7a-48c6-8bf1-dedea20395e9",
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"pm.environment.set(\"clientId\", jsonData.content[0].publicId);",
+									"",
+									"pm.test(\"Is Not Null\", function () {",
+									"    pm.expect(pm.environment.get(\"clientId\")).not.equal(null);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "GET",
 						"header": [],
@@ -74,7 +91,7 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "http://localhost:8089/api/v1/client/3c69024c-882b-4dc3-8603-2d9212a3e1c9",
+							"raw": "http://localhost:8089/api/v1/client/{{clientId}}",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -84,7 +101,7 @@
 								"api",
 								"v1",
 								"client",
-								"3c69024c-882b-4dc3-8603-2d9212a3e1c9"
+								"{{clientId}}"
 							]
 						}
 					},
@@ -92,6 +109,23 @@
 				},
 				{
 					"name": "Client Post",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "63d98fe9-a5b7-4ca8-80a4-7b2246787766",
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"pm.environment.set(\"clientId\", jsonData.publicId);",
+									"",
+									"pm.test(\"Is Not Null\", function () {",
+									"    pm.expect(pm.environment.get(\"clientId\")).not.equal(null);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "POST",
 						"header": [
@@ -132,7 +166,7 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "http://localhost:8089/api/v1/client/3c69024c-882b-4dc3-8603-2d9212a3e1c9",
+							"raw": "http://localhost:8089/api/v1/client/{{clientId}}",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -142,7 +176,7 @@
 								"api",
 								"v1",
 								"client",
-								"3c69024c-882b-4dc3-8603-2d9212a3e1c9"
+								"{{clientId}}"
 							]
 						}
 					},
@@ -155,6 +189,23 @@
 			"item": [
 				{
 					"name": "Buyer Get List",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "9a2f1b15-fc63-4459-b3e9-2adb90938fef",
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"pm.environment.set(\"buyerId\", jsonData.content[0].publicId);",
+									"",
+									"pm.test(\"Is Not Null\", function () {",
+									"    pm.expect(pm.environment.get(\"buyerId\")).not.equal(null);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "GET",
 						"header": [],
@@ -188,7 +239,7 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "http://localhost:8089/api/v1/buyer/99d088bb-8645-11e9-999e-0242ac110002",
+							"raw": "http://localhost:8089/api/v1/buyer/{{buyerId}}",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -198,7 +249,7 @@
 								"api",
 								"v1",
 								"buyer",
-								"99d088bb-8645-11e9-999e-0242ac110002"
+								"{{buyerId}}"
 							]
 						}
 					},
@@ -206,6 +257,23 @@
 				},
 				{
 					"name": "Buyer Post",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "4dfe1c14-72fd-4b16-b31f-d6534f053646",
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"pm.environment.set(\"buyerId\", jsonData.publicId);",
+									"",
+									"pm.test(\"Is Not Null\", function () {",
+									"    pm.expect(pm.environment.get(\"buyerId\")).not.equal(null);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "POST",
 						"header": [
@@ -218,7 +286,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"client\": {\n    \"publicId\": \"aa830c4d-bcf4-4ec3-b277-488db7014bc2\"\n  },\n  \"cpf\": \"241.970.670-62\",\n  \"email\": \"zazascasasq2@wirecard.com\",\n  \"name\": \"Buyer INSERIDO qwqwqwqwqwqw\"\n}"
+							"raw": "{\n  \"client\": {\n    \"publicId\": \"{{clientId}}\"\n  },\n  \"cpf\": \"241.970.670-62\",\n  \"email\": \"zazascasasq2@wirecard.com\",\n  \"name\": \"Buyer INSERIDO qwqwqwqwqwqw\"\n}"
 						},
 						"url": {
 							"raw": "http://localhost:8089/api/v1/buyer",
@@ -279,7 +347,7 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "http://localhost:8089/api/v1/buyer/311454c9-119f-45b9-a388-4c77cc4f2e21",
+							"raw": "http://localhost:8089/api/v1/buyer/{{buyerId}}",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -289,7 +357,7 @@
 								"api",
 								"v1",
 								"buyer",
-								"311454c9-119f-45b9-a388-4c77cc4f2e21"
+								"{{buyerId}}"
 							]
 						}
 					},
@@ -302,6 +370,25 @@
 			"item": [
 				{
 					"name": "Card Get List",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "5e445a75-9485-4cde-ba40-83d918a5ab22",
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"pm.environment.set(\"cardId\", jsonData.content[0].publicId);",
+									"pm.environment.set(\"buyerId\", jsonData.content[0].buyerEntity.publicId);",
+									"",
+									"pm.test(\"Is Not Null\", function () {",
+									"    pm.expect(pm.environment.get(\"cardId\")).not.equal(null);",
+									"    pm.expect(pm.environment.get(\"buyerId\")).not.equal(null);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "GET",
 						"header": [],
@@ -335,7 +422,7 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "http://localhost:8089/api/v1/card/701dc240-864d-11e9-999e-0242ac110002",
+							"raw": "http://localhost:8089/api/v1/card/{{cardId}}",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -345,7 +432,7 @@
 								"api",
 								"v1",
 								"card",
-								"701dc240-864d-11e9-999e-0242ac110002"
+								"{{cardId}}"
 							]
 						}
 					},
@@ -353,6 +440,23 @@
 				},
 				{
 					"name": "Card Post",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "25c4fd1a-fc83-4bd0-a1d6-ffa611e82901",
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"pm.environment.set(\"cardId\", jsonData.publicId);",
+									"",
+									"pm.test(\"Is Not Null\", function () {",
+									"    pm.expect(pm.environment.get(\"cardId\")).not.equal(null);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "POST",
 						"header": [
@@ -365,7 +469,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"buyer.publicId\": \"6feea999-864d-11e9-999e-0242ac110002\",\n  \"cvv\": \"999\",\n  \"expirationDate\": \"03/20\",\n  \"name\": \"NOVO CARD NAME TEST POSTMAM\",\n  \"number\": \"8585969674741387\"\n}"
+							"raw": "{\n  \"buyer.publicId\": \"{{buyerId}}\",\n  \"cvv\": \"999\",\n  \"expirationDate\": \"06/21\",\n  \"name\": \"NOVO CARD NAME TEST POSTMAM\",\n  \"number\": \"1111222233334444\"\n}"
 						},
 						"url": {
 							"raw": "http://localhost:8089/api/v1/card",
@@ -397,10 +501,10 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"buyer.publicId\": \"749acdf9-8587-11e9-999e-0242ac110002\",\n  \"cvv\": \"999\",\n  \"expirationDate\": \"02/20\",\n  \"name\": \"Name Updated asasadasdadasdadadadad\",\n  \"number\": \"1111222233334444\"\n}"
+							"raw": "{\n  \"buyer.publicId\": \"ea70713c-8897-11e9-bf48-0242ac110002\",\n  \"cvv\": \"111\",\n  \"expirationDate\": \"02/24\",\n  \"name\": \"MeuCard Updated to test validator\",\n  \"number\": \"1111222233334444\"\n}"
 						},
 						"url": {
-							"raw": "http://localhost:8089/api/v1/card/74c23cb2-8587-11e9-999e-0242ac110002",
+							"raw": "http://localhost:8089/api/v1/card/ea9bba90-8897-11e9-bf48-0242ac110002",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -410,7 +514,7 @@
 								"api",
 								"v1",
 								"card",
-								"74c23cb2-8587-11e9-999e-0242ac110002"
+								"ea9bba90-8897-11e9-bf48-0242ac110002"
 							]
 						}
 					},
@@ -426,7 +530,7 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "http://localhost:8089/api/v1/card/d024d2cb-50de-4788-9645-1725371471d5",
+							"raw": "http://localhost:8089/api/v1/card/{{cardId}}",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -436,7 +540,7 @@
 								"api",
 								"v1",
 								"card",
-								"d024d2cb-50de-4788-9645-1725371471d5"
+								"{{cardId}}"
 							]
 						}
 					},
@@ -473,7 +577,7 @@
 					"response": []
 				},
 				{
-					"name": "Payment Post",
+					"name": "Payment Credit Post",
 					"request": {
 						"method": "POST",
 						"header": [
@@ -486,10 +590,10 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"amount\": 100.28,\n  \"buyer.publicId\": \"241d2c5c-8732-11e9-9f91-0242ac110002\",\n  \"card.publicId\": \"2444a93f-8732-11e9-9f91-0242ac110002\"\n}"
+							"raw": "{\n  \"amount\": 875.51,\n  \"buyer.publicId\": \"{{buyerId}}\",\n  \"card.publicId\": \"{{cardId}}\"\n}"
 						},
 						"url": {
-							"raw": "http://localhost:8089/api/v1/payment/Credit_Card",
+							"raw": "http://localhost:8089/api/v1/payment/CREDIT_CARD",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -499,7 +603,40 @@
 								"api",
 								"v1",
 								"payment",
-								"Credit_Card"
+								"CREDIT_CARD"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Payment Bank Slip Post",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"amount\": 1973.67,\n  \"buyer.publicId\": \"{{buyerId}}\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8089/api/v1/payment/BANK_SLIP",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8089",
+							"path": [
+								"api",
+								"v1",
+								"payment",
+								"BANK_SLIP"
 							]
 						}
 					},
