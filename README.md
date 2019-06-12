@@ -53,7 +53,7 @@ Linux 4.15.0-50-generic Ubuntu x86_64 GNU/Linux
     -   Sonarqube -> port 9000
  
 
-## How to use Application
+## How to build Application
 * Follow the steps below.* 
 
 ### - Create Docker Infrastructure - SONARQUBE - MYSQL - REDIS  
@@ -97,3 +97,17 @@ __If application fail to start it is probably because the Data Store Infrastruct
 ## - See Sonar Information
 <a href="http://localhost:9000" target="_blank">SonarQube - http://localhost:9000<a/> \
 User: _admin_ / Password: _admin_
+
+
+
+## How to use Application
+
+#####Make the following operation
+###### 1 - Get Postman Environment and Post Collection and import then.
+###### 2 - Use Client POST end point to add a Client (this operation will set clientId variable on environment).
+###### 3 - Use Buyer POST end point to add a Buyer (this operation will set buyerId variable on environment).
+###### 4 - Use Card POST end point to add a Credit Card (this operation will set cardId variable on environment).
+###### 5 - Use Payment Credit Card POST end point to add a Credit Card payment.
+###### 6 - Use Payment bank Slip POST end point to add a Bank Slip payment.
+ 
+###### You can use any other end point, but you must respect database constraints and relatioships.
