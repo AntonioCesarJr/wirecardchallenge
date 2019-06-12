@@ -33,6 +33,8 @@ import java.util.UUID;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 
 @RunWith(JUnit4.class)
@@ -104,6 +106,7 @@ public class BuyerControllerTest {
                 BUYER_CPF_1, BUYER_CREATED_AT_1,BUYER_UPDATED_AT_1));
 
         ResponseEntity<BuyerDto> buyerDtoResponse = buyerController.findByPublicId(BUYER_PUBLIC_ID_1);
+
         assertNotNull(buyerDtoResponse);
     }
 
@@ -111,8 +114,10 @@ public class BuyerControllerTest {
     public void findByPublicIdBuyerNotFoundException() throws BuyerNotFoundException {
 
         BuyerNotFoundException buyerNotFoundException = new BuyerNotFoundException(NOT_FOUND);
+
         when(buyerService.findByPublicId(any(UUID.class)))
             .thenThrow(buyerNotFoundException);
+
         buyerController.findByPublicId(BUYER_PUBLIC_ID_1);
     }
 
@@ -123,7 +128,9 @@ public class BuyerControllerTest {
             BUYER_CPF_1, BUYER_CREATED_AT_1,BUYER_UPDATED_AT_1)))
             .thenReturn(buildBuyerDto(BUYER_ID_1, BUYER_PUBLIC_ID_1, BUYER_NAME_1, BUYER_EMAIL_1,
                 BUYER_CPF_1, BUYER_CREATED_AT_1,BUYER_UPDATED_AT_1));
+
         ResponseEntity<BuyerDto> buyerDtoResponse = buyerController.add(buildBuyerRequest());
+
         assertNotNull(buyerDtoResponse);
     }
 
@@ -131,8 +138,10 @@ public class BuyerControllerTest {
     public void addClientNotFoundException() throws BuyerServiceIntegrityConstraintException, ClientNotFoundException {
 
         ClientNotFoundException clientNotFoundException = new ClientNotFoundException(NOT_FOUND);
+
         when(buyerService.create(any(BuyerDto.class)))
             .thenThrow(clientNotFoundException);
+
         buyerController.add(buildBuyerRequest());
     }
 
@@ -142,8 +151,10 @@ public class BuyerControllerTest {
 
         BuyerServiceIntegrityConstraintException buyerServiceIntegrityConstraintException =
             new BuyerServiceIntegrityConstraintException(INTEGRITY_CONSTRAINT);
+
         when(buyerService.create(any(BuyerDto.class)))
             .thenThrow(buyerServiceIntegrityConstraintException);
+
         buyerController.add(buildBuyerRequest());
     }
 
@@ -155,7 +166,9 @@ public class BuyerControllerTest {
         when(buyerService.update(any(UUID.class), any(BuyerDto.class)))
             .thenReturn(buildBuyerDto(BUYER_ID_1, BUYER_PUBLIC_ID_1, BUYER_NAME_1, BUYER_EMAIL_1,
                 BUYER_CPF_1, BUYER_CREATED_AT_1,BUYER_UPDATED_AT_1));
+
         ResponseEntity<BuyerDto> buyerDtoResponse = buyerController.update(BUYER_PUBLIC_ID_1, buildBuyerRequest());
+
         assertNotNull(buyerDtoResponse);
     }
 
@@ -164,8 +177,10 @@ public class BuyerControllerTest {
         throws ClientNotFoundException, BuyerServiceIntegrityConstraintException, BuyerNotFoundException {
 
         BuyerNotFoundException buyerNotFoundException = new BuyerNotFoundException(NOT_FOUND);
+
         when(buyerService.update(any(UUID.class), any(BuyerDto.class)))
             .thenThrow(buyerNotFoundException);
+
         buyerController.update(BUYER_PUBLIC_ID_1, buildBuyerRequest());
     }
 
@@ -175,8 +190,10 @@ public class BuyerControllerTest {
 
         BuyerServiceIntegrityConstraintException buyerServiceIntegrityConstraintException =
             new BuyerServiceIntegrityConstraintException(INTEGRITY_CONSTRAINT);
+
         when(buyerService.update(any(UUID.class), any(BuyerDto.class)))
             .thenThrow(buyerServiceIntegrityConstraintException);
+
         buyerController.update(BUYER_PUBLIC_ID_1, buildBuyerRequest());
     }
 
@@ -186,14 +203,45 @@ public class BuyerControllerTest {
 
         ClientNotFoundException clientNotFoundException =
             new ClientNotFoundException(NOT_FOUND);
+
         when(buyerService.update(any(UUID.class), any(BuyerDto.class)))
             .thenThrow(clientNotFoundException);
+
         buyerController.update(BUYER_PUBLIC_ID_1, buildBuyerRequest());
     }
-//
-//    @Test
-//    public void delete() {
-//    }
+
+    @Test
+    public void delete() throws BuyerServiceIntegrityConstraintException, BuyerNotFoundException {
+
+        doNothing().when(buyerService).delete(any(UUID.class));
+
+        ResponseEntity<BuyerDto> buyerDtoResponse = buyerController.delete(BUYER_PUBLIC_ID_1);
+
+        assertNotNull(buyerDtoResponse);
+    }
+
+    @Test(expected = BuyerNotFoundHttpException.class)
+    public void deleteBuyerNotFoundException() throws BuyerServiceIntegrityConstraintException, BuyerNotFoundException {
+
+        BuyerNotFoundException buyerNotFoundException = new BuyerNotFoundException(NOT_FOUND);
+
+        doThrow(buyerNotFoundException)
+            .when(buyerService).delete(any(UUID.class));
+
+        buyerController.delete(BUYER_PUBLIC_ID_1);
+    }
+
+    @Test(expected = BuyerInternalErrorHttpException.class)
+    public void deleteBuyerServiceIntegrityConstraintException() throws BuyerServiceIntegrityConstraintException, BuyerNotFoundException {
+
+        BuyerServiceIntegrityConstraintException buyerServiceIntegrityConstraintException =
+            new BuyerServiceIntegrityConstraintException(INTEGRITY_CONSTRAINT);
+
+        doThrow(buyerServiceIntegrityConstraintException)
+            .when(buyerService).delete(any(UUID.class));
+
+        buyerController.delete(BUYER_PUBLIC_ID_1);
+    }
 
 
     private List<BuyerDto> buildBuyerDtoList(){
