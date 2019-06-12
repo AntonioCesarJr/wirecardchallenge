@@ -44,33 +44,42 @@ Linux 4.15.0-50-generic Ubuntu x86_64 GNU/Linux
 ### Make (optional)
 > GNU Make 4.1 \
   Copyright (C) 1988-2014 Free Software Foundation, Inc.
+  
+### Operation System Free Ports
+> You must release ports to the following services \
+    -   MySql -> port 3306 \
+    -   Redis -> port 6379 \
+    -   Api Rest / Swagger -> port 8089 \
+    -   Sonarqube -> port 9000
+ 
 
-## How to use Application
-*Use the following commands on a terminal in the root directory.* 
+## How to build Application
+* Follow the steps below.* 
 
-### - Create Docker Infrastructure - SONARQUBE  
-###### - Go to "/sonar-docker-files/" folder and typeEnum
-    make sonarqube
+### - Create Docker Infrastructure - SONARQUBE - MYSQL - REDIS  
+###### - Go to "/docker-files/" folder and type:
+    make all
 
-### - Create Docker Infrastructure - MYSQL - REDIS
-###### - Back to project root folder and typeEnum
-    make docker
-    
     or
   
-    docker-compose up -d
+    docker run -d --name SONARQUBE770 -p 9000:9000 sonarqube && docker-compose up-d
+
+###### - After that, verify if containers are running with command 'docker ps' 
+
+    
 __PS: You must wait until MYSQL database start to listener the confgured port!\
 This may take a few minutes__
 
-## - Build application with Make or Maven
+### - Build application with Make or Maven
+###### - Go to root application folder and execute:
     make install
     
     or
     
     mvn clean package install -U    
     
-## - Start application with Make or Maven
-    make run
+### - Start application with Make or Maven
+    make runrest
     
     or
     
@@ -89,3 +98,16 @@ __If application fail to start it is probably because the Data Store Infrastruct
 <a href="http://localhost:9000" target="_blank">SonarQube - http://localhost:9000<a/> \
 User: _admin_ / Password: _admin_
 
+
+
+## How to use Application
+
+#####Make the following operation
+###### 1 - Get Postman Environment and Post Collection and import then.
+###### 2 - Use Client POST end point to add a Client (this operation will set clientId variable on environment).
+###### 3 - Use Buyer POST end point to add a Buyer (this operation will set buyerId variable on environment).
+###### 4 - Use Card POST end point to add a Credit Card (this operation will set cardId variable on environment).
+###### 5 - Use Payment Credit Card POST end point to add a Credit Card payment.
+###### 6 - Use Payment bank Slip POST end point to add a Bank Slip payment.
+ 
+###### You can use any other end point, but you must respect database constraints and relatioships.

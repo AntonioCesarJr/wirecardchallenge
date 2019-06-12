@@ -60,7 +60,7 @@ public class BuyerController {
             return ResponseEntity.ok(buyerDtoSaved);
         } catch (ClientNotFoundException e) {
             throw new ClientNotFoundHttpException(e.getMessage() + PUBLIC_ID_SYMBOL +
-                buyerRequest.getClientRequest().getPublicId());
+                buyerRequest.getClient().getPublicId());
         } catch (BuyerServiceIntegrityConstraintException e) {
             throw new BuyerInternalErrorHttpException(e.getMessage());
         }
@@ -76,7 +76,7 @@ public class BuyerController {
             return ResponseEntity.ok(buyerDtoSaved);
         } catch (ClientNotFoundException e) {
             throw new ClientNotFoundHttpException(e.getMessage() + PUBLIC_ID_SYMBOL +
-                buyerRequest.getClientRequest().getPublicId());
+                buyerRequest.getClient().getPublicId());
         } catch (BuyerNotFoundException e) {
             throw new BuyerNotFoundHttpException(e.getMessage() + PUBLIC_ID_SYMBOL + publicId);
         } catch (BuyerServiceIntegrityConstraintException e) {
@@ -102,7 +102,7 @@ public class BuyerController {
             .email(buyerRequest.getEmail())
             .cpf(buyerRequest.getCpf())
             .clientDto(ClientDto.builder()
-                .publicId(buyerRequest.getClientRequest().getPublicId())
+                .publicId(buyerRequest.getClient().getPublicId())
                 .build())
             .build();
     }

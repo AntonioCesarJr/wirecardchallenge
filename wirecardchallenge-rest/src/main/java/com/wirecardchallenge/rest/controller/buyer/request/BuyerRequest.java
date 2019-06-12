@@ -20,5 +20,5 @@ public class BuyerRequest {
     private UUID publicId;
 
     @JsonProperty(value = "clientEntity")
-    private ClientRequest clientRequest;
+    private ClientRequest client;
 }
