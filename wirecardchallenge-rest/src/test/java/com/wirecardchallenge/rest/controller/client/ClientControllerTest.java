@@ -3,6 +3,7 @@ package com.wirecardchallenge.rest.controller.client;
 import com.wirecardchallenge.core.dto.ClientDto;
 import com.wirecardchallenge.core.exceptions.client.ClientNotFoundException;
 import com.wirecardchallenge.core.service.ClientService;
+import com.wirecardchallenge.rest.exception.client.ClientNotFoundHttpException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -26,6 +27,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 
 @RunWith(JUnit4.class)
@@ -51,11 +53,10 @@ public class ClientControllerTest {
     private static final UUID CLIENT_PUBLIC_ID_3 = UUID.randomUUID();
     private static final LocalDateTime CREATED_AT_3 = LocalDateTime.now();
     private static final LocalDateTime UPDATED_AT_3 = LocalDateTime.now().plusMinutes(20);
+    private static final String DI_EXCEPTION_MESSAGE = "Something wrong is not right !!";
 
     @Before
-    public void setUp() throws Exception {
-        MockitoAnnotations.initMocks(this);
-    }
+    public void setUp() {MockitoAnnotations.initMocks(this);}
 
     @Test
     public void findAll() {
@@ -77,13 +78,9 @@ public class ClientControllerTest {
     @Test
     public void findByPublicId() throws ClientNotFoundException {
 
+
         when(clientService.findByPublicId(CLIENT_PUBLIC_ID_1))
-            .thenReturn(ClientDto.builder()
-                .id(CLIENT_ID_1)
-                .publicId(CLIENT_PUBLIC_ID_1)
-                .createdAt(CREATED_AT_1)
-                .updatedAt(UPDATED_AT_1)
-                .build());
+            .thenReturn(buildClient_1(CLIENT_ID_1, CLIENT_PUBLIC_ID_1, CREATED_AT_1, UPDATED_AT_1));
 
         ResponseEntity<ClientDto> clientDtoResponse =
             clientController.findByPublicId(CLIENT_PUBLIC_ID_1);
@@ -96,15 +93,20 @@ public class ClientControllerTest {
         assertEquals(UPDATED_AT_1, clientDtoResponse.getBody().getUpdatedAt());
     }
 
+    @Test(expected = ClientNotFoundHttpException.class)
+    public void findByPublicIdClientNotFoundException() throws ClientNotFoundException {
+
+        ClientNotFoundException clientNotFoundException = new ClientNotFoundException(DI_EXCEPTION_MESSAGE);
+        when(clientService.findByPublicId(CLIENT_PUBLIC_ID_1))
+            .thenThrow(clientNotFoundException);
+
+        clientController.findByPublicId(CLIENT_PUBLIC_ID_1);
+    }
+
     @Test
     public void add() {
 
-        when(clientService.create()).thenReturn(ClientDto.builder()
-            .id(CLIENT_ID_1)
-            .publicId(CLIENT_PUBLIC_ID_1)
-            .createdAt(CREATED_AT_1)
-            .updatedAt(UPDATED_AT_1)
-            .build());
+        when(clientService.create()).thenReturn(buildClient_1(CLIENT_ID_1, CLIENT_PUBLIC_ID_1, CREATED_AT_1, UPDATED_AT_1));
 
         ResponseEntity<ClientDto> clientDtoResponse = clientController.add();
 
@@ -124,31 +126,33 @@ public class ClientControllerTest {
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
     }
 
+    @Test(expected = ClientNotFoundHttpException.class)
+    public void deleteClientNotFoundException() throws ClientNotFoundException {
+        ClientNotFoundException clientNotFoundException = new ClientNotFoundException(DI_EXCEPTION_MESSAGE);
+        doThrow(clientNotFoundException).when(clientService).delete(any(UUID.class));
+        clientController.delete(CLIENT_PUBLIC_ID_1);
+    }
+
     private List<ClientDto> buildClientDtoList(){
 
         List<ClientDto> clientDtoList = new ArrayList<>();
 
-        clientDtoList.add(ClientDto.builder()
-            .id(CLIENT_ID_1)
-            .publicId(CLIENT_PUBLIC_ID_1)
-            .createdAt(CREATED_AT_1)
-            .updatedAt(UPDATED_AT_1)
-            .build());
+        clientDtoList.add(buildClient_1(CLIENT_ID_1, CLIENT_PUBLIC_ID_1, CREATED_AT_1, UPDATED_AT_1));
 
-        clientDtoList.add(ClientDto.builder()
-            .id(CLIENT_ID_2)
-            .publicId(CLIENT_PUBLIC_ID_2)
-            .createdAt(CREATED_AT_2)
-            .updatedAt(UPDATED_AT_2)
-            .build());
+        clientDtoList.add(buildClient_1(CLIENT_ID_2, CLIENT_PUBLIC_ID_2, CREATED_AT_2, UPDATED_AT_2));
 
-        clientDtoList.add(ClientDto.builder()
-            .id(CLIENT_ID_3)
-            .publicId(CLIENT_PUBLIC_ID_3)
-            .createdAt(CREATED_AT_3)
-            .updatedAt(UPDATED_AT_3)
-            .build());
+        clientDtoList.add(buildClient_1(CLIENT_ID_3, CLIENT_PUBLIC_ID_3, CREATED_AT_3, UPDATED_AT_3));
 
         return clientDtoList;
+    }
+
+    private ClientDto buildClient_1(Long clientId1, UUID clientPublicId1,
+                                    LocalDateTime createdAt1, LocalDateTime updatedAt1) {
+        return ClientDto.builder()
+            .id(clientId1)
+            .publicId(clientPublicId1)
+            .createdAt(createdAt1)
+            .updatedAt(updatedAt1)
+            .build();
     }
 }
