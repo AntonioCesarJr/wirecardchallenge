@@ -44,21 +44,29 @@ Linux 4.15.0-50-generic Ubuntu x86_64 GNU/Linux
 ### Make (optional)
 > GNU Make 4.1 \
   Copyright (C) 1988-2014 Free Software Foundation, Inc.
+  
+### Operation System Free Ports
+> You must release ports to the following services \
+    -   MySql -> port 3306 \
+    -   Redis -> port 6379 \
+    -   Api Rest / Swagger -> port 8089 \
+    -   Sonarqube -> port 9000
+ 
 
 ## How to use Application
-*Use the following commands on a terminal in the root directory.* 
+*Use the following commands on terminal in the root application directory.* 
 
-### - Create Docker Infrastructure - SONARQUBE  
-###### - Go to "/sonar-docker-files/" folder and typeEnum
-    make sonarqube
+### - Create Docker Infrastructure - SONARQUBE - MYSQL - REDIS  
+###### - Go to "/docker-files/" folder and type:
+    make all
 
-### - Create Docker Infrastructure - MYSQL - REDIS
-###### - Back to project root folder and typeEnum
-    make docker
-    
     or
   
-    docker-compose up -d
+    docker run -d --name SONARQUBE770 -p 9000:9000 sonarqube && docker-compose up-d
+
+###### - After that, verify if containers are running with command 'docker ps' 
+
+    
 __PS: You must wait until MYSQL database start to listener the confgured port!\
 This may take a few minutes__
 
@@ -70,7 +78,7 @@ This may take a few minutes__
     mvn clean package install -U    
     
 ## - Start application with Make or Maven
-    make run
+    make runrest
     
     or
     
